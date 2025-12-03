@@ -20,7 +20,7 @@ const ForgetPassword = () => {
         <div className=" text-white pb-6">
           <div className="h-36">
             <img className="w-full" src={BgImages.Background} alt="" />
-            <div className="border w-12 h-12 rounded-full absolute left-5 top-3 p-4 bg-white">
+            <div className="border w-12 h-12 rounded-full absolute left-5 top-8 p-4 bg-white">
                 <FaChevronLeft color="black" className="cursor-pointer" onClick={() => navigate('/login')}/>
             </div>
           </div>
