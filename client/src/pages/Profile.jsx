@@ -33,20 +33,20 @@ const Profile = () => {
         <div className="w-30 h-30 rounded-full p-3 bg-gray-200">
           <img />
         </div>
-        <div className="pr-32">
-          <h1>Vishal Khadok</h1>
-          <p>I love fast food</p>
+        <div className="">
+          <h1 className="font-medium text-xl">Vishal Khadok</h1>
+          <p className="text-sm text-center">I love fast food</p>
         </div>
       </div>
       {/*  */}
       <div className="pt-6">
         <ul className=" bg-gray-100 rounded-xl p-8">
-          <div className="flex justify-between items-center">
+          <div className="flex justify-between items-center" onClick={() => navigate('/profile/personal-info')}>
             <li className="flex items-center gap-4">
               <p className="w-10 h-10 rounded-full p-2 bg-gray-50">
                 <IoPersonOutline size={24} color="orange" />
               </p>
-              <h2 className="font-medium">Personal</h2>
+              <h2 className="font-medium">Personal Info</h2>
             </li>
             <li>
               <p>

@@ -5,6 +5,10 @@ import Signup from "./auth/Signup"
 import ForgetPassword from "./auth/ForgetPassword"
 import Verification from "./auth/Verification"
 import Profile from "./pages/Profile"
+import PersonalInfo from "./profile/PersonalInfo"
+import EditProfile from "./profile/EditProfile"
+import AllRestaurants from "./components/AllRestaurants"
+import RestaurantView from "./pages/RestaurantView"
 
 function App() {
 
@@ -14,6 +18,11 @@ function App() {
       {/* Authentication Routes */}
         <Route path="/" element={<Home/>}/>
         <Route path="/profile" element={<Profile/>}/>
+        <Route path="/profile/personal-info" element={<PersonalInfo/>}/>
+        <Route path="/personal-info/edit-profile" element={<EditProfile/>}/>
+        <Route path="/all-restaurants" element={<AllRestaurants/>}/>
+        <Route path="/all-restaurants/:id" element={<RestaurantView/>}/>
+        <Route path="/restaurants/:id" element={<RestaurantView/>}/>
         <Route path="/login" element={<Login/>}/>
         <Route path="/signup" element={<Signup/>}/>
         <Route path="/forget-password" element={<ForgetPassword/>}/>

@@ -1,10 +1,10 @@
 import React from "react";
 import { CiSearch } from "react-icons/ci";
 
-const Search = ({}) => {
+const Search = () => {
   return (
-    <div className="p-2">
-      <div className="pb-2 pt-4">
+    <div className="p-6">
+      <div className="pb-2">
         <h2 className="text-sm">
           Hey Halal, <span className="font-medium">Good Afternoon</span>
         </h2>

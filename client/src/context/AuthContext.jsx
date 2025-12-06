@@ -1,4 +1,5 @@
 import { createContext, useState } from "react"
+import { RestaurantsList } from "../assets/assets";
 
 export const  AuthContext = createContext()
 
@@ -10,7 +11,8 @@ export const AppContextProvider = (props) => {
 
     const value = {
         authState,
-        setAuthState
+        setAuthState,
+        RestaurantsList 
     }
 
     return (
