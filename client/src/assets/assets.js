@@ -4,6 +4,7 @@ export const BgImages = {
   Background,
 };
 
+
 export const RestaurantsList = {
   "restaurants": [
     {

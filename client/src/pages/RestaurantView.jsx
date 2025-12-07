@@ -3,10 +3,28 @@ import { useNavigate, useParams } from "react-router";
 import { RestaurantsList } from "../assets/assets";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa6";
 import { HiOutlineDotsHorizontal } from "react-icons/hi";
+import { FaRegStar } from "react-icons/fa";
+import { TbTruckDelivery } from "react-icons/tb";
+import { MdOutlineAccessTime } from "react-icons/md";
 
 const RestaurantView = () => {
+
+  const itemList = [
+    {
+      name: 'Burger',
+    },
+    {
+      name: 'Sandwich',
+    },
+    {
+      name: 'Pizza ',
+    },
+    {
+      name: 'Sandwich',
+    }
+  ]
   const { id } = useParams();
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const restaurant = RestaurantsList.restaurants.find(
     (restaurant) => restaurant.id === parseInt(id)
@@ -36,20 +54,39 @@ const RestaurantView = () => {
               className=" bg-gray-300 h-32 w-full rounded-xl"
             />
             <h2 className="pt-2">{restaurant?.name}</h2>
-            <p>{restaurant?.menu?.[4]?.description}</p>
+            <div className="py-3">{restaurant?.menu?.map((item) => (
+              <div key={item.description}>{item.description}</div>
+            ))}</div>
           </div>
           <div className="flex justify-between">
-            <p>{restaurant?.rating}</p>
-            <div className="flex gap-2">
-              <p></p>
+            <div className="flex items-center gap-2">
+              <p>
+                <FaRegStar size={20}  color="orange" />
+              </p>
+              <p>{restaurant?.rating}</p>
+            </div>
+            <div className="flex items-center gap-2">
+              <p><TbTruckDelivery size={22} color="orange" /></p>
               <p>{restaurant?.location.city}</p>
             </div>
-            <div className="flex gap-2">
-              <p></p>
+            <div className="flex items-center gap-2">
+              <p><MdOutlineAccessTime size={22} color="orange"  /></p>
               <p>{restaurant?.deliveryTime}</p>
             </div>
           </div>
         </div>
+      </div>
+      {/*  */}
+      <div className="pt-4 grid grid-cols-4 gap-2">
+        {
+          itemList.map((item, index) => (
+            <div key={index.name}>
+              <ul className="border w-full border-gray-300 shadow-md  h-8 rounded-2xl text-center">
+                <li className="font-normal">{item.name}</li>
+              </ul>
+            </div>
+          ))
+        }
       </div>
     </div>
   );
