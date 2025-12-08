@@ -2,9 +2,12 @@ import React from "react";
 import { RestaurantsList } from "../assets/assets";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa6";
 import { Link, useNavigate } from "react-router";
+import { FaRegStar } from "react-icons/fa";
+import { TbTruckDelivery } from "react-icons/tb";
+import { MdOutlineAccessTime } from "react-icons/md";
 
 const AllRestaurants = () => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   return (
     <div className="p-6">
       <div className="flex items-center gap-4 ">
@@ -16,25 +19,43 @@ const AllRestaurants = () => {
         </button>
         <h2 className="font-medium">Restaurants</h2>
       </div>
-      <div className="my-4">
+      <div className="my-6">
         {RestaurantsList.restaurants.map((item, key) => (
-          <Link to={`/all-restaurants/${item.id}`} key={key} className="py-4" id="_id">
+          <Link
+            to={`/all-restaurants/${item.id}`}
+            key={key}
+            className="py-6"
+            id="_id"
+          >
             <div className="">
               <img
                 src={item.image}
                 className=" bg-gray-300 h-32 w-full rounded-xl"
               />
               <h2 className="pt-2">{item.name}</h2>
-              <p>{item.isVeg}</p>
+              <div className="py-3">
+                {item?.menu?.map((item) => (
+                  <div key={item.description}>{item.description}</div>
+                ))}
+              </div>
             </div>
-            <div className="flex justify-between">
-              <p>{item.rating}</p>
-              <div className="flex gap-2">
-                <p></p>
+            <div className="flex justify-between pb-4">
+              <div className="flex items-center gap-2">
+                <p>
+                  <FaRegStar size={20} color="orange" />
+                </p>
+                <p>{item.rating}</p>
+              </div>
+              <div className="flex items-center gap-2">
+                <p>
+                  <TbTruckDelivery size={22} color="orange" />
+                </p>
                 <p>{item.location.city}</p>
               </div>
-              <div className="flex gap-2">
-                <p></p>
+              <div className="flex items-center gap-2">
+                <p>
+                  <MdOutlineAccessTime size={22} color="orange" />
+                </p>
                 <p>{item.deliveryTime}</p>
               </div>
             </div>

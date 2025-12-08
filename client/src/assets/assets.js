@@ -1,7 +1,9 @@
 import Background from "./Bg_Background.png";
+import Element from './Elements.png'
 
 export const BgImages = {
   Background,
+  Element
 };
 
 

@@ -14,7 +14,7 @@ const Home = () => {
         <Categories />
         <Restaurants />
       </div>
-      <div className="absolute top-36 left-16">
+      <div className="absolute top-36 left-16 right-16">
         <Offers />
       </div>
     </div>

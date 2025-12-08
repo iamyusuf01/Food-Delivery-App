@@ -6,23 +6,23 @@ import { HiOutlineDotsHorizontal } from "react-icons/hi";
 import { FaRegStar } from "react-icons/fa";
 import { TbTruckDelivery } from "react-icons/tb";
 import { MdOutlineAccessTime } from "react-icons/md";
+import Filter from "../components/Filter";
 
 const RestaurantView = () => {
-
   const itemList = [
     {
-      name: 'Burger',
+      name: "Burger",
     },
     {
-      name: 'Sandwich',
+      name: "Sandwich",
     },
     {
-      name: 'Pizza ',
+      name: "Pizza ",
     },
     {
-      name: 'Sandwich',
-    }
-  ]
+      name: "Sandwich",
+    },
+  ];
   const { id } = useParams();
   const navigate = useNavigate();
 
@@ -54,23 +54,29 @@ const RestaurantView = () => {
               className=" bg-gray-300 h-32 w-full rounded-xl"
             />
             <h2 className="pt-2">{restaurant?.name}</h2>
-            <div className="py-3">{restaurant?.menu?.map((item) => (
-              <div key={item.description}>{item.description}</div>
-            ))}</div>
+            <div className="py-3">
+              {restaurant?.menu?.map((item) => (
+                <div key={item.description}>{item.description}</div>
+              ))}
+            </div>
           </div>
           <div className="flex justify-between">
             <div className="flex items-center gap-2">
               <p>
-                <FaRegStar size={20}  color="orange" />
+                <FaRegStar size={20} color="orange" />
               </p>
               <p>{restaurant?.rating}</p>
             </div>
             <div className="flex items-center gap-2">
-              <p><TbTruckDelivery size={22} color="orange" /></p>
+              <p>
+                <TbTruckDelivery size={22} color="orange" />
+              </p>
               <p>{restaurant?.location.city}</p>
             </div>
             <div className="flex items-center gap-2">
-              <p><MdOutlineAccessTime size={22} color="orange"  /></p>
+              <p>
+                <MdOutlineAccessTime size={22} color="orange" />
+              </p>
               <p>{restaurant?.deliveryTime}</p>
             </div>
           </div>
@@ -78,15 +84,17 @@ const RestaurantView = () => {
       </div>
       {/*  */}
       <div className="pt-4 grid grid-cols-4 gap-2">
-        {
-          itemList.map((item, index) => (
-            <div key={index.name}>
-              <ul className="border w-full border-gray-300 shadow-md  h-8 rounded-2xl text-center">
-                <li className="font-normal">{item.name}</li>
-              </ul>
-            </div>
-          ))
-        }
+        {itemList.map((item, index) => (
+          <div key={index.name}>
+            <ul className="border w-full border-gray-300 shadow-md   h-8 rounded-2xl text-center">
+              <li className="font-normal">{item.name}</li>
+            </ul>
+          </div>
+        ))}
+      </div>
+      {/* Filter Search */}
+      <div>
+        <Filter />
       </div>
     </div>
   );
