@@ -3,10 +3,13 @@ import { RxCross2 } from "react-icons/rx";
 
 const Filter = () => {
   const [active, setActive] = useState(false)
+  const [close, setClose] = useState(false)
 
   const handleClick = () => {
     setActive(!active)
   }
+
+
   const list = [
     {name: 'Delivery',
       mintues: '10-15 min'
@@ -17,12 +20,9 @@ const Filter = () => {
     {name: 'Online payment available', mintues: '45 min' },
   ]
   return (
-    <div className='p-6'>
+    <div className=''>
         {/*  */}
-        <div className='flex justify-between items-center'>
-          <h2 className='text-xl'>Filter your search</h2>
-          <p className='w-10 h-10 rounded-full p-3 bg-gray-200'><RxCross2/></p>
-        </div>
+        
         {/* Offers */}
         <div className='flex flex-wrap items-center pt-6 gap-4'>
            {list.map((item, index) => (
@@ -47,6 +47,8 @@ const Filter = () => {
               ))}
            </div>
         </div>
+        {/* Rating */}
+        <button className='w-full bg-orange-500 rounded h-10 mt-10 text-white uppercase text-xl'>Filter</button>
     </div>
   )
 }

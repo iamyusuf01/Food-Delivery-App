@@ -29,13 +29,7 @@ export const RestaurantsList = {
           "isVeg": false,
           "description": "Creamy tomato-based gravy with tender tandoori chicken pieces."
         },
-        {
-          "itemId": 102,
-          "name": "Paneer Tikka",
-          "price": 260,
-          "isVeg": true,
-          "description": "Charcoal-grilled paneer cubes marinated in spicy yoghurt."
-        }
+        
       ]
     },
     {
@@ -58,13 +52,7 @@ export const RestaurantsList = {
           "isVeg": true,
           "description": "A refreshing mix of quinoa, veggies, and a lemon herb dressing."
         },
-        {
-          "itemId": 202,
-          "name": "Avocado Smoothie",
-          "price": 150,
-          "isVeg": true,
-          "description": "Creamy smoothie made with fresh avocado and almond milk."
-        }
+       
       ]
     },
     {
@@ -87,13 +75,7 @@ export const RestaurantsList = {
           "isVeg": false,
           "description": "Thin-crust pizza topped with mozzarella and spicy pepperoni slices."
         },
-        {
-          "itemId": 302,
-          "name": "Margherita Pizza",
-          "price": 350,
-          "isVeg": true,
-          "description": "Classic pizza with basil, mozzarella, and rich tomato sauce."
-        }
+        
       ]
     },
     {
@@ -116,13 +98,7 @@ export const RestaurantsList = {
           "isVeg": false,
           "description": "Smoky and juicy chicken roasted in a clay oven with spicy marinade."
         },
-        {
-          "itemId": 402,
-          "name": "Dal Makhani",
-          "price": 220,
-          "isVeg": true,
-          "description": "Slow-cooked black lentils in a buttery, creamy Punjabi-style gravy."
-        }
+        
       ]
     },
     {
@@ -145,13 +121,7 @@ export const RestaurantsList = {
           "isVeg": false,
           "description": "Authentic Hyderabadi biryani with slow-cooked chicken and aromatic spices."
         },
-        {
-          "itemId": 502,
-          "name": "Veg Biryani",
-          "price": 240,
-          "isVeg": true,
-          "description": "Fragrant basmati rice cooked with mixed vegetables and spices."
-        }
+        
       ]
     },
     {
@@ -174,13 +144,7 @@ export const RestaurantsList = {
           "isVeg": false,
           "description": "Fresh salmon slices rolled with seasoned rice and seaweed."
         },
-        {
-          "itemId": 602,
-          "name": "Avocado Roll",
-          "price": 350,
-          "isVeg": true,
-          "description": "Creamy avocado wrapped with sticky rice and nori sheets."
-        }
+      
       ]
     },
     {
@@ -203,13 +167,7 @@ export const RestaurantsList = {
           "isVeg": false,
           "description": "Juicy beef patty layered with cheese, lettuce, and house sauce."
         },
-        {
-          "itemId": 702,
-          "name": "Veggie Burger",
-          "price": 120,
-          "isVeg": true,
-          "description": "Crispy vegetable patty with tomato, onions, and tangy mayo."
-        }
+      
       ]
     },
     {
@@ -232,13 +190,7 @@ export const RestaurantsList = {
           "description": "Chilled creamy coffee blended with ice and cocoa.",
           "isVeg": true
         },
-        {
-          "itemId": 802,
-          "name": "Chocolate Muffin",
-          "price": 90,
-          "isVeg": true,
-          "description": "Soft, rich muffin loaded with melted chocolate chunks."
-        }
+      
       ]
     },
     {
@@ -261,13 +213,7 @@ export const RestaurantsList = {
           "isVeg": true,
           "description": "Soft paratha stuffed with spiced paneer and veggies."
         },
-        {
-          "itemId": 902,
-          "name": "Veg Spring Roll",
-          "price": 100,
-          "isVeg": true,
-          "description": "Crispy rolls filled with sautéed vegetables and noodles."
-        }
+       
       ]
     },
     {
@@ -290,13 +236,7 @@ export const RestaurantsList = {
           "isVeg": false,
           "description": "Freshly grilled fish seasoned with herbs and lemon butter."
         },
-        {
-          "itemId": 1002,
-          "name": "Prawn Curry",
-          "price": 520,
-          "isVeg": false,
-          "description": "A spicy Goan-style curry loaded with tender prawns."
-        }
+       
       ]
     },
     {
@@ -319,13 +259,7 @@ export const RestaurantsList = {
           "isVeg": true,
           "description": "Traditional Punjabi dish made with mustard greens and spices."
         },
-        {
-          "itemId": 1102,
-          "name": "Amritsari Kulcha",
-          "price": 150,
-          "isVeg": true,
-          "description": "Stuffed kulcha baked until golden, served with chole."
-        }
+     
       ]
     },
     {
@@ -348,13 +282,7 @@ export const RestaurantsList = {
           "isVeg": true,
           "description": "Rice noodles stir-fried with tofu, peanuts, and tamarind sauce."
         },
-        {
-          "itemId": 1202,
-          "name": "Thai Green Curry",
-          "price": 360,
-          "isVeg": false,
-          "description": "Spicy coconut-based curry cooked with chicken and vegetables."
-        }
+       
       ]
     }
   ]

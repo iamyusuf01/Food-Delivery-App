@@ -17,7 +17,7 @@ const Offers = () => {
     return () => clearTimeout(timer)
   })
 
-  if (!visible) return null;
+  if (!visible) return '';
   return (
     
     <div className="p-6 relative">

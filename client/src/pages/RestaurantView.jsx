@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { use, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router";
 import { RestaurantsList } from "../assets/assets";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa6";
@@ -6,6 +6,8 @@ import { HiOutlineDotsHorizontal } from "react-icons/hi";
 import { FaRegStar } from "react-icons/fa";
 import { TbTruckDelivery } from "react-icons/tb";
 import { MdOutlineAccessTime } from "react-icons/md";
+import { RxCross2 } from "react-icons/rx";
+
 import Filter from "../components/Filter";
 
 const RestaurantView = () => {
@@ -23,6 +25,8 @@ const RestaurantView = () => {
       name: "Sandwich",
     },
   ];
+
+  const [open, setOpen] = useState(false);
   const { id } = useParams();
   const navigate = useNavigate();
 
@@ -31,7 +35,7 @@ const RestaurantView = () => {
   );
 
   return (
-    <div className="p-6">
+    <div className="p-6 relative">
       <div className="flex justify-between items-center">
         <div className="flex items-center gap-4 ">
           <button
@@ -42,7 +46,10 @@ const RestaurantView = () => {
           </button>
           <h2 className="font-medium">Restaurant View</h2>
         </div>
-        <div className="w-10 h-10 rounded-full p-3 bg-gray-200">
+        <div
+          className="w-10 h-10 cursor-pointer rounded-full p-3 bg-gray-200"
+          onClick={() => setOpen(true)}
+        >
           <HiOutlineDotsHorizontal />
         </div>
       </div>
@@ -93,9 +100,21 @@ const RestaurantView = () => {
         ))}
       </div>
       {/* Filter Search */}
-      <div>
-        <Filter />
-      </div>
+      {open && (
+        <div className="absolute p-6 rounded-xl right-6 left-6 m-auto top-10 bg-white shadow-lg">
+          <div className="flex justify-between items-center">
+            <h2 className="text-xl">Filter your search</h2>
+            <p
+              onClick={() => setOpen(false)}
+              className="w-10 h-10 rounded-full p-3 bg-gray-200 cursor-pointer"
+              // onClick={handleClose}
+            >
+              <RxCross2 />
+            </p>
+          </div>
+          <Filter />
+        </div>
+      )}
     </div>
   );
 };
