@@ -11,6 +11,7 @@ import AllRestaurants from "./components/AllRestaurants"
 import RestaurantView from "./pages/RestaurantView"
 import FoodDetails from "./components/FoodDetails"
 import Food from "./pages/Food"
+import MyCart from "./pages/MyCart"
 
 function App() {
 
@@ -26,8 +27,10 @@ function App() {
         <Route path="/all-restaurants/:id" element={<RestaurantView/>}/>
         <Route path="/restaurants/:id" element={<RestaurantView/>}/>
         <Route path="/food" element={<Food/>}/>
-        <Route path="/food-details/:id/:itemId" element={<FoodDetails />} />
+        <Route path="/food-details/:itemId" element={<FoodDetails />} />
+        {/* <Route path="/food-details/:id/:itemId" element={<FoodDetails />} /> */}
         <Route path="/login" element={<Login/>}/>
+        <Route path="/my-cart" element={<MyCart/>}/>
         <Route path="/signup" element={<Signup/>}/>
         <Route path="/forget-password" element={<ForgetPassword/>}/>
         <Route path="/verification" element={<Verification/>}/>

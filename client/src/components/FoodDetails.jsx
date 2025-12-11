@@ -1,28 +1,18 @@
 import React, { useState } from "react";
 import { useNavigate, useParams } from "react-router";
-import { RestaurantsList } from "../assets/assets";
+import { menu, RestaurantsList } from "../assets/assets";
 import { FaChevronLeft, FaRegStar } from "react-icons/fa";
 import { TbTruckDelivery } from "react-icons/tb";
 import { MdOutlineAccessTime } from "react-icons/md";
 import { FaPlus, FaMinus } from "react-icons/fa";
+import AddToCart from "./AddToCart";
 
 const FoodDetails = () => {
-  const { id, itemId } = useParams();
-  const [count, setCount] = useState("0");
-
+  const { itemId } = useParams();
   const navigate = useNavigate();
 
-  const increase = () => setCount(count + 1);
-  const decrease = () => {
-    if (count > 0) {
-      setCount(count - 1);
-    }
-  };
-  const restId = parseInt(id, 10);
-  const menuItemId = parseInt(itemId, 10);
-
-  const restaurant = RestaurantsList.restaurants.find((r) => r.id === restId);
-  const foodItem = restaurant?.menu?.find((m) => m.itemId === menuItemId);
+  const item = menu.find((item) => item.itemId === parseInt(itemId));
+  // console.log(item, itemId)
 
   return (
     <div className=" overflow-hidden">
@@ -41,17 +31,17 @@ const FoodDetails = () => {
             <div className="">
               <div>
                 <img
-                  src={restaurant?.image}
+                  // src={menu?.image}
                   className=" bg-gray-300 h-32 w-full rounded-xl"
                 />
                 <p className="mt-6 pl-6 border border-gray-300 rounded-full w-2/3   h-8">
-                  {restaurant.name}
+                  {item?.name}
                 </p>
               </div>
               <div className="py-2">
-                <div key={restaurant?.description}>
-                  <h2 className="pt-2">{foodItem?.name}</h2>
-                  <p className="pt-2"> {foodItem?.description}</p>
+                <div>
+                  {/* <h2 className="pt-2">{item?.name}</h2> */}
+                  <p className="pt-2"> {item?.description}</p>
                 </div>
               </div>
             </div>
@@ -60,19 +50,19 @@ const FoodDetails = () => {
                 <p>
                   <FaRegStar size={20} color="orange" />
                 </p>
-                <p>{restaurant?.rating}</p>
+                {/* <p>{restaurant?.rating}</p> */}
               </div>
               <div className="flex items-center gap-2">
                 <p>
                   <TbTruckDelivery size={22} color="orange" />
                 </p>
-                <p>{restaurant?.location.city}</p>
+                {/* <p>{restaurant?.location.city}</p> */}
               </div>
               <div className="flex items-center gap-2">
                 <p>
                   <MdOutlineAccessTime size={22} color="orange" />
                 </p>
-                <p>{restaurant?.deliveryTime}</p>
+                {/* <p>{restaurant?.deliveryTime}</p> */}
               </div>
             </div>
           </div>
@@ -95,25 +85,7 @@ const FoodDetails = () => {
       </div>
 
       {/* Add To Card */}
-      <div className="rounded-3xl bg-gray-200 p-6 w-full">
-        <div className="flex items-center py-4 pt-4 mt-6 justify-between ">
-          <p className="text-xl">${foodItem.price}</p>
-          <div className="flex items-center gap-4 border rounded-full w-26 h-12 py-2 px-4 bg-black text-white">
-            <p className="" onClick={decrease}>
-              <FaMinus />
-            </p>
-            <p>{count}</p>
-            <p onClick={increase}>
-              <FaPlus />
-            </p>
-          </div>
-        </div>
-        <button 
-          onClick={() => navigate('/my-card')}
-          className="uppercase bg-orange-400 text-white items-center w-full h-12 rounded ">
-          Add To Card
-        </button>
-      </div>
+      <AddToCart menu={item} />
     </div>
   );
 };

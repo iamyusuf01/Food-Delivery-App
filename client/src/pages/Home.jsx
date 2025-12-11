@@ -8,7 +8,7 @@ import Offers from "../components/Offers";
 const Home = () => {
   return (
     <div className="relative overflow-hidden">
-      <div >
+      <div>
         <Navbar />
         <Search />
         <Categories />

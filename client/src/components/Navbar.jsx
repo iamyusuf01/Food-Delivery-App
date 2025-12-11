@@ -26,7 +26,7 @@ const Navbar = () => {
           </div>
         </div>
         <div>
-          <button className="w-10 h-10 rounded-full bg-black p-1.5">
+          <button className="w-10 h-10 rounded-full bg-black p-1.5" onClick={() => navigate('/my-cart')}>
             <IoBagHandle size={28} fill="white" />
           </button>
         </div>
