@@ -1,6 +1,6 @@
 import { createContext, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router";
-import { RestaurantsList, menu, cart } from "../assets/assets";
+import { RestaurantsList, menu, cart, restaurant } from "../assets/assets";
 
 export const CartContext = createContext();
 
@@ -11,11 +11,13 @@ export const CardContextProvider = (props) => {
   const [unitPrice, setUnitPrice] = useState(0);
   const [total, setTotal] = useState("0");
   const [cartItems, setCartItems] = useState(cart)
+  const [resItems, setResItems] = useState(restaurant)
   const navigate = useNavigate()
-  const restaurant = RestaurantsList?.restaurants?.find(
-    (res) => res?.id === id
-  );
-  const menuItem = restaurant?.menu.find((menu) => menu?.itemId === itemId);
+
+  // const restaurant = RestaurantsList?.restaurants?.find(
+  //   (res) => res?.id === id
+  // );
+  const menuItem = menu.find((menu) => menu?.itemId === itemId);
 
   useEffect(() => {
     if (menuItem && typeof menuItem.price === "number") {
@@ -45,9 +47,12 @@ export const CardContextProvider = (props) => {
 
   const addToCartItems = (id) => {
     const item = menu.find((item) => item.itemId === id)
+    const resItems = restaurant.find((resItem) => resItem.id === id) 
        setCartItems((prev) => ([...prev, item]))
+       setResItems((prev) => ([...prev, resItems]))
        navigate('/my-cart')
   }
+
 
   const value = {
     name,
@@ -62,7 +67,9 @@ export const CardContextProvider = (props) => {
     restaurant,
     addToCartItems,
     setCartItems,
-    cartItems
+    cartItems,
+    resItems,
+    setResItems
   };
 
   return (

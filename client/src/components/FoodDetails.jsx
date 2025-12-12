@@ -1,6 +1,5 @@
-import React, { useState } from "react";
 import { useNavigate, useParams } from "react-router";
-import { menu, RestaurantsList } from "../assets/assets";
+import { menu, restaurant, RestaurantsList } from "../assets/assets";
 import { FaChevronLeft, FaRegStar } from "react-icons/fa";
 import { TbTruckDelivery } from "react-icons/tb";
 import { MdOutlineAccessTime } from "react-icons/md";
@@ -8,10 +7,11 @@ import { FaPlus, FaMinus } from "react-icons/fa";
 import AddToCart from "./AddToCart";
 
 const FoodDetails = () => {
-  const { itemId } = useParams();
+  const { itemId, id } = useParams();
   const navigate = useNavigate();
 
   const item = menu.find((item) => item.itemId === parseInt(itemId));
+  const resItem = restaurant.find((resItem) => resItem.id === parseInt(id));
   // console.log(item, itemId)
 
   return (
@@ -31,12 +31,13 @@ const FoodDetails = () => {
             <div className="">
               <div>
                 <img
-                  // src={menu?.image}
+                  src={resItem?.image}
                   className=" bg-gray-300 h-32 w-full rounded-xl"
                 />
                 <p className="mt-6 pl-6 border border-gray-300 rounded-full w-2/3   h-8">
-                  {item?.name}
+                  {resItem?.name}
                 </p>
+                <h2 className="pt-2">{item?.name}</h2>
               </div>
               <div className="py-2">
                 <div>
@@ -85,7 +86,7 @@ const FoodDetails = () => {
       </div>
 
       {/* Add To Card */}
-      <AddToCart menu={item} />
+      <AddToCart menu={item} restaurant={resItem} />
     </div>
   );
 };

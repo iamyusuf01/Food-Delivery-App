@@ -6,6 +6,22 @@ export const BgImages = {
   Element,
 };
 
+export const restaurant = [
+  {
+    id: 1,
+    name: "Spice Route Kitchen",
+    type: "Indian",
+    rating: 4.5,
+    deliveryTime: "30-40 mins",
+    isVeg: false,
+    location: {
+      city: "Mumbai",
+      address: "12 Lokhandwala Road, Andheri West",
+    },
+    image: "https://example.com/spice-route.jpg",
+  },
+];
+
 export const RestaurantsList = {
   restaurants: [
     {
