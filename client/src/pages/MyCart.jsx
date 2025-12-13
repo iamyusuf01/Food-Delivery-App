@@ -11,11 +11,15 @@ const MyCart = () => {
     increaseCount,
     decreaseCount,
     count = 1,
-    cartItems
+    cartItems,
+    removeCartItem,
   } = useContext(CartContext);
 
-  const restaurant = restaurants?.find((res) => res?.id === id);
-  // const menuItem = restaurant?.menu?.find((menu) => menu?.itemId === itemId);
+
+  // const resItem = restaurants?.find((resItem) => resItem.id === parseInt(id));
+  // const item = resItem?.menu?.find((item) => item.itemId === parseInt(itemId));
+
+  
 
   return (
     <div className=" bg-black text-white">
@@ -64,9 +68,12 @@ const MyCart = () => {
                       <p className="py-1">${product.price}</p>
                     </div>
                     {edit ? (
-                      <div className=" w-6 h-6 bg-red-500 rounded-full mx-auto text-center">
+                      <button
+                        className=" w-6 h-6 bg-red-500 rounded-full text-center"
+                        onClick={() => removeCartItem(product.itemId)}
+                      >
                         <p className="text-sm">X</p>
-                      </div>
+                      </button>
                     ) : (
                       ""
                     )}

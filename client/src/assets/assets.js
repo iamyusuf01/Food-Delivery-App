@@ -299,39 +299,3 @@ export const restaurants = [
   },
 ];
 
-export const cart = [
-  {
-    itemId: 101,
-    name: "Butter Chicken",
-    price: 320,
-    isVeg: false,
-    description:
-      "Creamy tomato-based gravy with tender tandoori chicken pieces.",
-  },
-  {
-    itemId: 102,
-    name: "Chicken",
-    price: 320,
-    isVeg: false,
-    description:
-      "Creamy tomato-based gravy with tender tandoori chicken pieces.",
-  },
-];
-export const menu = [
-  {
-    itemId: 101,
-    name: "Butter Chicken",
-    price: 320,
-    isVeg: false,
-    description:
-      "Creamy tomato-based gravy with tender tandoori chicken pieces.",
-  },
-  {
-    itemId: 102,
-    name: "Chicken",
-    price: 320,
-    isVeg: false,
-    description:
-      "Creamy tomato-based gravy with tender tandoori chicken pieces.",
-  },
-];

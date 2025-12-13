@@ -2,9 +2,9 @@ import React, { useContext, useState } from "react";
 import { useNavigate, useParams } from "react-router";
 import { FaMinus, FaPlus } from "react-icons/fa";
 import { CartContext } from "../context/CartContext";
-const AddToCart = ({restaurants, menu}) => {
+const AddToCart = ({ restaurants, menu }) => {
   // const { id, itemId } = useParams();
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const {
     increaseCount,
     decreaseCount,
@@ -12,8 +12,7 @@ const AddToCart = ({restaurants, menu}) => {
     addToCartItems,
   } = useContext(CartContext);
 
-
-   const unitPrice = menu?.price || 0;
+  const unitPrice = menu?.price || 0;
   const total = count * unitPrice;
 
   const handleAddToCart = () => {
@@ -21,11 +20,11 @@ const AddToCart = ({restaurants, menu}) => {
       ...menu,
       quantity: count,
       restaurantId: restaurants.id,
-        restaurantName: restaurants.name,
-       restaurantImage: restaurants.image,
-       totalPrice: total
+      restaurantName: restaurants.name,
+      restaurantImage: restaurants.image,
+      totalPrice: total,
     });
-    navigate('/my-cart')
+    navigate("/my-cart");
   };
   console.log(handleAddToCart);
   return (
