@@ -1,5 +1,5 @@
 import React from "react";
-import { RestaurantsList } from "../assets/assets";
+import { restaurants } from "../assets/assets";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa6";
 import { Link, useNavigate } from "react-router";
 import { FaRegStar } from "react-icons/fa";
@@ -20,7 +20,7 @@ const AllRestaurants = () => {
         <h2 className="font-medium">Restaurants</h2>
       </div>
       <div className="my-6">
-        {RestaurantsList.restaurants.map((item, key) => (
+        {restaurants.map((item, key) => (
           <Link
             to={`/all-restaurants/${item.id}`}
             key={key}

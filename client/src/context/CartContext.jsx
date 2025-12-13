@@ -1,6 +1,6 @@
 import { createContext, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router";
-import { RestaurantsList, menu, cart, restaurant } from "../assets/assets";
+import { restaurants } from "../assets/assets";
 
 export const CartContext = createContext();
 
@@ -10,14 +10,15 @@ export const CardContextProvider = (props) => {
   const [count, setCount] = useState(0);
   const [unitPrice, setUnitPrice] = useState(0);
   const [total, setTotal] = useState("0");
-  const [cartItems, setCartItems] = useState(cart)
-  const [resItems, setResItems] = useState(restaurant)
-  const navigate = useNavigate()
+  const [cartItems, setCartItems] = useState(() => {
+    const savedCart = localStorage.getItem("cartItems");
+    return savedCart ? JSON.parse(savedCart) : [];
+  });
+  const [ClearItems, setClearItems] = useState([]);
+  const navigate = useNavigate();
 
-  // const restaurant = RestaurantsList?.restaurants?.find(
-  //   (res) => res?.id === id
-  // );
-  const menuItem = menu.find((menu) => menu?.itemId === itemId);
+  const restaurant = restaurants?.find((res) => res?.id === id);
+  const menuItem = restaurant?.menu?.find((menu) => menu?.itemId === itemId);
 
   useEffect(() => {
     if (menuItem && typeof menuItem.price === "number") {
@@ -27,6 +28,10 @@ export const CardContextProvider = (props) => {
     }
     setCount(1);
   }, [menuItem]);
+
+  useEffect(() => {
+  localStorage.setItem("cartItems", JSON.stringify(cartItems));
+}, [cartItems]);
 
   useEffect(() => {
     setTotal(count * unitPrice);
@@ -45,14 +50,25 @@ export const CardContextProvider = (props) => {
     if (!Number.isNaN(n) && n > 0) setCount(n);
   };
 
-  const addToCartItems = (id) => {
-    const item = menu.find((item) => item.itemId === id)
-    const resItems = restaurant.find((resItem) => resItem.id === id) 
-       setCartItems((prev) => ([...prev, item]))
-       setResItems((prev) => ([...prev, resItems]))
-       navigate('/my-cart')
-  }
+  const addToCartItems = (menuItem, restaurant) => {
+    // setResItems((prev) => [...prev, restaurant]);
+    setCartItems((prev) => [...prev, menuItem]);
+    navigate("/my-cart");
+    console.log(menuItem, restaurant);
+  };
 
+  useEffect(() => {
+    if (restaurants?.menu) {
+      setCartItems(restaurants.menu);
+      setResItems([restaurants]); // wrap object in array
+    }
+  }, [restaurants]);
+
+  const clearCartItems = (id) => {
+    // const removeItem = .find((remove) => remove.itemId === id);
+    // setClearItems((prev) => [...prev, removeItem]);
+    // console.log(removeItem);
+  };
 
   const value = {
     name,
@@ -68,8 +84,11 @@ export const CardContextProvider = (props) => {
     addToCartItems,
     setCartItems,
     cartItems,
-    resItems,
-    setResItems
+    clearCartItems,
+    ClearItems,
+    setClearItems,
+    restaurant,
+    menuItem,
   };
 
   return (

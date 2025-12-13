@@ -1,5 +1,5 @@
 import React from "react";
-import { RestaurantsList } from "../assets/assets";
+import { restaurants } from "../assets/assets";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa6";
 import { useNavigate } from "react-router";
 import { Link } from "react-router-dom";
@@ -22,7 +22,7 @@ const Restaurants = () => {
         </div>
       </div>
       <div className="my-4">
-        {RestaurantsList.restaurants.slice(0, 4).map((item, key) => (
+        {restaurants.slice(0, 4).map((item, key) => (
           <Link
             to={`/all-restaurants/${item.id}`}
             key={key}

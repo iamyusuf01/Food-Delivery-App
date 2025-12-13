@@ -1,5 +1,5 @@
 import { useNavigate, useParams } from "react-router";
-import { menu, restaurant, RestaurantsList } from "../assets/assets";
+import { restaurants } from "../assets/assets";
 import { FaChevronLeft, FaRegStar } from "react-icons/fa";
 import { TbTruckDelivery } from "react-icons/tb";
 import { MdOutlineAccessTime } from "react-icons/md";
@@ -10,8 +10,8 @@ const FoodDetails = () => {
   const { itemId, id } = useParams();
   const navigate = useNavigate();
 
-  const item = menu.find((item) => item.itemId === parseInt(itemId));
-  const resItem = restaurant.find((resItem) => resItem.id === parseInt(id));
+  const resItem = restaurants?.find((resItem) => resItem.id === parseInt(id));
+  const item = resItem?.menu?.find((item) => item.itemId === parseInt(itemId));
   // console.log(item, itemId)
 
   return (
@@ -86,7 +86,7 @@ const FoodDetails = () => {
       </div>
 
       {/* Add To Card */}
-      <AddToCart menu={item} restaurant={resItem} />
+      <AddToCart restaurants={resItem} menu={item} />
     </div>
   );
 };

@@ -1,6 +1,6 @@
 import React, { use, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router";
-import { RestaurantsList } from "../assets/assets";
+import { restaurants } from "../assets/assets";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa6";
 import { HiOutlineDotsHorizontal } from "react-icons/hi";
 import { FaRegStar } from "react-icons/fa";
@@ -30,7 +30,7 @@ const RestaurantView = () => {
   const { id } = useParams();
   const navigate = useNavigate();
 
-  const restaurant = RestaurantsList.restaurants.find(
+  const restaurant = restaurants.find(
     (restaurant) => restaurant.id === parseInt(id)
   );
 
