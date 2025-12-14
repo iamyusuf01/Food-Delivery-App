@@ -1,11 +1,11 @@
 import React, { useContext, useState } from "react";
 import { FaChevronLeft, FaMinus, FaPlus, FaSleigh } from "react-icons/fa";
-import { useParams } from "react-router";
+// import { useParams } from "react-router";
 import { CartContext } from "../context/CartContext";
-import { restaurants } from "../assets/assets";
+// import { restaurants } from "../assets/assets";
 
 const MyCart = () => {
-  const { id, itemId } = useParams();
+  // const { id, itemId } = useParams();
   const [edit, setEdit] = useState("");
   const {
     increaseCount,

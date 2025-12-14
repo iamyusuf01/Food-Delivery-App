@@ -12,6 +12,8 @@ import RestaurantView from "./pages/RestaurantView"
 import FoodDetails from "./components/FoodDetails"
 import Food from "./pages/Food"
 import MyCart from "./pages/MyCart"
+import Payment from "./pages/Payment"
+import AddCard from "./payment/AddCard"
 
 function App() {
 
@@ -23,12 +25,16 @@ function App() {
         <Route path="/profile" element={<Profile/>}/>
         <Route path="/profile/personal-info" element={<PersonalInfo/>}/>
         <Route path="/personal-info/edit-profile" element={<EditProfile/>}/>
+
         <Route path="/all-restaurants" element={<AllRestaurants/>}/>
         <Route path="/all-restaurants/:id" element={<RestaurantView/>}/>
         <Route path="/restaurants/:id" element={<RestaurantView/>}/>
         <Route path="/food" element={<Food/>}/>
-        {/* <Route path="/food-details/:itemId" element={<FoodDetails />} /> */}
         <Route path="/food-details/:id/:itemId" element={<FoodDetails />} />
+
+        <Route path="/payment" element={<Payment/>}/>
+        <Route path="/payment/add-card" element={<AddCard/>}/>
+
         <Route path="/login" element={<Login/>}/>
         <Route path="/my-cart" element={<MyCart/>}/>
         <Route path="/signup" element={<Signup/>}/>
