@@ -14,6 +14,7 @@ import Food from "./pages/Food"
 import MyCart from "./pages/MyCart"
 import Payment from "./pages/Payment"
 import AddCard from "./payment/AddCard"
+import CheckPayment from "./payment/CheckPayment"
 
 function App() {
 
@@ -34,6 +35,7 @@ function App() {
 
         <Route path="/payment" element={<Payment/>}/>
         <Route path="/payment/add-card" element={<AddCard/>}/>
+        <Route path="/payment/verify-payment" element={<CheckPayment/>}/>
 
         <Route path="/login" element={<Login/>}/>
         <Route path="/my-cart" element={<MyCart/>}/>

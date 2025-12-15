@@ -2,6 +2,7 @@ import React, { useContext, useState } from "react";
 import { FaChevronLeft, FaMinus, FaPlus, FaSleigh } from "react-icons/fa";
 // import { useParams } from "react-router";
 import { CartContext } from "../context/CartContext";
+import { NavLink } from "react-router";
 // import { restaurants } from "../assets/assets";
 
 const MyCart = () => {
@@ -26,9 +27,9 @@ const MyCart = () => {
       <div className="p-6">
         <div className="flex justify-between items-center">
           <div className="flex gap-4 items-center">
-            <p className="w-10 h-10 rounded-full bg-gray-600 py-3 px-3">
+            <NavLink to={'/'} className="w-10 h-10 rounded-full bg-gray-600 py-3 px-3">
               <FaChevronLeft />
-            </p>
+            </NavLink>
             <h2 className="text-xl">Cart</h2>
           </div>
           <div>
