@@ -15,11 +15,12 @@ import MyCart from "./pages/MyCart"
 import Payment from "./pages/Payment"
 import AddCard from "./payment/AddCard"
 import CheckPayment from "./payment/CheckPayment"
-
+import { ToastContainer } from 'react-toastify';
 function App() {
 
   return (
     <div>
+     <ToastContainer/>
       <Routes>
       {/* Authentication Routes */}
         <Route path="/" element={<Home/>}/>

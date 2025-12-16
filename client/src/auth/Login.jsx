@@ -1,31 +1,54 @@
 import React, { useContext, useState } from "react";
 import { BgImages } from "../assets/assets.js";
-import { FaFacebook } from "react-icons/fa";
-import {  AiFillTwitterCircle } from "react-icons/ai";
+import { FaChevronLeft, FaFacebook } from "react-icons/fa";
+import { AiFillTwitterCircle } from "react-icons/ai";
 import { FaApple } from "react-icons/fa6";
 import { NavLink, useNavigate } from "react-router";
 import { AuthContext } from "../context/AuthContext.jsx";
-
+import { toast } from "react-toastify";
+import axios from "axios";
 
 const Login = () => {
-    const [email, setEmail] = useState('')
-    const [password, setPassword] = useState('')
-    const {authState, setAuthState} = useContext(AuthContext)
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const { authState, setAuthState, backendUrl, setIsLoggedIn } =
+    useContext(AuthContext);
 
-    const navigate = useNavigate()
+  const navigate = useNavigate();
 
-const handleClick = (e) => {
-    e.preventDefault();
-    alert("Login Successfull");
-    navigate('/')
+  const onClickHandler = async (e) => {
+    try {
+      e.preventDefault();
+      const { data } = await axios.post(
+        "http://localhost:4000/api/auth/login",
+        { email, password }
+      );
+      if (data.success) {
+        setIsLoggedIn(true);
+        toast.success(data.message);
+        navigate("/");
+      } else {
+        toast.error(data.message);
+      }
+      console.log(data);
+    } catch (error) {
+      toast.error(error.message);
+    }
   };
- 
+
   return (
-    <div className="justify-center items-center max-h-screen overflow-hidden">
+    <div className="justify-center items-center">
       <div className=" bg-[#1E1E2E]">
         <div className=" text-white   pb-6">
           <div className="h-38">
             <img className="w-full" src={BgImages.Background} alt="" />
+            <div className="border w-12 h-12 rounded-full absolute left-5 top-8 p-4 bg-white">
+              <FaChevronLeft
+                color="black"
+                className="cursor-pointer"
+                onClick={() => navigate("/")}
+              />
+            </div>
           </div>
           <div className="text-center">
             <h2 className="font-bold text-3xl">Login</h2>
@@ -34,8 +57,8 @@ const handleClick = (e) => {
             </p>
           </div>
         </div>
-        <div className="bg-white rounded-t-3xl p-6">
-          <form typeof="submit">
+        <div className="bg-white mt-4 rounded-t-3xl p-6">
+          <form onSubmit={onClickHandler}>
             <div className=" grid rounded-t-full">
               <div className="">
                 <p className="uppercase">Email</p>
@@ -64,30 +87,53 @@ const handleClick = (e) => {
                   <input type="checkbox" />
                   <p> Remember me</p>
                 </div>
-                <p onClick={() => navigate('/forget-password')} className="text-orange-400 cursor-pointer">Forget password</p>
+                <p
+                  onClick={() => navigate("/forget-password")}
+                  className="text-orange-400 cursor-pointer"
+                >
+                  Forget password
+                </p>
               </div>
-              <button type="submit" onClick={handleClick}  className="uppercase mt-6 bg-amber-500 h-12 rounded text-sm">
+              <button
+                type="submit"
+                // onClick={handleClick}
+                className="uppercase mt-6 bg-amber-500 h-12 rounded text-sm"
+              >
                 Log in
               </button>
             </div>
           </form>
           <div>
             <div className="pt-8 text-center">
-                <p>Don't have an account?. <span onClick={() => navigate('/signup')} className="uppercase cursor-pointer text-orange-400">Sign up</span></p>
-                <p className="pt-4 text-xl">Or</p>
+              <p>
+                Don't have an account?.{" "}
+                <span
+                  onClick={() => navigate("/signup")}
+                  className="uppercase cursor-pointer text-orange-400"
+                >
+                  Sign up
+                </span>
+              </p>
+              <p className="pt-4 text-xl">Or</p>
             </div>
             <div className="pt-2">
-                <ul className="flex justify-center gap-8">
-                    <NavLink>
-                        <li><FaFacebook size={36}/></li>
-                    </NavLink>
-                    <NavLink>
-                        <li><AiFillTwitterCircle size={36}/></li>
-                    </NavLink>
-                    <NavLink>
-                        <li><FaApple size={36}/></li>
-                    </NavLink>
-                </ul>
+              <ul className="flex justify-center gap-8">
+                <NavLink>
+                  <li>
+                    <FaFacebook size={36} />
+                  </li>
+                </NavLink>
+                <NavLink>
+                  <li>
+                    <AiFillTwitterCircle size={36} />
+                  </li>
+                </NavLink>
+                <NavLink>
+                  <li>
+                    <FaApple size={36} />
+                  </li>
+                </NavLink>
+              </ul>
             </div>
           </div>
         </div>

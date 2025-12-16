@@ -1,13 +1,17 @@
-import React from "react";
+import React, { useContext } from "react";
 import Navbar from "../components/Navbar";
 import Categories from "../components/Categories";
 import Search from "../components/Search";
 import Restaurants from "../components/Restaurants";
 import Offers from "../components/Offers";
+import { AuthContext } from "../context/AuthContext";
+import Login from "../auth/Login";
 
 const Home = () => {
-  return (
-    <div className="relative overflow-hidden">
+  const { isLoggedIn, setIsLoggedIn } = useContext(AuthContext);
+
+  return isLoggedIn ? (
+    <div className="relative ">
       <div>
         <Navbar />
         <Search />
@@ -18,6 +22,8 @@ const Home = () => {
         <Offers />
       </div>
     </div>
+  ) : (
+    <Login />
   );
 };
 

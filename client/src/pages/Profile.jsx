@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa6";
 import { HiOutlineDotsHorizontal } from "react-icons/hi";
 import { IoPersonOutline } from "react-icons/io5";
@@ -11,8 +11,28 @@ import { CiSettings } from "react-icons/ci";
 import { IoLogOutOutline } from "react-icons/io5";
 import { CiMap } from "react-icons/ci";
 import { useNavigate } from "react-router";
+import { AuthContext } from "../context/AuthContext";
+import axios from "axios";
+import { toast } from "react-toastify";
 
 const Profile = () => {
+  const {isLoggedIn, setIsLoggedIn} = useContext(AuthContext)
+
+  const logout = async () => {
+    try {
+      const {data} = await axios.post('http://localhost:4000/api/auth/logout', {})
+      if(data.success) {
+        setIsLoggedIn(true)
+        navigate('/')
+      } else {
+        toast.error(data.message)
+      }
+      console.log(data)
+    } catch (error) {
+        toast.error(error.message)
+      
+    }
+  }
   const navigate = useNavigate()
   return (
     <div className="p-6">
@@ -178,11 +198,11 @@ const Profile = () => {
               <p className="w-10 h-10 rounded-full p-2 bg-gray-50">
                 <IoLogOutOutline size={24} color="red" />
               </p>
-              <h2 className="">Logout</h2>
+              <button className="" onClick={logout}>Logout</button>
             </li>
-            <button>
+            <p>
               <FaChevronRight />
-            </button>
+            </p>
           </div>
         </ul>
       </div>
