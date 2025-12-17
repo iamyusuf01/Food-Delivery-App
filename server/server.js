@@ -4,19 +4,28 @@ import cors from "cors";
 import cookieParser from "cookie-parser";
 import connectDB from "./config/database.js";
 import authRouter from "./routes/authRouter.js";
+import userRouter from "./routes/userRouter.js";
 
 // dotenv.config();
+// dotenv.config({
+//   path: './env'
+// })
+
 const app = express();
 const PORT = process.env.PORT || 3000;
+//MongoDB Connect
 connectDB();
 
-connectDB();
+// Cloudinary Connect
+// connectCloudinary()
 
-app.use(express.json());
+app.use(express.json({limit: '16kb'}));
+app.use(express.urlencoded({extended: true, limit: '16kb'}))
+app.use(express.static('public'))
 app.use(cookieParser())
 // app.cors(cors());
 app.use(cors({
-  origin: "http://localhost:5173",
+  origin: process.env.CORS_ORIGIN,
   credentials: true
 }));
 
@@ -28,6 +37,7 @@ app.get("/", (req, res) => {
 
 
 app.use('/api/auth', authRouter)
+app.use('/api/user', userRouter)
 
 app.listen(PORT, () => {
   console.log(`Server Running on port ${PORT}`);

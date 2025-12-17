@@ -3,13 +3,13 @@ import { isAuthenticate, login, logout, register, resetPassword, sendResetOtp } 
 import auth from "../middlewares/authMiddleware.js";
 
 
-const authRouter = express.Router();
+const router = express.Router();
 
-authRouter.post('/register',  register);
-authRouter.post('/login', login)
-authRouter.post('/logout', logout)
-authRouter.post('/send-reset-otp', sendResetOtp)
-authRouter.post('/change-password', resetPassword)
-authRouter.post('/is-auth', auth, isAuthenticate)
+router.post('/register',  register);
+router.post('/login', login)
+router.post('/logout', logout)
+router.post('/send-reset-otp', sendResetOtp)
+router.post('/change-password', resetPassword)
+router.post('/is-auth', auth, isAuthenticate)
 
-export default authRouter;
+export default router;
