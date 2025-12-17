@@ -16,18 +16,18 @@ const MyCart = () => {
     removeCartItem,
   } = useContext(CartContext);
 
-
   // const resItem = restaurants?.find((resItem) => resItem.id === parseInt(id));
   // const item = resItem?.menu?.find((item) => item.itemId === parseInt(itemId));
 
-  
-
   return (
-    <div className=" bg-black text-white">
+    <div className="min-h-screen bg-black text-white">
       <div className="p-6">
         <div className="flex justify-between items-center">
           <div className="flex gap-4 items-center">
-            <NavLink to={'/'} className="w-10 h-10 rounded-full bg-gray-600 py-3 px-3">
+            <NavLink
+              to={"/"}
+              className="w-10 h-10 rounded-full bg-gray-600 py-3 px-3"
+            >
               <FaChevronLeft />
             </NavLink>
             <h2 className="text-xl">Cart</h2>
@@ -68,15 +68,13 @@ const MyCart = () => {
                       <p>{product.restaurantName}</p>
                       <p className="py-1">${product.price}</p>
                     </div>
-                    {edit ? (
+                    {edit && (
                       <button
                         className=" w-6 h-6 bg-red-500 rounded-full text-center"
                         onClick={() => removeCartItem(product.itemId)}
                       >
-                        <p className="text-sm">X</p>
+                        X
                       </button>
-                    ) : (
-                      ""
                     )}
                   </div>
                   <div className="flex justify-between py-2">
