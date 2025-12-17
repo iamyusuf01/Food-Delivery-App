@@ -15,6 +15,10 @@ const Categories = () => {
       name: "Burger",
       image: "",
     },
+    {
+      name: "Pizza",
+      image: "",
+    },
   ];
   return (
     <div className="p-6">
@@ -25,19 +29,19 @@ const Categories = () => {
           <FaChevronRight size={16} />
         </div>
       </div>
-      <div className="flex justify-between gap-4 pt-4 ">
+      <div className="w-full flex gap-4 pt-4 overflow-x-scroll whitespace-nowrap h-23 no-scrollbar">
         {itemList.map((item) => (
           <div
             key={item.name}
-            className="rounded-full w-full bg-amber-400 shadow-lg h-8"
+            className="min-w-[140px] rounded-full bg-amber-400/60 shadow-lg max-h-15"
           >
-            <ul className="flex items-center gap-2 text-center ">
+            <div className="flex items-center gap-2 text-center text-xl text-indigo-950 font-semibold p-2.5">
               <img
-                className=" bg-gray-200 w-6 h-6 rounded-full ml-2 mt-1"
+                className=" bg-gray-200 w-10 h-10 rounded-full"
                 src={item.image}
               />
-              <li className="">{item.name}</li>
-            </ul>
+              <span className="">{item.name}</span>
+            </div>
           </div>
         ))}
       </div>

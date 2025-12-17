@@ -6,11 +6,12 @@ import Restaurants from "../components/Restaurants";
 import Offers from "../components/Offers";
 import { AuthContext } from "../context/AuthContext";
 import Login from "../auth/Login";
+import { redirect } from "react-router-dom";
 
 const Home = () => {
   const { isLoggedIn, setIsLoggedIn } = useContext(AuthContext);
 
-  return isLoggedIn ? (
+  return !isLoggedIn ? (
     <div className="relative ">
       <div>
         <Navbar />
@@ -24,6 +25,7 @@ const Home = () => {
     </div>
   ) : (
     <Login />
+
   );
 };
 
