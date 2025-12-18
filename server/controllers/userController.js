@@ -69,13 +69,13 @@ export const updateAccountDetails = async (req, res) => {
   }
 };
 
-export const updateUserAvatar = async (req, res) => {
+export const uploadAvatar = async (req, res) => {
   try {
 
     if(!req.user?._id){
       return res.json({
         success: false,
-        message: 'Unauthorized'
+        message: 'Unauthorized user'
       })
     }
     const avatarLocalPath = req.file?.path;
@@ -83,7 +83,7 @@ export const updateUserAvatar = async (req, res) => {
     if (!avatarLocalPath) {
       return res.json({
         success: false,
-        message: "Avatar files is missing",
+        message: "Avatar file is missing",
       });
     }
 
@@ -91,31 +91,31 @@ export const updateUserAvatar = async (req, res) => {
     if (!avatar?.url) {
       return res.json({
         success: false,
-        message: "Error while uploading on avatar",
+        message: "Avatar upload failed",
       });
     }
 
     const user = await User.findByIdAndUpdate(
-      req.user?._id,
+      req.user._id,
       {
         $set: {
           avatar: avatar.url,
         },
       },
       { new: true }
-    ).select("-password");
+    ).select("-password -refreshToken");
 
-    if(!user){
-      return res.json({
-        success: false,
-        message: 'User not found'
-      })
-    }
 
     return res.json({
       success: true,
       message: "Avatar updated",
       user
     });
-  } catch (error) {}
+  } catch (error) {
+    console.log(error);
+    return res.json({
+      success: false,
+      message: error.message,
+    });
+  }
 };
