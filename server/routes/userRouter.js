@@ -9,8 +9,8 @@ import { upload } from "../middlewares/multer.js";
 
 const router = express.Router();
 
-router.get("/:id", getUserData);
-router.patch("/update-account", updateAccountDetails);
-router.patch("/avatar",  upload.single('avatar'), updateUserAvatar);
+router.get("/:id", auth, getUserData);
+router.patch("/update-account", auth, updateAccountDetails);
+router.post("/avatar", auth,  upload.single('avatar'), updateUserAvatar);
 
 export default router;
