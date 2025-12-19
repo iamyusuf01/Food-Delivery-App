@@ -12,6 +12,10 @@ export const AppContextProvider = (props) => {
   const [authState, setAuthState] = useState("");
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userData, setUserData] = useState(false);
+  const [allRestaurants, setRegisteredRestaurants] = useState(
+    [...restaurants].sort((a, b) => b.rating - a.rating)
+  );
+  const [allDish, setAllDish] = useState(restaurants.map((res) => res.menu).flat());
 
   console.log(backendUrl);
 
@@ -31,7 +35,11 @@ export const AppContextProvider = (props) => {
     setAuthState,
     isLoggedIn,
     setIsLoggedIn,
+    allRestaurants,
+    setRegisteredRestaurants,
     restaurants,
+    setAllDish,
+    allDish,
   };
 
   return (
