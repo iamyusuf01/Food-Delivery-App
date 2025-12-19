@@ -17,6 +17,8 @@ export const getUserData = async (req, res) => {
       userData: {
         name: user.name,
         email: user.email,
+        bio: user.bio,
+        location: user.location
       },
     });
   } catch (error) {
@@ -26,7 +28,6 @@ export const getUserData = async (req, res) => {
     });
   }
 };
-
 
 export const updateAccountDetails = async (req, res) => {
   try {
@@ -39,13 +40,12 @@ export const updateAccountDetails = async (req, res) => {
       });
     }
 
-
     const user = await User.findByIdAndUpdate(req.user?._id, {
       name,
       email,
       phone,
       bio,
-    }).select('-password -refreshToken');
+    }).select("-password -refreshToken");
 
     if (!user) {
       return res.json({
@@ -59,7 +59,6 @@ export const updateAccountDetails = async (req, res) => {
       message: "Account details updated",
       user,
     });
-    
   } catch (error) {
     console.log(error);
     return res.json({
@@ -71,12 +70,11 @@ export const updateAccountDetails = async (req, res) => {
 
 export const uploadAvatar = async (req, res) => {
   try {
-
-    if(!req.user?._id){
+    if (!req.user?._id) {
       return res.json({
         success: false,
-        message: 'Unauthorized user'
-      })
+        message: "Unauthorized user",
+      });
     }
     const avatarLocalPath = req.file?.path;
 
@@ -105,11 +103,10 @@ export const uploadAvatar = async (req, res) => {
       { new: true }
     ).select("-password -refreshToken");
 
-
     return res.json({
       success: true,
       message: "Avatar updated",
-      user
+      user,
     });
   } catch (error) {
     console.log(error);
@@ -119,3 +116,57 @@ export const uploadAvatar = async (req, res) => {
     });
   }
 };
+
+export const addAddress = async (req, res) => {
+  try {
+    const { location } = req.body;
+    if (!location) {
+      return res.json({
+        success: false,
+        message: "location data is required",
+      });
+    }
+    const { address, street, postCode, appartment } = location;
+
+    if (!address?.trim() || !street?.trim() || !postCode || !appartment) {
+      return res.json({
+        success: false,
+        message: "All fields are required",
+      });
+    }
+
+    const user = await User.findByIdAndUpdate(
+      req.user?._id,
+      {
+        location: {
+          address,
+          street,
+          postCode,
+          appartment,
+        },
+      },
+      { new: true }
+    );
+
+    if (!user) {
+      return res.json({
+        success: false,
+        message: "User not found",
+      });
+    }
+
+    return res.json({
+      success: true,
+      message: "Address Updated Successfully",
+      location: user.location
+    });
+  } catch (error) {
+    console.log(error);
+    return res.json({
+      success: false,
+      mnessage: error.message,
+    });
+  }
+};
+
+

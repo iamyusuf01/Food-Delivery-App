@@ -1,11 +1,13 @@
 import mongoose from "mongoose";
-import Menu from "./menuModel";
 
 const restaurantSchema = new mongoose.Schema({
     name: {
         type: String,
         required: true,
         trim: true
+    },
+    type: {
+        type: String
     },
     rating: {
         type: Number,
@@ -14,7 +16,8 @@ const restaurantSchema = new mongoose.Schema({
         max: 5,
     },
     deliveryTime: {
-        type: String
+        type: String    ,
+        required: true
     },
     isVeg: {
         type: Boolean,
@@ -26,14 +29,20 @@ const restaurantSchema = new mongoose.Schema({
             required:true
         },
         address: {
-            type: String
+            type: String,
+            required:true,
         },
     },
-    image: {
+    avatar: {
         type: String,
         required: true
     },
-    menu: [Menu],
+    menu: [
+        {
+            type: mongoose.Schema.ObjectId,
+            ref: 'Menu'
+        }
+    ],
     isOpen: {
         type: Boolean,
         default: true
