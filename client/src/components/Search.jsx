@@ -1,12 +1,29 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { CiSearch } from "react-icons/ci";
 import { AuthContext } from "../context/AuthContext";
 
 const Search = () => {
-  const { restaurants } = useContext(AuthContext);
+  const { restaurants, setRegisteredRestaurants } =
+    useContext(AuthContext);
   const [input, setInput] = useState("");
 
-  const handleSearchInput = () => {};
+  const handleSearch = () => {
+    if (input) {
+      const searchedRestaurants = restaurants.filter((res) =>
+        res.name.toLowerCase().includes(input.toLowerCase())
+      );
+      console.log(searchedRestaurants);
+      setRegisteredRestaurants(searchedRestaurants);
+    } else {
+      setRegisteredRestaurants(
+        [...restaurants].sort((a, b) => b.rating - a.rating)
+      );
+    }
+  };
+
+  useEffect(() => {
+    handleSearch();
+  }, [input, setRegisteredRestaurants]);
 
   return (
     <div className="mt-2">
@@ -22,11 +39,6 @@ const Search = () => {
           value={input}
           placeholder="Search dishes, restauarants"
           onChange={(e) => setInput(e.target.value)}
-          onKeyDown={(e) => {
-            if (e.key === "Enter") {
-              handleSearchInput();
-            }
-          }}
         />
       </div>
     </div>
