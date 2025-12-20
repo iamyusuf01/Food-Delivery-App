@@ -6,18 +6,22 @@ import { IoBagHandle } from "react-icons/io5";
 import { AuthContext } from "../context/AuthContext";
 import { IoIosStarOutline } from "react-icons/io";
 import { FaRupeeSign } from "react-icons/fa";
+import { Link } from "react-router-dom";
 
 const Search = () => {
-  const { allRestaurants, allDish } = useContext(AuthContext);
+  const { allRestaurants, allDish, navigate } = useContext(AuthContext);
   console.log(allDish);
 
   return (
-    <div className="px-6 pt-10 min-h-screen">
+    <div className="px-6 py-10 min-h-screen">
       <div className="flex justify-between">
         <div className="flex gap-3 items-center">
-          <span className="bg-gray-500/30 p-3 rounded-full">
+          <div
+            onClick={() => navigate(-1)}
+            className="bg-gray-500/30 p-3 rounded-full"
+          >
             <FaChevronLeft />
-          </span>
+          </div>
           <p className="text-xl text-gray-800">Search</p>
         </div>
         <div className="bg-black p-2 rounded-full">
@@ -26,10 +30,14 @@ const Search = () => {
       </div>
       <SearchInput />
       {allRestaurants.length > 0 ? (
-        <div className="">
-          <h6>Suggested Restaurants</h6>
+        <div className="mb-5">
+          <h6 className="font-semibold">Suggested Restaurants</h6>
           {allRestaurants.slice(0, 5).map((res) => (
-            <div key={res.id} className="flex gap-3 mt-3">
+            <Link
+              to={`/all-restaurants/${res.id}`}
+              key={res.id}
+              className="flex gap-3 mt-3"
+            >
               <div className="w-25 h-15 rounded bg-gray-600">
                 <img src="/" alt="" />
               </div>
@@ -40,19 +48,27 @@ const Search = () => {
                   {res.rating}
                 </span>
               </div>
-            </div>
+            </Link>
           ))}
         </div>
       ) : (
-        <div className="">
-          <h4>Restaurant Not Found</h4>
+        <div className="h-40 flex items-center justify-center bg-gray-300 rounded mb-5">
+          <h4 className="text-2xl font-semibold text-black">
+            Restaurant Not Found
+          </h4>
         </div>
       )}
       {allDish.length > 0 ? (
         <div className="">
-          <h6>Suggested Dishes</h6>
+          <h6 className="font-semibold">Suggested Dishes</h6>
           {allDish.slice(0, 5).map((dish) => (
-            <div key={dish.itemId} className="flex gap-3 mt-3">
+            <div
+              onClick={() =>
+                navigate(`food-details/${dish.restaurantId}/${dish.itemId}`)
+              }
+              key={dish.itemId}
+              className="flex gap-3 mt-3"
+            >
               <div className="w-25 h-15 rounded bg-gray-600">
                 <img src="/" alt="" />
               </div>
@@ -67,8 +83,10 @@ const Search = () => {
           ))}
         </div>
       ) : (
-        <div className="">
-          <h4>Dish Not Found</h4>
+        <div className="h-40 flex items-center justify-center bg-gray-300 rounded mb-5">
+          <h4 className="text-2xl font-semibold text-black">
+            Dishes Not Found
+          </h4>
         </div>
       )}
     </div>

@@ -38,6 +38,7 @@ export const restaurants = [
     menu: [
       {
         itemId: 101,
+        restaurantId: 1,
         name: "Butter Chicken",
         price: 320,
         isVeg: false,
@@ -61,6 +62,7 @@ export const restaurants = [
     menu: [
       {
         itemId: 201,
+        restaurantId: 2,
         name: "Quinoa Salad",
         price: 180,
         isVeg: true,
@@ -84,6 +86,7 @@ export const restaurants = [
     menu: [
       {
         itemId: 301,
+        restaurantId: 3,
         name: "Pepperoni Pizza",
         price: 450,
         isVeg: false,
@@ -107,6 +110,7 @@ export const restaurants = [
     menu: [
       {
         itemId: 401,
+        restaurantId: 4,
         name: "Tandoori Chicken",
         price: 380,
         isVeg: false,
@@ -130,6 +134,7 @@ export const restaurants = [
     menu: [
       {
         itemId: 501,
+        restaurantId: 5,
         name: "Chicken Dum Biryani",
         price: 300,
         isVeg: false,
@@ -153,6 +158,7 @@ export const restaurants = [
     menu: [
       {
         itemId: 601,
+        restaurantId: 6,
         name: "Salmon Sushi",
         price: 520,
         isVeg: false,
@@ -176,6 +182,7 @@ export const restaurants = [
     menu: [
       {
         itemId: 701,
+        restaurantId: 7,
         name: "Cheese Burger",
         price: 150,
         isVeg: false,
@@ -199,10 +206,11 @@ export const restaurants = [
     menu: [
       {
         itemId: 801,
+        restaurantId: 8,
         name: "Cold Coffee",
         price: 160,
-        description: "Chilled creamy coffee blended with ice and cocoa.",
         isVeg: true,
+        description: "Chilled creamy coffee blended with ice and cocoa.",
       },
     ],
   },
@@ -221,6 +229,7 @@ export const restaurants = [
     menu: [
       {
         itemId: 901,
+        restaurantId: 9,
         name: "Paneer Kathi Roll",
         price: 140,
         isVeg: true,
@@ -243,6 +252,7 @@ export const restaurants = [
     menu: [
       {
         itemId: 1001,
+        restaurantId: 10,
         name: "Grilled Fish",
         price: 480,
         isVeg: false,
@@ -266,6 +276,7 @@ export const restaurants = [
     menu: [
       {
         itemId: 1101,
+        restaurantId: 11,
         name: "Sarson Ka Saag",
         price: 220,
         isVeg: true,
@@ -289,6 +300,7 @@ export const restaurants = [
     menu: [
       {
         itemId: 1201,
+        restaurantId: 12,
         name: "Pad Thai",
         price: 320,
         isVeg: true,

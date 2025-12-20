@@ -1,22 +1,29 @@
-import React from "react";
+import React, { useContext } from "react";
 import { restaurants } from "../assets/assets";
 import { FaPlus } from "react-icons/fa";
-import { useNavigate } from "react-router";
+import { AuthContext } from "../context/AuthContext";
+import Navbar from "../components/Navbar";
 
 const Food = () => {
-  const navigate = useNavigate();
+  const { navigate } = useContext(AuthContext);
   return (
     <div className="p-6">
-      <div className="">
+      <Navbar />
+      <div className="mt-5">
         {restaurants.map((resItem) => (
           <div key={resItem.id} className="grid grid-cols-2">
             {resItem?.menu.map((item) => (
               <div
                 key={item.itemId}
                 className="py-2 px-1"
-                onClick={() => navigate(`/food-details/${resItem.id}/${item.itemId}`)}
+                onClick={() =>
+                  navigate(`/food-details/${resItem.id}/${item.itemId}`)
+                }
               >
-                <img src={resItem.image} className=" h-32 bg-gray-300 rounded-xl"/>
+                <img
+                  src={resItem.image}
+                  className=" h-32 bg-gray-300 rounded-xl"
+                />
                 <h2 className="font-medium text-xl">{item.name}</h2>
                 <p className="">{resItem.name}</p>
                 <div className="flex items-center justify-between">
