@@ -1,14 +1,16 @@
-import { useNavigate, useParams } from "react-router";
+import { useParams } from "react-router";
 import { restaurants } from "../assets/assets";
 import { FaChevronLeft, FaRegStar } from "react-icons/fa";
 import { TbTruckDelivery } from "react-icons/tb";
 import { MdOutlineAccessTime } from "react-icons/md";
 import { FaPlus, FaMinus } from "react-icons/fa";
 import AddToCart from "./AddToCart";
+import { useContext } from "react";
+import { AuthContext } from "../context/AuthContext";
 
 const FoodDetails = () => {
   const { itemId, id } = useParams();
-  const navigate = useNavigate();
+  const { navigate } = useContext(AuthContext);
 
   const resItem = restaurants?.find((resItem) => resItem.id === parseInt(id));
   const item = resItem?.menu?.find((item) => item.itemId === parseInt(itemId));
@@ -20,7 +22,7 @@ const FoodDetails = () => {
         <div className="flex items-center gap-4 ">
           <button
             className="w-10 h-10 rounded-full p-3 bg-gray-200"
-            onClick={() => navigate("/food")}
+            onClick={() => navigate(-1)}
           >
             <FaChevronLeft />
           </button>

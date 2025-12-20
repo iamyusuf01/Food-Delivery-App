@@ -1,4 +1,4 @@
-import React, { use, useEffect, useState } from "react";
+import React, { use, useContext, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router";
 import { restaurants } from "../assets/assets";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa6";
@@ -9,26 +9,28 @@ import { MdOutlineAccessTime } from "react-icons/md";
 import { RxCross2 } from "react-icons/rx";
 
 import Filter from "../components/Filter";
+import { AuthContext } from "../context/AuthContext";
+
+const itemList = [
+  {
+    name: "Burger",
+  },
+  {
+    name: "Sandwich",
+  },
+  {
+    name: "Pizza ",
+  },
+  {
+    name: "Sandwich",
+  },
+];
 
 const RestaurantView = () => {
-  const itemList = [
-    {
-      name: "Burger",
-    },
-    {
-      name: "Sandwich",
-    },
-    {
-      name: "Pizza ",
-    },
-    {
-      name: "Sandwich",
-    },
-  ];
+  const { navigate } = useContext(AuthContext);
 
   const [open, setOpen] = useState(false);
   const { id } = useParams();
-  const navigate = useNavigate();
 
   const restaurant = restaurants.find(
     (restaurant) => restaurant.id === parseInt(id)
@@ -40,7 +42,7 @@ const RestaurantView = () => {
         <div className="flex items-center gap-4 ">
           <button
             className="w-10 h-10 rounded-full p-3 bg-gray-200"
-            onClick={() => navigate("/all-restaurants")}
+            onClick={() => navigate(-1)}
           >
             <FaChevronLeft />
           </button>

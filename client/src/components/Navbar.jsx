@@ -8,7 +8,7 @@ import { Link, useNavigate } from "react-router";
 const Navbar = () => {
   const navigate = useNavigate();
   return (
-    <div className="p-6">
+    <div>
       {/*  */}
       <div className="flex justify-between items-center">
         <div className="flex gap-4">

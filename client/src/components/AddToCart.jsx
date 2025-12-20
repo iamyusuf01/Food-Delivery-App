@@ -26,7 +26,7 @@ const AddToCart = ({ restaurants, menu }) => {
     });
     navigate("/my-cart");
   };
-  console.log(handleAddToCart);
+
   return (
     <div className="rounded-3xl bg-gray-200 p-6 w-full">
       <div className="flex items-center py-4 pt-4 mt-6 justify-between ">

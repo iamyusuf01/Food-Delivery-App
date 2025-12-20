@@ -2,11 +2,13 @@ import { createContext, useState } from "react";
 import { restaurants } from "../assets/assets";
 import axios from "axios";
 import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 export const AuthContext = createContext();
 
 export const AppContextProvider = (props) => {
   axios.defaults.withCredentials = true;
+  const navigate = useNavigate();
 
   const backendUrl = import.meta.env.VITE_BACKEND_URL;
   const [authState, setAuthState] = useState("");
@@ -15,7 +17,9 @@ export const AppContextProvider = (props) => {
   const [allRestaurants, setRegisteredRestaurants] = useState(
     [...restaurants].sort((a, b) => b.rating - a.rating)
   );
-  const [allDish, setAllDish] = useState(restaurants.map((res) => res.menu).flat());
+  const [allDish, setAllDish] = useState(
+    restaurants.map((res) => res.menu).flat()
+  );
 
   console.log(backendUrl);
 
@@ -31,6 +35,7 @@ export const AppContextProvider = (props) => {
   };
 
   const value = {
+    navigate,
     authState,
     setAuthState,
     isLoggedIn,

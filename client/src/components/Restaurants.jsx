@@ -10,7 +10,7 @@ import { MdOutlineAccessTime } from "react-icons/md"
 const Restaurants = () => {
   const navigate = useNavigate();
   return (
-    <div className="p-6">
+    <div>
       <div className="flex justify-between items-center">
         <h2>Open Restaurants</h2>
         <div
