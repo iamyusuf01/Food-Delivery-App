@@ -6,6 +6,11 @@ const menuSchema = new mongoose.Schema(
       type: Number,
       required: true,
     },
+    restaurant: {
+      type: mongoose.Schema.ObjectId,
+      ref: 'Restaurant',
+      required: true
+    },
     name: {
       type: String,
       required: true,
@@ -26,7 +31,7 @@ const menuSchema = new mongoose.Schema(
       type: String,
     },
   },
-  { _id: false }
+  { timestamps: true }
 );
 
 const Menu = mongoose.models.Menu || mongoose.model("Menu", menuSchema);

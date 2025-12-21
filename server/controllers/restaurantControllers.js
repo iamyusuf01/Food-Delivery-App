@@ -1,4 +1,5 @@
 import { uploadOnCloudinary } from "../config/cloudinary.js";
+import Menu from "../models/menuModel.js";
 import Restaurant from "../models/restaurantModel.js";
 
 export const addRestaurant = async (req, res) => {
@@ -63,3 +64,99 @@ export const addRestaurant = async (req, res) => {
     });
   }
 };
+
+export const getCurrentRestaurant = async (req, res) => {
+  try {
+    const { restaurantId } = req.body;
+    if (!restaurantId) {
+      return res.json({
+        success: false,
+        message: "Restaurant Id required",
+      });
+    }
+    const restaurants = await Restaurant.findById(restaurantId).populate(
+      "menu"
+    );
+    if (!restaurants) {
+      return res.json({
+        success: false,
+        message: "Restaurant not found",
+      });
+    }
+
+    return res.json({
+      success: true,
+      message: "Fetching restaurants successfully",
+      restaurants
+    });
+  } catch (error) {
+    console.log(error);
+    return res.json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+export const getAllRestaurants = async (req, res) => {
+  try {
+    const restaurants = await Restaurant.find().populate(
+      "menu"
+    );
+    if (!restaurants) {
+      return res.json({
+        success: false,
+        message: "Restaurant not found",
+      });
+    }
+
+    return res.json({
+      success: true,
+      message: "Fetching all restaurants successfully",
+      restaurants
+    });
+  } catch (error) {
+    console.log(error);
+    return res.json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+export const deleteRestaurant = async (req, res) => {
+  try {
+    const { restaurantId } = req.body;
+
+    if (!restaurantId) {
+      return res.json({
+        success: false,
+        message: "Restaurant Id required",
+      });
+    }
+
+    const restaurant = await Restaurant.findById(restaurantId);
+    if (!restaurant) {
+      return res.json({
+        success: false,
+        message: "Restaurant not found",
+      });
+    }
+
+    if(restaurant.menu?.length){
+      await Menu.deleteMany({_id: {$in: restaurant.menu}});
+    }
+
+    await Restaurant.findByIdAndDelete(restaurantId)
+    return res.json({
+      success: true,
+      message: "Restaurant deleted successfully",
+    });
+  } catch (error) {
+    console.log(error);
+    return res.json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
