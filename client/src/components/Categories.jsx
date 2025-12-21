@@ -21,7 +21,7 @@ const Categories = () => {
     },
   ];
   return (
-    <div className="p-6">
+    <div>
       <div className="flex justify-between items-center">
         <h2>All Categories</h2>
         <div className="flex items-center gap-2">

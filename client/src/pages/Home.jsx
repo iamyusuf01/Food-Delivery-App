@@ -13,9 +13,11 @@ const Home = () => {
 
   return !isLoggedIn ? (
     <div className="relative ">
-      <div>
+      <div className="p-6 flex flex-col gap-3">
         <Navbar />
-        <Search />
+        <h2 className="text-sm pb-2">
+          Hey Halal, <span className="font-medium">Good Afternoon</span>
+        </h2>
         <Categories />
         <Restaurants />
       </div>
@@ -25,7 +27,6 @@ const Home = () => {
     </div>
   ) : (
     <Login />
-
   );
 };
 
