@@ -26,20 +26,24 @@ const userSchema = new mongoose.Schema(
     phone: {
       type: Number,
       unique: true,
-      default: 0,
     },
     bio: {
       type: String,
       default: "",
     },
+    role: {
+      type: String,
+      enum: ["user", "admin", "seller"],
+      default: "user",
+    },
     location: {
       address: {
         type: String,
-        required: true,
+        default: ''
       },
       street: {
         type: String,
-        required: true,
+        default: ''
       },
       postCode: {
         type: Number,

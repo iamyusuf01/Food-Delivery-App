@@ -79,19 +79,19 @@ export const register = async (req, res) => {
 const generateAccessTokenAndRefreshTokens = async (userId, res) => {
   try {
     const user = await User.findById(userId);
-    if(!user){
-      return 'User not found'
+    if (!user) {
+      return "User not found";
     }
     const accessToken = user.generateAccessToken();
     const refreshToken = user.generateRefreshToken();
 
-    user.accessToken = accessToken
+    user.accessToken = accessToken;
     user.refreshToken = refreshToken;
     await user.save({ ValidityBeforeSave: false });
 
-    return { accessToken, refreshToken } 
+    return { accessToken, refreshToken };
   } catch (error) {
-    console.log(error)
+    console.log(error);
   }
 };
 
@@ -193,7 +193,6 @@ export const login = async (req, res) => {
       httpOnly: true,
       secure: true,
     };
-
 
     return res
       .cookie("accessToken", accessToken, options)
@@ -364,4 +363,41 @@ export const isAuthenticate = async (req, res) => {
       message: error.message,
     });
   }
+};
+
+export const updateUserRole = async (req, res) => {
+  try {
+    const { role } = req.body;
+    if (!req.user?._id || !role) {
+      return res.json({
+        success: false,
+        message: "UserId and role are required",
+      });
+    }
+
+    if (!["user", "admin", "seller"].includes(role)) {
+      return res.json({
+        success: false,
+        message: "Invalid role",
+      });
+    }
+
+    const user = await User.findByIdAndUpdate(req.user?._id,
+      {role},
+      {new: true}
+    ).select("-password");
+
+    if(!user){
+      return res.json({
+        success: false,
+        message: "User not found"
+      })
+    }
+
+    return res.json({
+      success: true,
+      message: "Role updated succesfully",
+      user
+    })
+  } catch (error) {}
 };

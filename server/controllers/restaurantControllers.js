@@ -9,7 +9,7 @@ export const addRestaurant = async (req, res) => {
     }
     const { name, location, type, deliveryTime } = req.body;
 
-    if (!name || !type || !deliveryTime || !location) {
+    if (!name || !type || !deliveryTime ) {
       return res.json({
         success: true,
         message: "All fields are required",
@@ -18,7 +18,7 @@ export const addRestaurant = async (req, res) => {
 
     const { city, address } = location;
 
-    if (!city || !address) {
+    if ( !location.city || !location.address) {
       return res.json({
         success: false,
         message: "City and address are required",
