@@ -45,6 +45,15 @@ export const restaurants = [
         description:
           "Creamy tomato-based gravy with tender tandoori chicken pieces.",
       },
+      {
+        itemId: 125,
+        restaurantId: 1,
+        name: "Chicken Burger",
+        price: 320,
+        isVeg: false,
+        description:
+          "Creamy tomato-based gravy with tender tandoori chicken pieces.",
+      },
     ],
   },
   {

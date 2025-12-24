@@ -9,7 +9,8 @@ import { FaRupeeSign } from "react-icons/fa";
 import { Link } from "react-router-dom";
 
 const Search = () => {
-  const { allRestaurants, allDish, navigate } = useContext(AuthContext);
+  const { allRestaurants, allDish, navigate, menuOptions } =
+    useContext(AuthContext);
   console.log(allDish);
 
   return (
@@ -29,9 +30,24 @@ const Search = () => {
         </div>
       </div>
       <SearchInput />
+      <div className="">
+        <h3 className="font-semibold text-gray-700">Recent Keywords</h3>
+        <div className="w-full flex items-start gap-4 mt-3 overflow-x-scroll whitespace-nowrap h-19 no-scrollbar">
+          {menuOptions.map((item) => (
+            <div
+              className="flex items-center justify-center text-xl text-indigo-950 font-semibold 
+              rounded-full px-5 py-3 bg-gray-600/10 shadow-lg"
+              key={item.label}
+              onClick={() => navigate(`/search/${item.value}`)}
+            >
+              {item.value.charAt(0).toUpperCase() + item.value.slice(1)}
+            </div>
+          ))}
+        </div>
+      </div>
       {allRestaurants.length > 0 ? (
         <div className="mb-5">
-          <h6 className="font-semibold">Suggested Restaurants</h6>
+          <h6 className="font-semibold text-gray-700">Suggested Restaurants</h6>
           {allRestaurants.slice(0, 5).map((res) => (
             <Link
               to={`/all-restaurants/${res.id}`}
@@ -60,7 +76,7 @@ const Search = () => {
       )}
       {allDish.length > 0 ? (
         <div className="">
-          <h6 className="font-semibold">Suggested Dishes</h6>
+          <h6 className="font-semibold text-gray-700">Suggested Dishes</h6>
           {allDish.slice(0, 5).map((dish) => (
             <div
               onClick={() =>

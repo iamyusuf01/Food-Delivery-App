@@ -54,7 +54,7 @@ export const CardContextProvider = (props) => {
     // setResItems((prev) => [...prev, restaurant]);
     setCartItems((prev) => [...prev, menuItem]);
     navigate("/my-cart");
-    console.log(menuItem, restaurant);
+    console.log(menuItem, restaurant,'this is from cart context');
   };
 
   const removeCartItem = (itemId) => {
@@ -84,7 +84,8 @@ export const CardContextProvider = (props) => {
     addToCartItems,
     setCartItems,
     cartItems,
-    removeCartItem
+    removeCartItem,
+    navigate
   };
 
   return (
