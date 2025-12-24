@@ -1,21 +1,22 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 import { FaChevronLeft, FaPlus, FaSortDown } from "react-icons/fa";
 import { CgNotes, CgSearch } from "react-icons/cg";
 import { RiSoundModuleLine } from "react-icons/ri";
 import Select from "react-select";
+import { FaX } from "react-icons/fa6";
 
 const SpecificItem = () => {
   const { item } = useParams();
   const { allDish, restaurants, navigate, menuOptions } =
     useContext(AuthContext);
 
-  const selectedOption = menuOptions.find((option) => option.value === item);
+  const [filteredItems, setFilteredItems] = useState([]);
+  const [filter, setFilter] = useState(false);
+  const [sort, setSort] = useState("");
 
-  const filteredFoodItems = allDish.filter((dish) =>
-    dish.name.toLowerCase().includes(item)
-  );
+  const selectedOption = menuOptions.find((option) => option.value === item);
 
   const findRestaurantName = (id) => {
     const restaurant = restaurants.find((res) => res.id === id);
@@ -54,8 +55,32 @@ const SpecificItem = () => {
     }),
   };
 
+  const handleFilter = (sortBy) => {
+    setSort(sortBy);
+    let filtered;
+    if (sortBy === "low_to_high") {
+      filtered = allDish
+        .filter((dish) => dish.name.toLowerCase().includes(item))
+        .sort((a, b) => a.price - b.price);
+    } else if (sortBy === "high_to_low") {
+      filtered = allDish
+        .filter((dish) => dish.name.toLowerCase().includes(item))
+        .sort((a, b) => b.price - a.price);
+    }
+    setFilteredItems(filtered);
+  };
+
+  useEffect(() => {
+    const filtered = allDish.filter((dish) =>
+      dish.name.toLowerCase().includes(item)
+    );
+
+    setFilteredItems(filtered);
+    setSort("");
+  }, [item]);
+
   return (
-    <div className="p-6">
+    <div className="p-6 relative min-h-screen">
       <div className="flex gap-3 items-center justify-between mb-5">
         <div className="flex gap-3 items-center">
           <div
@@ -80,7 +105,7 @@ const SpecificItem = () => {
           </Link>
           <button
             className="rounded-full bg-black p-2"
-            // onClick={() => navigate("/")}
+            onClick={() => setFilter(true)}
           >
             <RiSoundModuleLine size={24} fill="white" />
           </button>
@@ -89,17 +114,19 @@ const SpecificItem = () => {
       <h1 className="text-xl font-semibold mb-5">
         Popular {item.charAt(0).toUpperCase() + item.slice(1) + "s"}
       </h1>
-      {filteredFoodItems.length === 0 ? (
+      {filteredItems.length === 0 ? (
         <div className="flex items-center justify-center h-50">
           <p className="text-2xl font-semibold text-center text-gray-700">
             No Such Menu Items is Available Right Now!
           </p>
-          
         </div>
       ) : (
         <div className="grid grid-cols-2 gap-5">
-          {filteredFoodItems.map((item) => (
+          {filteredItems.map((item) => (
             <div
+              onClick={() =>
+                navigate(`/food-details/${item.restaurantId}/${item.itemId}`)
+              }
               key={item.itemId}
               className="bg-white shadow-xl p-3 w-full rounded-2xl"
             >
@@ -118,6 +145,55 @@ const SpecificItem = () => {
               </div>
             </div>
           ))}
+        </div>
+      )}
+      {filter && (
+        <div className="absolute bg-gray-400/20 z-50 w-full left-0 top-0 h-screen">
+          <div className="relative bg-white m-6 rounded-2xl min-h-1/4 p-6 space-y-2">
+            <div
+              onClick={() => setFilter(false)}
+              className="absolute right-3 top-3 cursor-pointer bg-red-600 p-3 rounded-full text-white"
+            >
+              <FaX />
+            </div>
+            <p className="text-xl font-semibold underline text-gray-800 mb-3 underline-offset-5 ">
+              Sort by Price
+            </p>
+            <div className="flex hover:bg-gray-400/20 p-3">
+              <input
+                type="radio"
+                name="price"
+                value={"low_to_high"}
+                id="low_to_high"
+                className="w-20"
+                checked={sort === "low_to_high" ? true : false}
+                onChange={(e) => handleFilter(e.target.value)}
+              />
+              <label
+                htmlFor="low_to_high"
+                className="text-xl font-bold text-gray-800"
+              >
+                Low to High
+              </label>
+            </div>
+            <div className="flex hover:bg-gray-400/20 p-3">
+              <input
+                type="radio"
+                name="price"
+                value={"high_to_low"}
+                id="high_to_low"
+                className="w-20"
+                checked={sort === "high_to_low" ? true : false}
+                onChange={(e) => handleFilter(e.target.value)}
+              />
+              <label
+                htmlFor="high_to_low"
+                className="text-xl font-bold text-gray-800"
+              >
+                High to Low
+              </label>
+            </div>
+          </div>
         </div>
       )}
     </div>
