@@ -2,10 +2,11 @@ import React, { useContext, useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 import { FaChevronLeft, FaPlus, FaSortDown } from "react-icons/fa";
-import { CgNotes, CgSearch } from "react-icons/cg";
+import {  CgSearch } from "react-icons/cg";
 import { RiSoundModuleLine } from "react-icons/ri";
 import Select from "react-select";
 import { FaX } from "react-icons/fa6";
+import OpenRestaurants from "../components/OpenRestaurants";
 
 const SpecificItem = () => {
   const { item } = useParams();
@@ -147,6 +148,7 @@ const SpecificItem = () => {
           ))}
         </div>
       )}
+      <OpenRestaurants filteredDishes={filteredItems} />
       {filter && (
         <div className="absolute bg-gray-400/20 z-50 w-full left-0 top-0 h-screen">
           <div className="relative bg-white m-6 rounded-2xl min-h-1/4 p-6 space-y-2">
