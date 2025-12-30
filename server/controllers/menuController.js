@@ -117,3 +117,40 @@ export const updateItem = async (req, res) => {
     });
   }
 };
+
+export const deleteItem = async (req, res) => {
+  try {
+    const { itemId } = req.params;
+    const { restaurantId } = req.body;
+
+    if (!itemId || !restaurantId) {
+      return res.status(400).json({
+        success: false,
+        message: "itemId and restaurantId are required",
+      });
+    }
+
+    const restaurant = await Restaurant.findById(restaurantId);
+    if (!restaurant) {
+      return res.json({
+        success: false,
+        message: "restaurant Id not found",
+      });
+    }
+    const menu = await Menu.findByIdAndDelete({
+      _id: itemId,
+      restaurant: restaurantId,
+    });
+
+    return res.json({
+      success: true,
+      message: "Menu item deleted successfully",
+      menu,
+    });
+  } catch (error) {
+    return res.json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
