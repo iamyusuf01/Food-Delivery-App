@@ -160,3 +160,53 @@ export const deleteRestaurant = async (req, res) => {
   }
 };
 
+export const updateAvatar = async (req, res) => {
+  try {
+    if (!req.user?._id) {
+      return res.json({
+        success: false,
+        message: "Unauthorized user",
+      });
+    }
+    const avatarLocalPath = req.file?.path;
+
+    if (!avatarLocalPath) {
+      return res.json({
+        success: false,
+        message: "Avatar file is missing",
+      });
+    }
+
+    const avatar = await uploadOnCloudinary(avatarLocalPath);
+    if (!avatar?.url) {
+      return res.json({
+        success: false,
+        message: "Avatar upload failed",
+      });
+    }
+
+    const user = await User.findByIdAndUpdate(
+      req.user._id,
+      {
+        $set: {
+          avatar: avatar.url,
+        },
+      },
+      { new: true }
+    ).select("-password -refreshToken");
+
+    return res.json({
+      success: true,
+      message: "Avatar updated",
+      user,
+    });
+  } catch (error) {
+    console.log(error);
+    return res.json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+

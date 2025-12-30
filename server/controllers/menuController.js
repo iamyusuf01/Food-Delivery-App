@@ -4,16 +4,17 @@ import Menu from "../models/menuModel.js";
 
 export const addItems = async (req, res) => {
   try {
-    const { restaurantId, name, price, description } = req.body;
+    const { name, price, description } = req.body;
+    const { restaurantId } = req.params;
 
-    if (!restaurantId || !name || price === undefined || !description) {
+    if (!name || !price || !description) {
       return res.json({
         success: false,
         message: "All fields are required",
       });
     }
 
-    const restaurant = await Restaurant.findById(restaurantId)
+    const restaurant = await Restaurant.findById(restaurantId);
     if (!restaurant) {
       return res.json({
         success: false,
@@ -58,6 +59,55 @@ export const addItems = async (req, res) => {
     return res.json({
       success: true,
       message: "Item Added Successfully",
+      menuItem,
+    });
+  } catch (error) {
+    return res.json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+export const updateItem = async (req, res) => {
+  try {
+    const { name, description, price, restaurantId } = req.body;
+    const { itemId } = req.params;
+    if (!name || !description || !price) {
+      return res.json({
+        success: false,
+        message: "All fields are required",
+      });
+    }
+
+    const restaurant = await Restaurant.findById(restaurantId);
+    if (!restaurant) {
+      return res.json({
+        success: false,
+        message: "Restaurant not founds",
+      });
+    }
+    const menuItem = await Menu.findByIdAndUpdate(
+      { _id: itemId, restaurant: restaurantId },
+      {
+        name,
+        description,
+        price,
+        restaurant: restaurantId,
+      },
+      { new: true }
+    );
+
+    if (!menuItem) {
+      return res.json({
+        success: false,
+        message: "Menu item not found for this restaurant",
+      });
+    }
+
+    return res.json({
+      success: true,
+      message: "Item updated Successfully",
       menuItem,
     });
   } catch (error) {

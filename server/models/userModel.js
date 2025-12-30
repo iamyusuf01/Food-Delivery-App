@@ -39,11 +39,11 @@ const userSchema = new mongoose.Schema(
     location: {
       address: {
         type: String,
-        default: ''
+        default: "",
       },
       street: {
         type: String,
-        default: ''
+        default: "",
       },
       postCode: {
         type: Number,
@@ -93,6 +93,7 @@ userSchema.methods.generateRefreshToken = function () {
   return jwt.sign(
     {
       _id: this._id,
+      role: this.role,
     },
     process.env.REFRESH_TOKEN_SECRET,
     {
