@@ -17,6 +17,7 @@ import AddCard from "./payment/AddCard";
 import CheckPayment from "./payment/CheckPayment";
 import { ToastContainer } from "react-toastify";
 import Search from "./pages/Search";
+import SpecificItem from "./pages/SpecificItem";
 
 function App() {
   return (
@@ -46,6 +47,7 @@ function App() {
         <Route path="/verification" element={<Verification />} />
 
         <Route path="/search" element={<Search />} />
+        <Route path="/search/:item" element={<SpecificItem />} />
       </Routes>
     </div>
   );

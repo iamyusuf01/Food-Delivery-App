@@ -6,6 +6,14 @@ import { useNavigate } from "react-router-dom";
 
 export const AuthContext = createContext();
 
+const menuOptions = [
+  { value: "burger", label: "BURGER" },
+  { value: "pizza", label: "PIZZA" },
+  { value: "hotdog", label: "HOTDOG" },
+  { value: "chicken", label: "CHICKEN" },
+  { value: "biryani", label: "BIRYANI" },
+];
+
 export const AppContextProvider = (props) => {
   axios.defaults.withCredentials = true;
   const navigate = useNavigate();
@@ -45,6 +53,7 @@ export const AppContextProvider = (props) => {
     restaurants,
     setAllDish,
     allDish,
+    menuOptions,
   };
 
   return (
