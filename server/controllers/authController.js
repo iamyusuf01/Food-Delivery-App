@@ -365,3 +365,39 @@ export const isAuthenticate = async (req, res) => {
   }
 };
 
+export const updateUserRole = async (req, res) => {
+  try {
+    const { role } = req.body;
+    if (!req.user?._id || !role) {
+      return res.json({
+        success: false,
+        message: "UserId and role are required",
+      });
+    }
+
+    if (!["user", "admin", "seller"].includes(role)) {
+      return res.json({
+        success: false,
+        message: "Invalid role",
+      });
+    }
+
+    const user = await User.findByIdAndUpdate(req.user?._id,
+      {role},
+      {new: true}
+    ).select("-password");
+
+    if(!user){
+      return res.json({
+        success: false,
+        message: "User not found"
+      })
+    }
+
+    return res.json({
+      success: true,
+      message: "Role updated succesfully",
+      user
+    })
+  } catch (error) {}
+};

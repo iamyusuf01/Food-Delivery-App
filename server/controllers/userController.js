@@ -1,5 +1,6 @@
 import User from "../models/userModel.js";
 import { uploadOnCloudinary } from "../config/cloudinary.js";
+import stripe from "../config/stripe.js";
 
 export const getUserData = async (req, res) => {
   try {
@@ -170,40 +171,30 @@ export const addAddress = async (req, res) => {
   }
 };
 
-export const updateUserRole = async (req, res) => {
+export const paymentInstance = async (req, res) => {
   try {
-    const { role } = req.body;
-    if (!req.user?._id || !role) {
-      return res.json({
-        success: false,
-        message: "UserId and role are required",
-      });
-    }
+    const { amount, email } = req.body;
 
-    if (!["user", "admin", "seller"].includes(role)) {
-      return res.json({
-        success: false,
-        message: "Invalid role",
-      });
-    }
-
-    const user = await User.findByIdAndUpdate(
-      req.user?._id,
-      { role },
-      { new: true }
-    ).select("-password");
-
-    if (!user) {
-      return res.json({
-        success: false,
-        message: "User not found",
-      });
-    }
-
-    return res.json({
-      success: true,
-      message: "Role updated succesfully",
-      user,
+    // amount must be in paise (₹25 = 2500)
+    const paymentIntent = await stripe.paymentIntents.create({
+      amount,
+      currency: "inr",
+      receipt_email: email,
+      automatic_payment_methods: {
+        enabled: true,
+      },
+      description: "Your Food Order",
     });
-  } catch (error) {}
+
+    res.status(200).json({
+      success: true,
+      clientSecret: paymentIntent.client_secret,
+    });
+
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
 };
