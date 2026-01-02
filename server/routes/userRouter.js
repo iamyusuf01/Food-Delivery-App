@@ -12,12 +12,12 @@ import { updateUserRole } from "../controllers/authController.js";
 
 const router = express.Router();
 
-router.get("/:id", auth, getUserData);
+router.get("/data", auth, getUserData);
 router.patch("/update-account", auth, updateAccountDetails);
 router.post("/avatar", auth,  upload.single("avatar"), uploadAvatar);
 router.post('/address', auth, addAddress)
 router.patch('/update-role', auth, authorizeRoles("admin"), updateUserRole)
-router.post('/payment', auth, paymentInstance)
+router.get('/payment',  paymentInstance)
 
 
 export default router;

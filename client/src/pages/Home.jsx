@@ -11,7 +11,7 @@ import { redirect } from "react-router-dom";
 const Home = () => {
   const { isLoggedIn, setIsLoggedIn } = useContext(AuthContext);
 
-  return !isLoggedIn ? (
+  return (
     <div className="relative ">
       <div className="p-6 flex flex-col gap-3">
         <Navbar />
@@ -25,8 +25,6 @@ const Home = () => {
         <Offers />
       </div>
     </div>
-  ) : (
-    <Login />
   );
 };
 

@@ -191,7 +191,9 @@ export const login = async (req, res) => {
 
     const options = {
       httpOnly: true,
-      secure: true,
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
     };
 
     return res
@@ -382,22 +384,23 @@ export const updateUserRole = async (req, res) => {
       });
     }
 
-    const user = await User.findByIdAndUpdate(req.user?._id,
-      {role},
-      {new: true}
+    const user = await User.findByIdAndUpdate(
+      req.user?._id,
+      { role },
+      { new: true }
     ).select("-password");
 
-    if(!user){
+    if (!user) {
       return res.json({
         success: false,
-        message: "User not found"
-      })
+        message: "User not found",
+      });
     }
 
     return res.json({
       success: true,
       message: "Role updated succesfully",
-      user
-    })
+      user,
+    });
   } catch (error) {}
 };

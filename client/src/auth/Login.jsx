@@ -11,26 +11,26 @@ import axios from "axios";
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const { authState, setAuthState, backendUrl, setIsLoggedIn } =
-    useContext(AuthContext);
+  const { backendUrl, getUserData, setIsLoggedIn } = useContext(AuthContext);
 
   const navigate = useNavigate();
 
   const onClickHandler = async (e) => {
+    e.preventDefault();
     try {
-      e.preventDefault();
       const { data } = await axios.post(
         "http://localhost:4000/api/auth/login",
-        { email, password }
+        { email, password },
+        { withCredentials: true }
       );
       if (data.success) {
         setIsLoggedIn(true);
+        getUserData()
         toast.success(data.message);
         navigate("/");
       } else {
         toast.error(data.message);
       }
-      console.log(data);
     } catch (error) {
       toast.error(error.message);
     }
@@ -96,7 +96,6 @@ const Login = () => {
               </div>
               <button
                 type="submit"
-                // onClick={handleClick}
                 className="uppercase mt-6 bg-amber-500 h-12 rounded text-sm"
               >
                 Log in
