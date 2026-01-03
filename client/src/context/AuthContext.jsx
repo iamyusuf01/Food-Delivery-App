@@ -24,25 +24,23 @@ export const AppContextProvider = (props) => {
   // const [authState, setAuthState] = useState("");
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userData, setUserData] = useState(null);
-  const [token, setToken] = useState(localStorage.getItem("accessToken"));
   const [allRestaurants, setRegisteredRestaurants] = useState(
     [...restaurants].sort((a, b) => b.rating - a.rating)
   );
   const [allDish, setAllDish] = useState(
     restaurants.map((res) => res.menu).flat()
   );
-
-  console.log(backendUrl);
+  const token = localStorage.getItem("accessToken");
 
   const getAuthState = async () => {
     try {
-      const { data } = await axios.get(
+      const { data } = await axios.post(
         "http://localhost:4000/api/auth/is-auth",
         { withCredentials: true }
       );
       if (data.success) {
         setIsLoggedIn(true);
-        getUserData();
+        getUserData()
       }
     } catch (error) {
       toast.error(error.message);
@@ -50,31 +48,29 @@ export const AppContextProvider = (props) => {
   };
 
   const getUserData = async () => {
-    if (!token) {
-      setIsLoggedIn(false);
-      return;
-    }
     try {
-      const { data } = await axios.get("http://localhost:4000/api/user/data", {
-        headers: { Authorization: `Bearer ${token}` },
-        withCredentials: true,
-      });
-      if (data.success) {
-        setUserData(data.userData);
+      const { data } = await axios.get(
+        "http://localhost:4000/api/user/data",
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        },
+        { withCredentials: true }
+      );
+      if (data?.success) {
         setIsLoggedIn(true);
-        console.log(data);
+        setUserData(data.userData);
+        console.log(data)
       } else {
         toast.error(data.message);
-        setIsLoggedIn(false);
       }
     } catch (error) {
       toast.error(error.message);
     }
   };
+
   useEffect(() => {
-    getAuthState;
-    getUserData;
-  });
+    getAuthState();
+  }, []);
 
   useEffect(() => {
     if (!token) {
@@ -84,7 +80,6 @@ export const AppContextProvider = (props) => {
 
   const value = {
     token,
-    setToken,
     navigate,
     isLoggedIn,
     setIsLoggedIn,

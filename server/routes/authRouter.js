@@ -9,7 +9,7 @@ router.post('/register',  register);
 router.post('/login', login)
 
 router.post('/logout', auth, logout)
-router.post('refresh-token', refreshAccessToken)
+router.post('/refresh-token', refreshAccessToken)
 
 router.post('/send-reset-otp',  sendResetOtp)
 router.post('/change-password', resetPassword)

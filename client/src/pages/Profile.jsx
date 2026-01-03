@@ -22,11 +22,11 @@ const Profile = () => {
   const logout = async () => {
     try {
       const { data } = await axios.post(
-        "http://localhost:4000/api/auth/logout"
+        "http://localhost:4000/api/auth/logout", {}
       );
       if (data.success) {
         setIsLoggedIn(false);
-        navigate("/signup");
+        navigate("/login");
       } else {
         toast.error(data.message);
       }
@@ -56,12 +56,12 @@ const Profile = () => {
           </div>
           {/*  */}
           <div className="flex items-center justify-between py-12">
-            <div className="w-30 h-30 rounded-full p-3 bg-gray-200">
-              <img />
+            <div className="w-32 h-32 rounded-full bg-orange-200 overflow-hidden">
+              <img src={userData?.avatar} className="w-full h-full object-cover" />
             </div>
             <div className="">
               <h1 className="font-medium text-xl">{userData?.name}</h1>
-              <p className="text-sm text-center">I love fast food</p>
+              <p className="text-sm text-center">{userData?.bio}</p>
             </div>
           </div>
           {/*  */}
@@ -218,6 +218,17 @@ const Profile = () => {
         </div>
       ) : (
         <div className="pt-6">
+          <div className="flex justify-between items-center py-4">
+            <div className="flex items-center gap-4 ">
+              <button
+                className="w-10 h-10 rounded-full p-3 bg-gray-200"
+                onClick={() => navigate("/")}
+              >
+                <FaChevronLeft />
+              </button>
+              <h2 className="font-medium">Profile</h2>
+            </div>
+          </div>
           <ul className=" bg-gray-100 rounded-xl py-4 px-8 ">
             <div className="flex justify-between items-cente mt-2">
               <li className="w-30 h-30 rounded-full p-3 bg-gray-200">

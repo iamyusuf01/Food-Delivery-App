@@ -135,7 +135,7 @@ export const refreshAccessToken = async (req, res) => {
       await generateAccessTokenAndRefreshTokens(user._id);
     return res
       .cookie("accessToken", accessToken, options)
-      .cookie("refreshToken", newRefreshTokenToken, options)
+      .cookie("refreshToken", newRefreshToken, options)
       .json({
         success: true,
         message: "Access token refreshed",
@@ -191,7 +191,6 @@ export const login = async (req, res) => {
 
     const options = {
       httpOnly: true,
-      httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
     };
@@ -218,19 +217,16 @@ export const login = async (req, res) => {
 //LogOut
 export const logout = async (req, res) => {
   try {
-    await User.findByIdAndUpdate(
-      req.user?.id,
-      {
-        $unset: {
-          refreshToken: 1,
-        },
+    await User.findByIdAndUpdate(req.user?.id, {
+      $unset: {
+        refreshToken: 1,
       },
-      { new: true }
-    );
+    });
 
     const options = {
       httpOnly: true,
-      secure: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
     };
     return res
       .clearCookie("accessToken", options)
@@ -357,6 +353,7 @@ export const isAuthenticate = async (req, res) => {
     return res.json({
       success: true,
       message: "User is authenticated",
+      user: req.user
     });
   } catch (error) {
     console.log(error);

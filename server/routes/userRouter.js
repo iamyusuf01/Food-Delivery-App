@@ -13,11 +13,15 @@ import { updateUserRole } from "../controllers/authController.js";
 const router = express.Router();
 
 router.get("/data", auth, getUserData);
-router.patch("/update-account", auth, updateAccountDetails);
-router.post("/avatar", auth,  upload.single("avatar"), uploadAvatar);
-router.post('/address', auth, addAddress)
-router.patch('/update-role', auth, authorizeRoles("admin"), updateUserRole)
-router.get('/payment',  paymentInstance)
-
+router.put(
+  "/update-account",
+  auth,
+  upload.single("avatar"),
+  updateAccountDetails
+);
+router.post("/avatar", auth, upload.single("avatar"), uploadAvatar);
+router.post("/address", auth, addAddress);
+router.put("/update-role", auth, authorizeRoles("admin"), updateUserRole);
+router.get("/payment", paymentInstance);
 
 export default router;

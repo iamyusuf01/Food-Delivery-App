@@ -19,8 +19,10 @@ export const getUserData = async (req, res) => {
       userData: {
         name: user.name,
         email: user.email,
-        bio: user.bio,
-        location: user.location,
+        bio: user?.bio,
+        location: user?.location,
+        avatar: user?.avatar,
+        phone: user?.phone,
       },
     });
   } catch (error) {
@@ -42,12 +44,30 @@ export const updateAccountDetails = async (req, res) => {
       });
     }
 
+    let avatarLocalPath = req.file?.path;
+
+    if (!avatarLocalPath) {
+      return res.json({
+        success: false,
+        message: "Avatar file is missing",
+      });
+    }
+
+    const avatar = await uploadOnCloudinary(avatarLocalPath);
+    if (!avatar?.url) {
+      return res.json({
+        success: false,
+        message: "Avatar upload failed",
+      });
+    }
+
     const user = await User.findByIdAndUpdate(req.user?._id, {
       name,
       email,
       phone,
       bio,
-    }).select("-password -refreshToken");
+      avatar: avatar.url
+    }, {new: true}).select("-password -refreshToken");
 
     if (!user) {
       return res.json({
@@ -190,7 +210,6 @@ export const paymentInstance = async (req, res) => {
       success: true,
       clientSecret: paymentIntent.client_secret,
     });
-
   } catch (error) {
     res.status(500).json({
       success: false,
