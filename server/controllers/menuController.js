@@ -1,6 +1,7 @@
 import Restaurant from "../models/restaurantModel.js";
 import { uploadOnCloudinary } from "../config/cloudinary.js";
 import Menu from "../models/menuModel.js";
+import { MongoCryptKMSRequestNetworkTimeoutError } from "mongodb";
 
 export const addItems = async (req, res) => {
   try {
@@ -19,6 +20,16 @@ export const addItems = async (req, res) => {
       return res.json({
         success: false,
         message: "Restaurant not found",
+      });
+    }
+
+    if (
+      req.user._id === "seller" &&
+      restaurant.owner.toString() !== req.user._id.toString()
+    ) {
+      return res.json({
+        success: false,
+        message: "You cannot add menu tp this restuarant",
       });
     }
 
@@ -71,7 +82,7 @@ export const addItems = async (req, res) => {
 
 export const updateItem = async (req, res) => {
   try {
-    const { name, description, price, restaurantId } = req.body;
+    const { name, description, price } = req.body;
     const { itemId } = req.params;
     if (!name || !description || !price) {
       return res.json({
@@ -80,25 +91,44 @@ export const updateItem = async (req, res) => {
       });
     }
 
-    const restaurant = await Restaurant.findById(restaurantId);
-    if (!restaurant) {
+    let imageLocalPath = req.file?.path;
+    if (!imageLocalPath) {
       return res.json({
         success: false,
-        message: "Restaurant not founds",
+        message: "image file is missing",
       });
     }
-    const menuItem = await Menu.findByIdAndUpdate(
-      { _id: itemId, restaurant: restaurantId },
+
+    const image = await uploadOnCloudinary(imageLocalPath);
+    if (!image.url) {
+      return res.json({
+        success: false,
+        message: "Image upload failed",
+      });
+    }
+
+    const menu = await Menu.findByIdAndUpdate(
+      itemId,
       {
         name,
         description,
         price,
-        restaurant: restaurantId,
+        image: image.url,
       },
       { new: true }
     );
 
-    if (!menuItem) {
+    if (
+      req.user?.role === "seller" &&
+      menu.restaurant.owner.toString() !== req.user._id.toString()
+    ) {
+      return res.json({
+        success: false,
+        message: "Not allowed to update this menu item",
+      });
+    }
+
+    if (!menu) {
       return res.json({
         success: false,
         message: "Menu item not found for this restaurant",
@@ -107,8 +137,8 @@ export const updateItem = async (req, res) => {
 
     return res.json({
       success: true,
-      message: "Item updated Successfully",
-      menuItem,
+      message: "Menu Item updated Successfully",
+      menu,
     });
   } catch (error) {
     return res.json({
@@ -121,31 +151,38 @@ export const updateItem = async (req, res) => {
 export const deleteItem = async (req, res) => {
   try {
     const { itemId } = req.params;
-    const { restaurantId } = req.body;
+    // const { restaurantId } = req.body;
 
-    if (!itemId || !restaurantId) {
-      return res.status(400).json({
-        success: false,
-        message: "itemId and restaurantId are required",
-      });
-    }
+    // if (!itemId || !restaurantId) {
+    //   return res.status(400).json({
+    //     success: false,
+    //     message: "itemId and restaurantId are required",
+    //   });
+    // }
 
-    const restaurant = await Restaurant.findById(restaurantId);
-    if (!restaurant) {
+    const menu = await Menu.findById(itemId).populate("restaurant");
+    if (!menu) {
       return res.json({
         success: false,
-        message: "restaurant Id not found",
+        message: "Menu item not founds",
       });
     }
-    const menu = await Menu.findByIdAndDelete({
-      _id: itemId,
-      restaurant: restaurantId,
-    });
+
+    if (
+      req.user.role === "seller" &&
+      menu.restaurant.owner.toString() !== req.user._id.toString()
+    ) {
+      return res.json({
+        success: false,
+        message: "Not allowed to delete this menu item",
+      });
+    }
+    const menuItem = await Menu.findByIdAndDelete(itemId);
 
     return res.json({
       success: true,
       message: "Menu item deleted successfully",
-      menu,
+      menuItem,
     });
   } catch (error) {
     return res.json({
@@ -153,4 +190,16 @@ export const deleteItem = async (req, res) => {
       message: error.message,
     });
   }
+};
+
+export const getMenuByRestaurant = async (req, res) => {
+  try {
+    const { restaurantId } = req.params;
+    const menu = await Menu.find({ restaurant: restaurantId });
+
+    return res.json({
+      success: true,
+      menu,
+    });
+  } catch (error) {}
 };

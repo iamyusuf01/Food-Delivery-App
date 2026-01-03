@@ -19,6 +19,7 @@ export const getUserData = async (req, res) => {
       userData: {
         name: user.name,
         email: user.email,
+        role: user.role,
         bio: user?.bio,
         location: user?.location,
         avatar: user?.avatar,

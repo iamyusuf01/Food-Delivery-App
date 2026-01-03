@@ -1,6 +1,7 @@
 import { uploadOnCloudinary } from "../config/cloudinary.js";
 import Menu from "../models/menuModel.js";
 import Restaurant from "../models/restaurantModel.js";
+import User from "../models/userModel.js";
 
 export const addRestaurant = async (req, res) => {
   try {
@@ -9,16 +10,16 @@ export const addRestaurant = async (req, res) => {
     }
     const { name, location, type, deliveryTime } = req.body;
 
-    if (!name || !type || !deliveryTime ) {
+    if (!name || !type || !deliveryTime || !location) {
       return res.json({
-        success: true,
+        success: false,
         message: "All fields are required",
       });
     }
 
     const { city, address } = location;
 
-    if ( !location.city || !location.address) {
+    if (!location.city || !location.address) {
       return res.json({
         success: false,
         message: "City and address are required",
@@ -29,7 +30,7 @@ export const addRestaurant = async (req, res) => {
     if (!avatarLocalPath) {
       return res.json({
         success: false,
-        message: "Avatar file missing",
+        message: "Restaurant avatar file missing",
       });
     }
 
@@ -41,6 +42,19 @@ export const addRestaurant = async (req, res) => {
       });
     }
 
+    if (req.user.role === "seller") {
+      const existingRestaurant = await Restaurant.findOne({
+        owner: req.user._id,
+      });
+
+      if (existingRestaurant) {
+        return res.json({
+          success: false,
+          message: "Seller can create only one restaurant",
+        });
+      }
+    }
+
     const restaurant = await Restaurant.create({
       name,
       type,
@@ -50,6 +64,7 @@ export const addRestaurant = async (req, res) => {
         address,
       },
       avatar: avatar.url,
+      owner: req.user._id,
     });
 
     return res.json({
@@ -87,7 +102,7 @@ export const getCurrentRestaurant = async (req, res) => {
     return res.json({
       success: true,
       message: "Fetching restaurants successfully",
-      restaurants
+      restaurants,
     });
   } catch (error) {
     console.log(error);
@@ -99,9 +114,7 @@ export const getCurrentRestaurant = async (req, res) => {
 };
 export const getAllRestaurants = async (req, res) => {
   try {
-    const restaurants = await Restaurant.find().populate(
-      "menu"
-    );
+    const restaurants = await Restaurant.find().populate("menu");
     if (!restaurants) {
       return res.json({
         success: false,
@@ -112,7 +125,7 @@ export const getAllRestaurants = async (req, res) => {
     return res.json({
       success: true,
       message: "Fetching all restaurants successfully",
-      restaurants
+      restaurants,
     });
   } catch (error) {
     console.log(error);
@@ -142,11 +155,20 @@ export const deleteRestaurant = async (req, res) => {
       });
     }
 
-    if(restaurant.menu?.length){
-      await Menu.deleteMany({_id: {$in: restaurant.menu}});
+    if(req.user.role === 'seller' && 
+      restaurant.owner.toString() !== req.user._id.toString()
+    ) {
+      return res.json({
+        success: false,
+        message: 'You cannot delete this restaurant'
+      })
     }
 
-    await Restaurant.findByIdAndDelete(restaurantId)
+    if (restaurant.menu?.length) {
+      await Menu.deleteMany({ _id: { $in: restaurant.menu } });
+    }
+
+    await Restaurant.findByIdAndDelete(restaurantId);
     return res.json({
       success: true,
       message: "Restaurant deleted successfully",
@@ -160,14 +182,33 @@ export const deleteRestaurant = async (req, res) => {
   }
 };
 
-export const updateAvatar = async (req, res) => {
+export const updateRestaurantAvatar = async (req, res) => {
   try {
-    if (!req.user?._id) {
+    const { restaurantId } = req.params;
+    if (!restaurantId) {
       return res.json({
         success: false,
         message: "Unauthorized user",
       });
     }
+
+    const restaurant = await Restaurant.findById(restaurantId);
+    if(!restaurant) {
+      return res.json({
+        success:false,
+        message: 'Restaurant not found'
+      })
+    }
+    if (
+      req.user.role === "seller" &&
+      restaurant.owner.toString() !== req.user._id.toString()
+    ) {
+      return res.json({
+        success: false,
+        message: "Not allowed to modify this restaurant",
+      });
+    }
+
     const avatarLocalPath = req.file?.path;
 
     if (!avatarLocalPath) {
@@ -208,5 +249,3 @@ export const updateAvatar = async (req, res) => {
     });
   }
 };
-
-

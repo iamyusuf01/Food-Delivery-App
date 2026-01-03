@@ -24,6 +24,7 @@ export const AppContextProvider = (props) => {
   // const [authState, setAuthState] = useState("");
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userData, setUserData] = useState(null);
+  const [isAdmin, setIsAdmin] = useState(false)
   const [allRestaurants, setRegisteredRestaurants] = useState(
     [...restaurants].sort((a, b) => b.rating - a.rating)
   );
@@ -59,6 +60,7 @@ export const AppContextProvider = (props) => {
       if (data?.success) {
         setIsLoggedIn(true);
         setUserData(data.userData);
+        if(data.userData?.role === 'admin')
         console.log(data)
       } else {
         toast.error(data.message);
