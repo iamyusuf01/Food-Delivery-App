@@ -1,4 +1,4 @@
-import { Route, Routes } from "react-router";
+import { Route, Routes} from "react-router";
 import Home from "./pages/Home";
 import Login from "./auth/Login";
 import Signup from "./auth/Signup";
@@ -19,6 +19,11 @@ import { ToastContainer } from "react-toastify";
 import Search from "./pages/Search";
 import SpecificItem from "./pages/SpecificItem";
 import PublicRoute from "./routes/PublicRoute";
+import Navbar from "./components/Navbar";
+import SellerDashboard from "./pages/admin/SellerDashboard";
+import Admin from "./pages/admin/Admin";
+import MyProfile from "./pages/admin/MyProfile";
+import Wrapper from "./components/admin/Wrapper";
 
 function App() {
   return (
@@ -67,6 +72,12 @@ function App() {
         {/* Search Routes */}
         <Route path="/search" element={<Search />} />
         <Route path="/search/:item" element={<SpecificItem />} />
+
+        {/* Admin Routes */}
+        <Route path="/admin" element={<Admin />}>
+          <Route index element={<SellerDashboard />} />
+          <Route path="my-profile" element={<MyProfile />} />
+        </Route>
       </Routes>
     </div>
   );

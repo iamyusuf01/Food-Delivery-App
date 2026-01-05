@@ -6,15 +6,15 @@ import Restaurants from "../components/Restaurants";
 import Offers from "../components/Offers";
 import { AuthContext } from "../context/AuthContext";
 import Login from "../auth/Login";
-import { redirect } from "react-router-dom";
+import { useMatch } from "react-router-dom";
 
 const Home = () => {
-  const { isLoggedIn, setIsLoggedIn } = useContext(AuthContext);
+  const isAdminRoute = useMatch("/admin/*");
 
   return (
     <div className="relative ">
       <div className="p-6 flex flex-col gap-3">
-        <Navbar />
+        {!isAdminRoute && <Navbar />}
         <h2 className="text-sm pb-2">
           Hey Halal, <span className="font-medium">Good Afternoon</span>
         </h2>

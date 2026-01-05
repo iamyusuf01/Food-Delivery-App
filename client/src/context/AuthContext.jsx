@@ -60,8 +60,8 @@ export const AppContextProvider = (props) => {
       if (data?.success) {
         setIsLoggedIn(true);
         setUserData(data.userData);
-        if(data.userData?.role === 'admin')
-        console.log(data)
+        data.userData?.role === 'admin' && setIsAdmin(true)
+        console.log(data.userData.role)
       } else {
         toast.error(data.message);
       }
@@ -85,6 +85,7 @@ export const AppContextProvider = (props) => {
     navigate,
     isLoggedIn,
     setIsLoggedIn,
+    isAdmin,
     allRestaurants,
     setRegisteredRestaurants,
     restaurants,
