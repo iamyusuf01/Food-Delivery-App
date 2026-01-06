@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useContext } from "react";
 import { CgMenuLeft, CgSearch } from "react-icons/cg";
 import { FaCaretDown } from "react-icons/fa";
 import { IoBagHandle } from "react-icons/io5";
 import { Link, useNavigate } from "react-router";
+import { AuthContext } from "../../context/AuthContext";
 
 const Navbar = () => {
   const navigate = useNavigate();

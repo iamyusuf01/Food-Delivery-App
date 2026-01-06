@@ -10,10 +10,10 @@ import auth, { authorizeRoles } from "../middlewares/authMiddleware.js";
 
 const router = express.Router();
 
-router.get("/:restaurantId", getMenuByRestaurant);
+router.get("/get-menu/:id", getMenuByRestaurant);
 
 router.post(
-  "/add/:restaurantId",
+  "/add",
   authorizeRoles("admin", "seller"),
   upload.fields([{ name: "image", maxCount: 1 }]),
   addItems

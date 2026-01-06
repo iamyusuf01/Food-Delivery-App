@@ -1,14 +1,17 @@
-import React from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { restaurants } from "../assets/assets";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa6";
-import { useNavigate } from "react-router";
+import { useNavigate, useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { FaRegStar } from "react-icons/fa";
 import { TbTruckDelivery } from "react-icons/tb";
-import { MdOutlineAccessTime } from "react-icons/md"
-
+import { MdOutlineAccessTime } from "react-icons/md";
+import { AuthContext } from "../context/AuthContext";
 const Restaurants = () => {
   const navigate = useNavigate();
+  const { restaurants, OpenRestaurants } = useContext(AuthContext);
+
+  if (!OpenRestaurants || !restaurants.length) return null;
   return (
     <div>
       <div className="flex justify-between items-center">
@@ -37,7 +40,7 @@ const Restaurants = () => {
               <h2 className="pt-2">{item.name}</h2>
               <div className="py-3">
                 {item?.menu?.map((item) => (
-                  <div key={item.description}>{item.description}</div>
+                  <div key={item.description}>{item.name}</div>
                 ))}
               </div>
             </div>

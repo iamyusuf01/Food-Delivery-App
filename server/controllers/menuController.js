@@ -2,6 +2,7 @@ import Restaurant from "../models/restaurantModel.js";
 import { uploadOnCloudinary } from "../config/cloudinary.js";
 import Menu from "../models/menuModel.js";
 import { MongoCryptKMSRequestNetworkTimeoutError } from "mongodb";
+import mongoose from "mongoose";
 
 export const addItems = async (req, res) => {
   try {
@@ -194,12 +195,38 @@ export const deleteItem = async (req, res) => {
 
 export const getMenuByRestaurant = async (req, res) => {
   try {
-    const { restaurantId } = req.params;
-    const menu = await Menu.find({ restaurant: restaurantId });
+    const { id } = req.params;
+    if (!id) {
+      return res.json({
+        success: false,
+        message: "Restaurant id is required",
+      });
+    }
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.json({
+        success: false,
+        message: "Invalid restaurant id",
+      });
+    }
+    const menu = await Menu.find({ restaurant: id });
+    if (!menu.length) {
+      return res.json({
+        success: false,
+        message: "No menu found for this restaurant",
+      });
+    }
 
     return res.json({
       success: true,
+      count: menu.length,
       menu,
     });
-  } catch (error) {}
+  } catch (error) {
+    return res.json({
+      success: false,
+      message: error.message,
+    });
+  }
 };
+
+

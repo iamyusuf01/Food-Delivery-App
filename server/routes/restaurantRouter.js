@@ -12,7 +12,7 @@ router.put('/:restaurantId/avatar', authorizeRoles('admin', 'seller'), upload.si
 // Get All restaurants
 router.get('/all', getAllRestaurants)
 // Fetch all current restaurant
-router.get('/:restaurantId', getCurrentRestaurant)
+router.get('/current-restaurant', getCurrentRestaurant)
 // delete restaurants
 router.delete('/:restaurantId', auth, authorizeRoles('admin'), deleteRestaurant)
 

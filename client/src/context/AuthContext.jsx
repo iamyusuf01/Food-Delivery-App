@@ -1,8 +1,8 @@
-import { createContext, use, useState } from "react";
-import { restaurants } from "../assets/assets";
+import { createContext, useState } from "react";
+// import { restaurants } from "../assets/assets";
 import axios from "axios";
 import { toast } from "react-toastify";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useEffect } from "react";
 
 export const AuthContext = createContext();
@@ -17,6 +17,7 @@ const menuOptions = [
 
 export const AppContextProvider = (props) => {
   const backendUrl = import.meta.env.VITE_API_URL;
+  console.log(backendUrl);
 
   axios.defaults.withCredentials = true;
   const navigate = useNavigate();
@@ -24,7 +25,12 @@ export const AppContextProvider = (props) => {
   // const [authState, setAuthState] = useState("");
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userData, setUserData] = useState(null);
-  const [isAdmin, setIsAdmin] = useState(false)
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [restaurantData, setRestaurantData] = useState(null);
+  const [OpenRestaurants, setOpenRestaurants] = useState(false);
+
+  const [restaurants, setRestaurants] = useState([]);
+
   const [allRestaurants, setRegisteredRestaurants] = useState(
     [...restaurants].sort((a, b) => b.rating - a.rating)
   );
@@ -32,6 +38,8 @@ export const AppContextProvider = (props) => {
     restaurants.map((res) => res.menu).flat()
   );
   const token = localStorage.getItem("accessToken");
+  const [menu, setMenu] = useState([]);
+    // const { id } = useParams();
 
   const getAuthState = async () => {
     try {
@@ -41,7 +49,7 @@ export const AppContextProvider = (props) => {
       );
       if (data.success) {
         setIsLoggedIn(true);
-        getUserData()
+        getUserData();
       }
     } catch (error) {
       toast.error(error.message);
@@ -60,8 +68,8 @@ export const AppContextProvider = (props) => {
       if (data?.success) {
         setIsLoggedIn(true);
         setUserData(data.userData);
-        data.userData?.role === 'admin' && setIsAdmin(true)
-        console.log(data.userData.role)
+        data.userData?.role === "admin" && setIsAdmin(true);
+        console.log(data.userData.role);
       } else {
         toast.error(data.message);
       }
@@ -69,6 +77,55 @@ export const AppContextProvider = (props) => {
       toast.error(error.message);
     }
   };
+
+  const getRestaurantData = async () => {
+    try {
+      const { data } = await axios.get(
+        "http://localhost:4000/api/restaurant/current-restaurant"
+      );
+      if (data.success) {
+        setRestaurantData(data.restaurantData);
+        console.log(data);
+      } else {
+        toast.error(data.message);
+      }
+    } catch (error) {
+      toast.error(error.message);
+    }
+  };
+
+  const fetchAllRestaurants = async () => {
+    try {
+      const { data } = await axios.get(
+        "http://localhost:4000/api/restaurant/all"
+      );
+      if (data.success) {
+        setRestaurants(data.restaurants);
+        setOpenRestaurants(data.restaurants.some(r => r.isOpen) || false)
+      }
+      console.log(data);
+    } catch (error) {
+      toast.error(error.message);
+    }
+  };
+  
+    // const fetchMenuByRestaurantId = async () => {
+    //     try {
+    //       const { data } = await axios.get(
+    //         `http://localhost:4000/api/menu/get-menu/${id}`
+    //       );
+    //       if (data.success) {
+    //         setMenu(data.menu);
+    //       }
+    //       console.log(data);
+    //     } catch (error) {
+    //       toast.error(error.message)
+    //     }
+    // };
+
+  useEffect(() => {
+    fetchAllRestaurants();
+  }, []);
 
   useEffect(() => {
     getAuthState();
@@ -96,6 +153,10 @@ export const AppContextProvider = (props) => {
     setUserData,
     getUserData,
     getAuthState,
+    restaurantData,
+    OpenRestaurants,
+    menu,
+    // fetchMenuByRestaurantId
   };
 
   return (

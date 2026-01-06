@@ -82,17 +82,15 @@ export const addRestaurant = async (req, res) => {
 
 export const getCurrentRestaurant = async (req, res) => {
   try {
-    const { restaurantId } = req.body;
+    const { restaurantId } = req.params;
     if (!restaurantId) {
       return res.json({
         success: false,
         message: "Restaurant Id required",
       });
     }
-    const restaurants = await Restaurant.findById(restaurantId).populate(
-      "menu"
-    );
-    if (!restaurants) {
+    const restaurant = await Restaurant.findById(restaurantId).populate("menu");
+    if (!restaurant) {
       return res.json({
         success: false,
         message: "Restaurant not found",
@@ -102,7 +100,7 @@ export const getCurrentRestaurant = async (req, res) => {
     return res.json({
       success: true,
       message: "Fetching restaurants successfully",
-      restaurants,
+      restaurant
     });
   } catch (error) {
     console.log(error);
@@ -155,13 +153,14 @@ export const deleteRestaurant = async (req, res) => {
       });
     }
 
-    if(req.user.role === 'seller' && 
+    if (
+      req.user.role === "seller" &&
       restaurant.owner.toString() !== req.user._id.toString()
     ) {
       return res.json({
         success: false,
-        message: 'You cannot delete this restaurant'
-      })
+        message: "You cannot delete this restaurant",
+      });
     }
 
     if (restaurant.menu?.length) {
@@ -193,11 +192,11 @@ export const updateRestaurantAvatar = async (req, res) => {
     }
 
     const restaurant = await Restaurant.findById(restaurantId);
-    if(!restaurant) {
+    if (!restaurant) {
       return res.json({
-        success:false,
-        message: 'Restaurant not found'
-      })
+        success: false,
+        message: "Restaurant not found",
+      });
     }
     if (
       req.user.role === "seller" &&

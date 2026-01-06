@@ -1,13 +1,16 @@
 import React from "react";
 import { restaurants } from "../assets/assets";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa6";
-import { Link, useNavigate } from "react-router";
+import { Link, useNavigate, useParams } from "react-router";
 import { FaRegStar } from "react-icons/fa";
 import { TbTruckDelivery } from "react-icons/tb";
 import { MdOutlineAccessTime } from "react-icons/md";
+import { useContext } from "react";
+import { AuthContext } from "../context/AuthContext";
 
 const AllRestaurants = () => {
   const navigate = useNavigate();
+  const {restaurants} = useContext(AuthContext)
   return (
     <div className="p-6">
       <div className="flex items-center gap-4 ">
@@ -19,7 +22,7 @@ const AllRestaurants = () => {
         </button>
         <h2 className="font-medium">Restaurants</h2>
       </div>
-      <div className="my-6">
+      <div className="flex flex-col">
         {restaurants.map((item, key) => (
           <Link
             to={`/all-restaurants/${item.id}`}
@@ -29,8 +32,8 @@ const AllRestaurants = () => {
           >
             <div className="">
               <img
-                src={item.image}
-                className=" bg-gray-300 h-32 w-full rounded-xl"
+                // src={item.avatar}
+                className=" bg-gray-300 h-32 rounded-xl"
               />
               <h2 className="pt-2">{item.name}</h2>
               <div className="py-3">
