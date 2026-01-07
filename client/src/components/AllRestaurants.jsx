@@ -1,7 +1,7 @@
 import React from "react";
 import { restaurants } from "../assets/assets";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa6";
-import { Link, useNavigate, useParams } from "react-router";
+import { Link, useNavigate} from "react-router";
 import { FaRegStar } from "react-icons/fa";
 import { TbTruckDelivery } from "react-icons/tb";
 import { MdOutlineAccessTime } from "react-icons/md";
@@ -25,7 +25,7 @@ const AllRestaurants = () => {
       <div className="flex flex-col">
         {restaurants.map((item, key) => (
           <Link
-            to={`/all-restaurants/${item.id}`}
+            to={`/all-restaurants/${item._id}`}
             key={key}
             className="py-6"
             id="_id"

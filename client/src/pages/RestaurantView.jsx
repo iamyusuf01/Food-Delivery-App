@@ -10,6 +10,7 @@ import { RxCross2 } from "react-icons/rx";
 
 import Filter from "../components/Filter";
 import { AuthContext } from "../context/AuthContext";
+import axios from "axios";
 
 const itemList = [
   {
@@ -27,14 +28,17 @@ const itemList = [
 ];
 
 const RestaurantView = () => {
-  const { navigate } = useContext(AuthContext);
+  const { navigate, restaurants } = useContext(AuthContext);
 
   const [open, setOpen] = useState(false);
   const { id } = useParams();
 
   const restaurant = restaurants.find(
-    (restaurant) => restaurant.id === parseInt(id)
+    (restaurant) => restaurant._id?.toString() === id
   );
+
+
+  console.log(restaurant);
 
   return (
     <div className="p-6 relative">

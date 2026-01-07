@@ -1,7 +1,7 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext } from "react";
 import { restaurants } from "../assets/assets";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa6";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { FaRegStar } from "react-icons/fa";
 import { TbTruckDelivery } from "react-icons/tb";
@@ -25,9 +25,9 @@ const Restaurants = () => {
         </div>
       </div>
       <div className="my-4">
-        {restaurants.slice(0, 4).map((item, key) => (
+        {restaurants.map((item, key) => (
           <Link
-            to={`/all-restaurants/${item.id}`}
+            to={`/restaurants/${item._id}`}
             key={key}
             className="py-6"
             id="_id"
@@ -61,7 +61,7 @@ const Restaurants = () => {
                 <p>
                   <MdOutlineAccessTime size={22} color="orange" />
                 </p>
-                <p>{item.deliveryTime}</p>
+                <p>{item.deliveryTime} Min</p>
               </div>
             </div>
           </Link>
