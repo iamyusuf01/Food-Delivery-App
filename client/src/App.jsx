@@ -19,11 +19,10 @@ import { ToastContainer } from "react-toastify";
 import Search from "./pages/Search";
 import SpecificItem from "./pages/SpecificItem";
 import PublicRoute from "./routes/PublicRoute";
-import Navbar from "./components/Navbar";
 import SellerDashboard from "./pages/admin/SellerDashboard";
 import Admin from "./pages/admin/Admin";
 import MyProfile from "./pages/admin/MyProfile";
-import Wrapper from "./components/admin/Wrapper";
+import AddItem from "./pages/admin/AddItem";
 
 function App() {
   return (
@@ -77,6 +76,7 @@ function App() {
         <Route path="/admin" element={<Admin />}>
           <Route index element={<SellerDashboard />} />
           <Route path="my-profile" element={<MyProfile />} />
+          <Route path="add-item" element={<AddItem />} />
         </Route>
       </Routes>
     </div>

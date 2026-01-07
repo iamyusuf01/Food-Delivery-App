@@ -2,16 +2,26 @@ import React from "react";
 import Navbar from "../../components/admin/Navbar";
 import { useContext } from "react";
 import { AuthContext } from "../../context/AuthContext";
-import { Outlet } from "react-router";
-import Wrapper from "../../components/admin/Wrapper";
+import { Outlet, useLocation } from "react-router";
+import Wrapper from "../../components/admin/AdminLayout";
+import Footer from "../../components/admin/Footer";
 
 const Admin = () => {
   const { isAdmin } = useContext(AuthContext);
+  const location = useLocation();
+
+     const hiddenRoutes = [
+       "/admin/my-profile",
+        "/admin/add-item",
+       ];
+
+    const hideLayout = hiddenRoutes.includes(location.pathname);
   return (
     isAdmin && (
       <div className="bg-gray-200">
-        <Wrapper />
-        <Outlet />
+         {!hideLayout && <Navbar />}
+         <Outlet/>
+         {!hideLayout && <Footer />}
       </div>
     )
   );
