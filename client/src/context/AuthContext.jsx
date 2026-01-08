@@ -38,7 +38,6 @@ export const AppContextProvider = (props) => {
     restaurants.map((res) => res.menu).flat()
   );
   const token = localStorage.getItem("accessToken");
-  const [menu, setMenu] = useState([]);
     // const { id } = useParams();
 
   const getAuthState = async () => {
@@ -109,19 +108,7 @@ export const AppContextProvider = (props) => {
     }
   };
   
-    // const fetchMenuByRestaurantId = async () => {
-    //     try {
-    //       const { data } = await axios.get(
-    //         `http://localhost:4000/api/menu/get-menu/${id}`
-    //       );
-    //       if (data.success) {
-    //         setMenu(data.menu);
-    //       }
-    //       console.log(data);
-    //     } catch (error) {
-    //       toast.error(error.message)
-    //     }
-    // };
+
 
   useEffect(() => {
     fetchAllRestaurants();
@@ -155,7 +142,7 @@ export const AppContextProvider = (props) => {
     getAuthState,
     restaurantData,
     OpenRestaurants,
-    menu,
+    // menu,
     // fetchMenuByRestaurantId
   };
 

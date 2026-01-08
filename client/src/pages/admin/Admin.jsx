@@ -3,7 +3,6 @@ import Navbar from "../../components/admin/Navbar";
 import { useContext } from "react";
 import { AuthContext } from "../../context/AuthContext";
 import { Outlet, useLocation } from "react-router";
-import Wrapper from "../../components/admin/AdminLayout";
 import Footer from "../../components/admin/Footer";
 
 const Admin = () => {

@@ -33,6 +33,7 @@ const AllRestaurants = () => {
             <div className="">
               <img
                 // src={item.avatar}
+                src=""
                 className=" bg-gray-300 h-32 rounded-xl"
               />
               <h2 className="pt-2">{item.name}</h2>
@@ -59,7 +60,7 @@ const AllRestaurants = () => {
                 <p>
                   <MdOutlineAccessTime size={22} color="orange" />
                 </p>
-                <p>{item.deliveryTime}</p>
+                <p>{item.deliveryTime} Min</p>
               </div>
             </div>
           </Link>

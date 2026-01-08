@@ -11,6 +11,7 @@ import { RxCross2 } from "react-icons/rx";
 import Filter from "../components/Filter";
 import { AuthContext } from "../context/AuthContext";
 import axios from "axios";
+import { toast } from "react-toastify";
 
 const itemList = [
   {
@@ -31,15 +32,31 @@ const RestaurantView = () => {
   const { navigate, restaurants } = useContext(AuthContext);
 
   const [open, setOpen] = useState(false);
+  const [menu, setMenu] = useState([]);
+
   const { id } = useParams();
 
   const restaurant = restaurants.find(
     (restaurant) => restaurant._id?.toString() === id
   );
 
+  const fetchAllMenu = async () => {
+    try {
+      const { data } = await axios.get(
+        `http://localhost:4000/api/menu/all-menu`
+      );
+      if (data.success) {
+        setMenu(data.menu);
+      }
+      console.log(data);
+    } catch (error) {
+      toast.error(error.message);
+    }
+  };
 
-  console.log(restaurant);
-
+  useEffect(() => {
+    fetchAllMenu();
+  }, []);
   return (
     <div className="p-6 relative">
       <div className="flex justify-between items-center">
@@ -68,9 +85,9 @@ const RestaurantView = () => {
             />
             <h2 className="pt-2">{restaurant?.name}</h2>
             <div className="py-3">
-              {restaurant?.menu?.map((item) => (
+              {/* {restaurant?.menu?.map((item) => (
                 <div key={item.description}>{item.description}</div>
-              ))}
+              ))} */}
             </div>
           </div>
           <div className="flex justify-between">
@@ -102,6 +119,21 @@ const RestaurantView = () => {
             <ul className="border w-full border-gray-300 shadow-md   h-8 rounded-2xl text-center">
               <li className="font-normal">{item.name}</li>
             </ul>
+          </div>
+        ))}
+      </div>
+      <div className="grid grid-cols-2 justify-between  my-12">
+        {menu.map((menuItem, i) => (
+          <div key={i} className="rounded-2xl shadow-lg px-4 py-4">
+            <div>
+              <img src="" className=" w-full h-32 bg-gray-200 " />
+              <p className="text-xl font-medium pt-2">{menuItem.name}</p>
+              <p className="text-xl">{restaurant.name}</p>
+            </div>
+            <div className="flex justify-between items-center pt-2">
+              <p>${menuItem.price}</p>
+              <p>Add</p>
+            </div>
           </div>
         ))}
       </div>

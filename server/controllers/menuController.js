@@ -229,4 +229,25 @@ export const getMenuByRestaurant = async (req, res) => {
   }
 };
 
+export const getAllMenu = async (req, res) => {
+  try {
+    const menu = await Menu.find().populate("restaurant");
+    if (!menu) {
+      return res.json({
+        success: false,
+        message: "Menu not found",
+      });
+    }
 
+    return res.json({
+      success: true,
+      message: "Fetch all menu",
+      menu,
+    });
+  } catch (error) {
+    return res.json({
+      success: false,
+      message: error.message,
+    });
+  }
+};

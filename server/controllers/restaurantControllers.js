@@ -115,7 +115,7 @@ export const getAllRestaurants = async (req, res) => {
     const restaurants = await Restaurant.find().populate("menu");
     if (!restaurants) {
       return res.json({
-        success: false,
+        success: false, 
         message: "Restaurant not found",
       });
     }
