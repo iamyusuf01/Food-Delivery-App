@@ -115,20 +115,20 @@ const RestaurantView = () => {
       {/*  */}
       <div className="pt-4 grid grid-cols-4 gap-2">
         {itemList.map((item, index) => (
-          <div key={index.name}>
+          <div key={index}>
             <ul className="border w-full border-gray-300 shadow-md   h-8 rounded-2xl text-center">
               <li className="font-normal">{item.name}</li>
             </ul>
           </div>
         ))}
       </div>
-      <div className="grid grid-cols-2 justify-between  my-12">
+      <div className="grid grid-cols-2 justify-between  my-12" onClick={() => navigate(`/food-details/${restaurant._id}`)}>
         {menu.map((menuItem, i) => (
           <div key={i} className="rounded-2xl shadow-lg px-4 py-4">
             <div>
               <img src="" className=" w-full h-32 bg-gray-200 " />
               <p className="text-xl font-medium pt-2">{menuItem.name}</p>
-              <p className="text-xl">{restaurant.name}</p>
+              <p className="text-xl">{restaurant?.name}</p>
             </div>
             <div className="flex justify-between items-center pt-2">
               <p>${menuItem.price}</p>

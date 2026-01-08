@@ -15,17 +15,19 @@ router.get("/get-menu/:id", getMenuByRestaurant);
 router.get("/all-menu", getAllMenu);
 
 router.post(
-  "/add",
+  "/add-item/:id",
+  auth,
   authorizeRoles("admin", "seller"),
   upload.fields([{ name: "image", maxCount: 1 }]),
   addItems
 );
 router.put(
-  "/:itemId",
+  "/update/:id",
+  auth,
   authorizeRoles("admin", "seller"),
   upload.single("image"),
   updateItem
 );
-router.delete("/:itemId", authorizeRoles("admin", "seller"), deleteItem);
+router.delete("/delete/:id", auth, authorizeRoles("admin", "seller"), deleteItem);
 
 export default router;

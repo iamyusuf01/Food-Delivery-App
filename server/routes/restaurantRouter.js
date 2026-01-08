@@ -6,14 +6,14 @@ import auth, { authorizeRoles } from "../middlewares/authMiddleware.js";
 const router = express.Router()
 
 // Add Restaurants 
-router.post('/add', authorizeRoles('admin', 'seller'), upload.fields([{ name: "avatar", maxCount: 1 }]), addRestaurant)
+router.post('/add', auth, authorizeRoles('admin', 'seller'), upload.fields([{ name: "avatar", maxCount: 1 }]), addRestaurant)
 // update restaurant avatar
-router.put('/:restaurantId/avatar', authorizeRoles('admin', 'seller'), upload.single('avatar'), updateRestaurantAvatar)
+router.put('/:id/avatar',auth, authorizeRoles('admin', 'seller'), upload.single('avatar'), updateRestaurantAvatar)
 // Get All restaurants
 router.get('/all', getAllRestaurants)
 // Fetch all current restaurant
-router.get('/current-restaurant', getCurrentRestaurant)
+router.get('/current-restaurant/:id', getCurrentRestaurant)
 // delete restaurants
-router.delete('/:restaurantId', auth, authorizeRoles('admin'), deleteRestaurant)
+router.delete('/delete/:id', auth, authorizeRoles('admin'), deleteRestaurant)
 
 export default router

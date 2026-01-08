@@ -43,11 +43,11 @@ export const addRestaurant = async (req, res) => {
     }
 
     if (req.user.role === "seller") {
-      const existingRestaurant = await Restaurant.findOne({
+      const exists = await Restaurant.findOne({
         owner: req.user._id,
       });
 
-      if (existingRestaurant) {
+      if (exists) {
         return res.json({
           success: false,
           message: "Seller can create only one restaurant",
@@ -82,14 +82,14 @@ export const addRestaurant = async (req, res) => {
 
 export const getCurrentRestaurant = async (req, res) => {
   try {
-    const { restaurantId } = req.params;
-    if (!restaurantId) {
+    const { id } = req.params;
+    if (!id) {
       return res.json({
         success: false,
         message: "Restaurant Id required",
       });
     }
-    const restaurant = await Restaurant.findById(restaurantId).populate("menu");
+    const restaurant = await Restaurant.findById(id).populate("menu");
     if (!restaurant) {
       return res.json({
         success: false,
@@ -113,12 +113,6 @@ export const getCurrentRestaurant = async (req, res) => {
 export const getAllRestaurants = async (req, res) => {
   try {
     const restaurants = await Restaurant.find().populate("menu");
-    if (!restaurants) {
-      return res.json({
-        success: false, 
-        message: "Restaurant not found",
-      });
-    }
 
     return res.json({
       success: true,
@@ -136,16 +130,16 @@ export const getAllRestaurants = async (req, res) => {
 
 export const deleteRestaurant = async (req, res) => {
   try {
-    const { restaurantId } = req.body;
+    const { id } = req.body;
 
-    if (!restaurantId) {
+    if (!id) {
       return res.json({
         success: false,
         message: "Restaurant Id required",
       });
     }
 
-    const restaurant = await Restaurant.findById(restaurantId);
+    const restaurant = await Restaurant.findById(id);
     if (!restaurant) {
       return res.json({
         success: false,
@@ -163,11 +157,12 @@ export const deleteRestaurant = async (req, res) => {
       });
     }
 
-    if (restaurant.menu?.length) {
-      await Menu.deleteMany({ _id: { $in: restaurant.menu } });
-    }
+    // if (restaurant.menu?.length) {
+    //   await Menu.deleteMany({ _id: { $in: restaurant.menu } });
+    // }
 
-    await Restaurant.findByIdAndDelete(restaurantId);
+    await Menu.deleteMany({ restaurant: id });
+    await Restaurant.findByIdAndDelete(id);
     return res.json({
       success: true,
       message: "Restaurant deleted successfully",
@@ -183,15 +178,15 @@ export const deleteRestaurant = async (req, res) => {
 
 export const updateRestaurantAvatar = async (req, res) => {
   try {
-    const { restaurantId } = req.params;
-    if (!restaurantId) {
+    const { id } = req.params;
+    if (!id) {
       return res.json({
         success: false,
         message: "Unauthorized user",
       });
     }
 
-    const restaurant = await Restaurant.findById(restaurantId);
+    const restaurant = await Restaurant.findById(id);
     if (!restaurant) {
       return res.json({
         success: false,
@@ -226,7 +221,7 @@ export const updateRestaurantAvatar = async (req, res) => {
     }
 
     const user = await User.findByIdAndUpdate(
-      req.user._id,
+      id,
       {
         $set: {
           avatar: avatar.url,

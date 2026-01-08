@@ -61,7 +61,7 @@ function App() {
         <Route path="/all-restaurants/:id" element={<RestaurantView />} />
         <Route path="/restaurants/:id" element={<RestaurantView />} />
         <Route path="/food" element={<Food />} />
-        <Route path="/food-details/:id/:itemId" element={<FoodDetails />} />
+        <Route path="/food-details/:id/" element={<FoodDetails />} />
 
         {/* Payment Routes */}
         <Route path="/payment" element={<Payment />} />

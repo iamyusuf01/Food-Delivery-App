@@ -7,7 +7,7 @@ import mongoose from "mongoose";
 export const addItems = async (req, res) => {
   try {
     const { name, price, description } = req.body;
-    const { restaurantId } = req.params;
+    const { id } = req.params;
 
     if (!name || !price || !description) {
       return res.json({
@@ -16,7 +16,7 @@ export const addItems = async (req, res) => {
       });
     }
 
-    const restaurant = await Restaurant.findById(restaurantId);
+    const restaurant = await Restaurant.findById(id);
     if (!restaurant) {
       return res.json({
         success: false,
@@ -25,12 +25,12 @@ export const addItems = async (req, res) => {
     }
 
     if (
-      req.user._id === "seller" &&
+      req.user.role === "seller" &&
       restaurant.owner.toString() !== req.user._id.toString()
     ) {
       return res.json({
         success: false,
-        message: "You cannot add menu tp this restuarant",
+        message: "You cannot add menu to this restuarant",
       });
     }
 
@@ -50,28 +50,28 @@ export const addItems = async (req, res) => {
       });
     }
 
-    const lastItem = await Menu.findOne({ restaurant: restaurantId })
-      .sort({ itemId: -1 })
-      .select("itemId");
+    // const lastItem = await Menu.findOne({ restaurant: restaurantId })
+    //   .sort({ itemId: -1 })
+    //   .select("itemId");
 
-    const nextItemId = lastItem ? lastItem.itemId + 1 : 101;
+    // const nextItemId = lastItem ? lastItem.itemId + 1 : 101;
 
-    const menuItem = await Menu.create({
-      itemId: nextItemId,
-      restaurant: restaurantId,
+    const menu = await Menu.create({
+      // itemId: nextItemId,
+      restaurant: id,
       name,
       price,
       description,
       image: image.url,
     });
 
-    restaurant.menu.push(menuItem._id);
+    restaurant.menu.push(menu._id);
     await restaurant.save();
 
     return res.json({
       success: true,
-      message: "Item Added Successfully",
-      menuItem,
+      message: " Menu item Added Successfully",
+      menu,
     });
   } catch (error) {
     return res.json({
@@ -84,7 +84,7 @@ export const addItems = async (req, res) => {
 export const updateItem = async (req, res) => {
   try {
     const { name, description, price } = req.body;
-    const { itemId } = req.params;
+    const { id } = req.params;
     if (!name || !description || !price) {
       return res.json({
         success: false,
@@ -109,7 +109,7 @@ export const updateItem = async (req, res) => {
     }
 
     const menu = await Menu.findByIdAndUpdate(
-      itemId,
+      id,
       {
         name,
         description,
@@ -151,17 +151,9 @@ export const updateItem = async (req, res) => {
 
 export const deleteItem = async (req, res) => {
   try {
-    const { itemId } = req.params;
-    // const { restaurantId } = req.body;
+    const { id } = req.params;
 
-    // if (!itemId || !restaurantId) {
-    //   return res.status(400).json({
-    //     success: false,
-    //     message: "itemId and restaurantId are required",
-    //   });
-    // }
-
-    const menu = await Menu.findById(itemId).populate("restaurant");
+    const menu = await Menu.findById(id).populate("restaurant");
     if (!menu) {
       return res.json({
         success: false,
@@ -178,12 +170,16 @@ export const deleteItem = async (req, res) => {
         message: "Not allowed to delete this menu item",
       });
     }
-    const menuItem = await Menu.findByIdAndDelete(itemId);
+
+    await Restaurant.findByIdAndUpdate(menu.restaurant._id, {
+      $pull: { menu: menu._id },
+    });
+
+    await Menu.findByIdAndDelete(id);
 
     return res.json({
       success: true,
       message: "Menu item deleted successfully",
-      menuItem,
     });
   } catch (error) {
     return res.json({
@@ -196,12 +192,7 @@ export const deleteItem = async (req, res) => {
 export const getMenuByRestaurant = async (req, res) => {
   try {
     const { id } = req.params;
-    if (!id) {
-      return res.json({
-        success: false,
-        message: "Restaurant id is required",
-      });
-    }
+
     if (!mongoose.Types.ObjectId.isValid(id)) {
       return res.json({
         success: false,
@@ -232,16 +223,9 @@ export const getMenuByRestaurant = async (req, res) => {
 export const getAllMenu = async (req, res) => {
   try {
     const menu = await Menu.find().populate("restaurant");
-    if (!menu) {
-      return res.json({
-        success: false,
-        message: "Menu not found",
-      });
-    }
 
     return res.json({
       success: true,
-      message: "Fetch all menu",
       menu,
     });
   } catch (error) {
