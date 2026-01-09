@@ -1,6 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
 import { FaChevronLeft } from "react-icons/fa";
 import { Link } from "react-router";
+import { BsCloudUpload } from "react-icons/bs";
+import { FaAngleDown } from "react-icons/fa6";
 
 const AddItem = () => {
   const basic = [
@@ -20,6 +22,20 @@ const AddItem = () => {
     { name: "Poppers", image: "" },
     { name: "Ginger", image: "" },
   ];
+
+  const [name, setName] = useState("");
+  const [avatar, setAvatar] = useState(null);
+  const [price, setPrice] = useState(0);
+  const [description, setDescription] = useState("");
+  const [preview, setPreview] = useState(null);
+
+  const handleAvatarChange = (e) => {
+    const file = e.target.file[0];
+    if (!file) return;
+
+    setAvatar(file);
+    setPreview(URL.createObjectURL(file));
+  };
   return (
     <div className="p-6">
       <div className=" flex justify-between items-center  max-h-screen rounded-2xl">
@@ -39,70 +55,113 @@ const AddItem = () => {
           <div className="pt-6 py-4">
             <p className="uppercase">Item Name</p>
             <input
+              onChange={(e) => setName(e.target.name)}
+              value={name}
               type="text"
               placeholder="Food Name"
               className="border border-gray-400 rounded px-2 outline-none mt-2 py-1 w-full"
             />
           </div>
-          <div>
-            <p className="uppercase">Upload Photo</p>
+          <div className="py-2">
+            <p className="uppercase pb-4">Upload Photo</p>
             <input
+              onChange={handleAvatarChange}
               type="file"
               accept="image/*"
               id="uploadItem"
-              placeholder="Food Name"
-              className="border hidden border-gray-400 rounded px-2 outline-none mt-2 py-1 w-full"
+              placeholder="Enter Food Name"
+              className="border hidden border-gray-200 rounded px-2 outline-none mt-2 py-1 w-full"
             />
-            <label htmlFor="uploadItem">
-              <img src="" className="w-32 h-32 rounded-xl mt-1 bg-gray-300" />
+            <label htmlFor="uploadItem" className="">
+              <div className="w-32 h-32 rounded-xl relative text-center mt-1  shadow-lg">
+                {preview && <img src={preview} />}
+                <BsCloudUpload
+                  className="absolute left-10 top-10 "
+                  size={52}
+                  color="blue"
+                />
+              </div>
             </label>
           </div>
-          <div>
-            <p>Price</p>
-            <input />
-            <input />
-            <input />
-          </div>
-          <div>
-            <h2>Ingriedents</h2>
-            <div>
-              <p>Basic</p>
-              <div>
-                <p>See All</p>
-                <p>Icon</p>
+          <div className="py-4">
+            <p className="uppercase text-xl">Price</p>
+            <div className="flex justify-between items-center">
+              <input
+                type="number"
+                placeholder="$50"
+                className="border w-32 border-gray-400 rounded px-2 outline-none mt-2 py-1"
+              />
+              <div className="flex items-center gap-2 mt-2">
+                <input
+                  type="checkbox"
+                  className="border border-gray-400 rounded w-6 h-6 "
+                />
+                <p className="pb-1">Pick up</p>
               </div>
-              <div>
+              <div className="flex gap-2 items-center mt-2">
+                <input
+                  type="checkbox"
+                  className="border border-gray-400 rounded w-6 h-6 bg-orange-400"
+                />
+                <p className="pb-1">Delivery</p>
+              </div>
+            </div>
+          </div>
+          <div className="py-2">
+            <h2 className="uppercase text-xl">Ingriedents</h2>
+            <div className="">
+              <div className="flex justify-between items-center">
+                <p className="text-xl py-1">Basic</p>
+                <div className="flex items-center gap-2">
+                  <p>See All</p>
+                  <FaAngleDown />
+                </div>
+              </div>
+              <div className="grid grid-cols-6 gap-12 items-center text-center ">
                 {basic.map((item, basic) => (
                   <div className="" key={basic}>
-                    <ul>
-                      <li>{item.name}</li>
+                    <ul className="py-2">
+                      <li className="border w-16 h-16 rounded-full text-center mx-auto py-4">
+                        icon
+                      </li>
+                      <li className="py-1">{item.name}</li>
                     </ul>
                   </div>
                 ))}
               </div>
             </div>
-            <div>
-              <p>Fruit</p>
-              <div>
-                <p>See All</p>
-                <p>Icon</p>
+            <div className="py-4">
+              <div className="flex justify-between items-center">
+                <p className="text-xl py-1">Fruit</p>
+                <div className="flex items-center gap-2 ">
+                  <p className="text-xl py-1">See All</p>
+                  <FaAngleDown />
+                </div>
               </div>
-              <div>
+              <div className="grid grid-cols-6 gap-12 items-center text-center ">
                 {fruit.map((item, fruit) => (
                   <div className="" key={fruit}>
                     <ul>
-                      <li>{item.name}</li>
+                      <li className="border w-16 h-16 rounded-full text-center mx-auto py-4">
+                        icon
+                      </li>
+                      <li className="py-1">{item.name}</li>
                     </ul>
                   </div>
                 ))}
               </div>
             </div>
           </div>
-          <div>
-            <p>Details</p>
-            <textarea />
+          <div className="flex flex-col">
+            <p className="uppercase text-xl">Details</p>
+            <textarea
+              minLength={6}
+              className="border border-gray-400 rounded-md w-full h-20 my-2"
+            />
           </div>
-          <button>Save Change</button>
+          <button className="text-center w-full my-4 h-12 rounded-xl bg-orange-500 text-white uppercase text-xl">
+            Save Change
+          </button>
         </form>
       </div>
     </div>

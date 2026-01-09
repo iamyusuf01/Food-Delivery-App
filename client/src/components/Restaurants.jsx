@@ -38,9 +38,11 @@ const Restaurants = () => {
                 className=" bg-gray-300 h-32 w-full rounded-xl"
               />
               <h2 className="pt-2">{item.name}</h2>
-              <div className="py-3">
-                {item?.menu?.map((item) => (
-                  <div key={item.description}>{item.name}</div>
+              <div className="py-2">
+                {item?.menu?.map((item, index) => (
+                  <div key={index} className="">
+                    <p className="">{item.name}</p>
+                  </div>
                 ))}
               </div>
             </div>

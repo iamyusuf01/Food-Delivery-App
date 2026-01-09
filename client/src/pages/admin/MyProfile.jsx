@@ -12,7 +12,7 @@ import { toast } from "react-toastify";
 import { AuthContext } from "../../context/AuthContext";
 
 const MyProfile = () => {
-  const { isLoggedIn, isAdmin, userData, setIsLoggedIn } =
+  const { isLoggedIn, isAdmin,  setIsLoggedIn } =
     useContext(AuthContext);
   const navigate = useNavigate();
 
