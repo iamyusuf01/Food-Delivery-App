@@ -12,7 +12,7 @@ const Footer = () => {
         <Link>
           <RxDashboard size={26}  />
         </Link>
-        <Link>
+        <Link to={'/admin/my-food-list'}>
           <IoIosMenu size={32} />
         </Link>
         <Link to={'/admin/add-item'}>

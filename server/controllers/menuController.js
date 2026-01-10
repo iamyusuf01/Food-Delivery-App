@@ -84,7 +84,7 @@ export const addItems = async (req, res) => {
 export const updateItem = async (req, res) => {
   try {
     const { name, description, price } = req.body;
-    const { id } = req.params;
+    const { menuItem } = req.params;
     if (!name || !description || !price) {
       return res.json({
         success: false,
@@ -109,7 +109,7 @@ export const updateItem = async (req, res) => {
     }
 
     const menu = await Menu.findByIdAndUpdate(
-      id,
+      menuItem,
       {
         name,
         description,
@@ -151,9 +151,9 @@ export const updateItem = async (req, res) => {
 
 export const deleteItem = async (req, res) => {
   try {
-    const { id } = req.params;
+    const { menuItem } = req.params;
 
-    const menu = await Menu.findById(id).populate("restaurant");
+    const menu = await Menu.findById(menuItem).populate("restaurant");
     if (!menu) {
       return res.json({
         success: false,
@@ -191,9 +191,9 @@ export const deleteItem = async (req, res) => {
 
 export const getMenuByRestaurant = async (req, res) => {
   try {
-    const { id } = req.params;
+    const { menuItem } = req.params;
 
-    if (!mongoose.Types.ObjectId.isValid(id)) {
+    if (!mongoose.Types.ObjectId.isValid(menuItem)) {
       return res.json({
         success: false,
         message: "Invalid restaurant id",
@@ -235,3 +235,29 @@ export const getAllMenu = async (req, res) => {
     });
   }
 };
+
+export const getCurrentMenu = async (req, res) => {
+  try {
+    const { menuItem } = req.params;
+
+    const menu = await Menu.findById(menuItem).populate("restaurant");
+
+    if (!menu) {
+      return res.json({
+        success: false,
+        message: "Menu item not found",
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      menu,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+

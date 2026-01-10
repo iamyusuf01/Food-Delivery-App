@@ -5,41 +5,35 @@ import { TbTruckDelivery } from "react-icons/tb";
 import { MdOutlineAccessTime } from "react-icons/md";
 import { FaPlus, FaMinus } from "react-icons/fa";
 import AddToCart from "./AddToCart";
-import { use, useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../context/AuthContext";
 import axios from "axios";
 import { toast } from "react-toastify";
 
 const FoodDetails = () => {
-  const { id } = useParams();
+  const { menuItem } = useParams();
   const { navigate, restaurants } = useContext(AuthContext);
-  const [menuByRestaurant, setMenuByRestaurant] = useState([]);
+  const [menu, setMenu] = useState([]);
 
-  // const restaurant = restaurants?.find(
-  //   (resItem) => resItem?._id?.toString() === id
-  // );
-  // console.log(restaurant)
-  console.log(menuByRestaurant);
-
-  const fetchMenuByRestaurant = async () => {
+  const fetchMenu = async () => {
     try {
       const { data } = await axios.get(
-        `http://localhost:4000/api/menu/get-menu/${id}`
+        `http://localhost:4000/api/menu/current-menu/${menuItem}`
       );
       if (data.success) {
-        setMenuByRestaurant(data.menu);
+        setMenu(data.menu);
       }
-      // console.log(data);
+      console.log(data);
     } catch (error) {
       toast.error(error.message);
     }
   };
 
   useEffect(() => {
-    if (id) {
-      fetchMenuByRestaurant();
+    if (menuItem) {
+      fetchMenu();
     }
-  }, [id]);
+  }, [menuItem]);
 
   return (
     <div className=" overflow-hidden">
@@ -58,39 +52,37 @@ const FoodDetails = () => {
             <div className="">
               <div>
                 <img
-                  src={menuByRestaurant?.image}
+                  // src={menu?.image}
                   className=" bg-gray-300 h-32 w-full rounded-xl"
                 />
                 <p className="mt-6 pl-6 border border-gray-300 rounded-full w-2/3   h-8">
-                  {restaurant?.name}
+                  {menu?.restaurant?.name}
                 </p>
-                <h2 className="pt-2">{menuByRestaurant?.name}</h2>
+                <p className="pt-2">{menu?.name}</p>
               </div>
+
               <div className="py-2">
-                <div>
-                  {/* <h2 className="pt-2">{item?.name}</h2> */}
-                  <p className="pt-2"> {menuByRestaurant?.description}</p>
-                </div>
+                <p className=""> {menu?.description}</p>
               </div>
             </div>
-            <div className="flex justify-between">
+            <div className="flex items-center gap-20">
               <div className="flex items-center gap-2">
                 <p>
                   <FaRegStar size={20} color="orange" />
                 </p>
-                <p>{restaurant?.rating}</p>
+                <p>{menu?.restaurant?.rating}</p>
               </div>
               <div className="flex items-center gap-2">
                 <p>
                   <TbTruckDelivery size={22} color="orange" />
                 </p>
-                <p>{restaurant?.location.city}</p>
+                <p>{menu?.restaurant?.location.city}</p>
               </div>
               <div className="flex items-center gap-2">
                 <p>
                   <MdOutlineAccessTime size={22} color="orange" />
                 </p>
-                <p>{restaurant?.deliveryTime} Min</p>
+                <p>{menu?.restaurant?.deliveryTime} Min</p>
               </div>
             </div>
           </div>
@@ -114,8 +106,8 @@ const FoodDetails = () => {
 
       {/* Add To Card */}
       <AddToCart
-        restaurants={restaurant}
-        // menu={item}
+        // restaurants={restaurant}
+        menu={menu}
       />
     </div>
   );

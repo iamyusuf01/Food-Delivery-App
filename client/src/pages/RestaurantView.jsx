@@ -39,7 +39,6 @@ const RestaurantView = () => {
   const restaurant = restaurants.find(
     (restaurant) => restaurant._id?.toString() === id
   );
-
   const fetchAllMenu = async () => {
     try {
       const { data } = await axios.get(
@@ -122,7 +121,7 @@ const RestaurantView = () => {
           </div>
         ))}
       </div>
-      <div className="grid grid-cols-2 justify-between  my-12" onClick={() => navigate(`/food-details/${restaurant._id}`)}>
+      <div className="grid grid-cols-2 justify-between  my-12">
         {menu.map((menuItem, i) => (
           <div key={i} className="rounded-2xl shadow-lg px-4 py-4">
             <div>
@@ -132,7 +131,9 @@ const RestaurantView = () => {
             </div>
             <div className="flex justify-between items-center pt-2">
               <p>${menuItem.price}</p>
-              <p>Add</p>
+              <button onClick={() => navigate(`/food-details/${menuItem._id}`)}>
+                Add
+              </button>
             </div>
           </div>
         ))}

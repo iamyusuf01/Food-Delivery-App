@@ -37,12 +37,12 @@ const AddItem = () => {
     setPreview(URL.createObjectURL(file));
   };
   return (
-    <div className="p-6">
+    <div className="p-6 overflow-hidden">
       <div className=" flex justify-between items-center  max-h-screen rounded-2xl">
         <div className="flex items-center gap-4 ">
           <Link
             className="w-10 h-10 rounded-full p-3 bg-gray-300 text-black"
-            to={"/add-item"}
+            to={"/admin"}
           >
             <FaChevronLeft />
           </Link>
@@ -87,6 +87,8 @@ const AddItem = () => {
             <p className="uppercase text-xl">Price</p>
             <div className="flex justify-between items-center">
               <input
+                onClick={(e) => setPrice(e.target.value)}
+                value={price}
                 type="number"
                 placeholder="$50"
                 className="border w-32 border-gray-400 rounded px-2 outline-none mt-2 py-1"
@@ -107,7 +109,7 @@ const AddItem = () => {
               </div>
             </div>
           </div>
-          <div className="py-2">
+          <div className="">
             <h2 className="uppercase text-xl">Ingriedents</h2>
             <div className="">
               <div className="flex justify-between items-center">
@@ -117,11 +119,11 @@ const AddItem = () => {
                   <FaAngleDown />
                 </div>
               </div>
-              <div className="grid grid-cols-6 gap-12 items-center text-center ">
+              <div className="grid grid-cols-6 ">
                 {basic.map((item, basic) => (
                   <div className="" key={basic}>
-                    <ul className="py-2">
-                      <li className="border w-16 h-16 rounded-full text-center mx-auto py-4">
+                    <ul className="py-2  text-center ">
+                      <li className="border w-14 h-14 mx-auto rounded-full py-3">
                         icon
                       </li>
                       <li className="py-1">{item.name}</li>
@@ -134,15 +136,15 @@ const AddItem = () => {
               <div className="flex justify-between items-center">
                 <p className="text-xl py-1">Fruit</p>
                 <div className="flex items-center gap-2 ">
-                  <p className="text-xl py-1">See All</p>
+                  <p className="py-1">See All</p>
                   <FaAngleDown />
                 </div>
               </div>
-              <div className="grid grid-cols-6 gap-12 items-center text-center ">
+              <div className="grid grid-cols-6 gap-4 items-center text-center pt-2 ">
                 {fruit.map((item, fruit) => (
                   <div className="" key={fruit}>
-                    <ul>
-                      <li className="border w-16 h-16 rounded-full text-center mx-auto py-4">
+                    <ul className="text-center ">
+                      <li className="border w-14 h-14 mx-auto rounded-full text-center py-3">
                         icon
                       </li>
                       <li className="py-1">{item.name}</li>
@@ -155,6 +157,8 @@ const AddItem = () => {
           <div className="flex flex-col">
             <p className="uppercase text-xl">Details</p>
             <textarea
+              onChange={(e) => setDescription(e.target.value)}
+              value={description}
               minLength={6}
               className="border border-gray-400 rounded-md w-full h-20 my-2"
             />

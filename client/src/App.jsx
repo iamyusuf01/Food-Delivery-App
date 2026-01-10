@@ -23,6 +23,8 @@ import SellerDashboard from "./pages/admin/SellerDashboard";
 import Admin from "./pages/admin/Admin";
 import MyProfile from "./pages/admin/MyProfile";
 import AddItem from "./pages/admin/AddItem";
+import ChefFoodDetails from "./pages/admin/ChefFoodDetails";
+import MyFood from "./pages/admin/MyFood";
 
 function App() {
   return (
@@ -61,7 +63,7 @@ function App() {
         <Route path="/all-restaurants/:id" element={<RestaurantView />} />
         <Route path="/restaurants/:id" element={<RestaurantView />} />
         <Route path="/food" element={<Food />} />
-        <Route path="/food-details/:id/" element={<FoodDetails />} />
+        <Route path="/food-details/:menuItem" element={<FoodDetails />} />
 
         {/* Payment Routes */}
         <Route path="/payment" element={<Payment />} />
@@ -77,6 +79,8 @@ function App() {
           <Route index element={<SellerDashboard />} />
           <Route path="my-profile" element={<MyProfile />} />
           <Route path="add-item" element={<AddItem />} />
+          <Route path="my-food-list" element={<MyFood />} />
+          <Route path="food-details" element={<ChefFoodDetails />} />
         </Route>
       </Routes>
     </div>
