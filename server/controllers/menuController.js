@@ -7,7 +7,7 @@ import mongoose from "mongoose";
 export const addItems = async (req, res) => {
   try {
     const { name, price, description } = req.body;
-    const { id } = req.params;
+    // const { id } = req.params;
 
     if (!name || !price || !description) {
       return res.json({
@@ -16,13 +16,13 @@ export const addItems = async (req, res) => {
       });
     }
 
-    const restaurant = await Restaurant.findById(id);
-    if (!restaurant) {
-      return res.json({
-        success: false,
-        message: "Restaurant not found",
-      });
-    }
+    // const restaurant = await Restaurant.findById(id);
+    // if (!restaurant) {
+    //   return res.json({
+    //     success: false,
+    //     message: "Restaurant not found",
+    //   });
+    // }
 
     if (
       req.user.role === "seller" &&
@@ -260,4 +260,3 @@ export const getCurrentMenu = async (req, res) => {
     });
   }
 };
-

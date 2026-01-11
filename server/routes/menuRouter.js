@@ -17,10 +17,10 @@ router.get("/all-menu", getAllMenu);
 router.get("/current-menu/:menuItem", getCurrentMenu);
 
 router.post(
-  "/add-item/:menuItem",
+  "/add-item",
   auth,
   authorizeRoles("admin", "seller"),
-  upload.fields([{ name: "image", maxCount: 1 }]),
+  upload.single("image"),
   addItems
 );
 router.put(

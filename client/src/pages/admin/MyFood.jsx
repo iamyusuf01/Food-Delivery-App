@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { FaChevronLeft } from "react-icons/fa6";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { BsThreeDots } from "react-icons/bs";
 import { IoMdStar } from "react-icons/io";
 import { CiEdit } from "react-icons/ci";
@@ -9,6 +9,7 @@ import { MdDelete, MdEdit } from "react-icons/md";
 const MyFood = () => {
   const [active, setActive] = useState("All");
   const [openIndex, setOpenIndex] = useState(null);
+  const navigate = useNavigate()
 
   const categories = ["All", "Breakfast", "Lunch", "Dinner"];
 
@@ -28,17 +29,13 @@ const MyFood = () => {
 
   useEffect(() => {
     const handleClickOutside = (e) => {
-      if (
-        dropdownRef.current &&
-        !dropdownRef.current.contains(e.target)
-      ) {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
         setOpenIndex(null);
       }
     };
 
     document.addEventListener("mousedown", handleClickOutside);
-    return () =>
-      document.removeEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
   return (
@@ -61,18 +58,14 @@ const MyFood = () => {
             <button
               onClick={() => setActive(item)}
               className={`font-medium ${
-                active === item
-                  ? "text-orange-500"
-                  : "text-black"
+                active === item ? "text-orange-500" : "text-black"
               }`}
             >
               {item}
             </button>
             <hr
               className={`mt-1 w-full border-t-2 ${
-                active === item
-                  ? "border-orange-500"
-                  : "border-transparent"
+                active === item ? "border-orange-500" : "border-transparent"
               }`}
             />
           </div>
@@ -81,28 +74,18 @@ const MyFood = () => {
 
       {/* Food List */}
       {cartItem.map((cart, index) => (
-        <div
-          key={cart.id}
-          className="rounded-xl p-4 mb-4 relative"
-        >
-          <p className="text-gray-400 text-sm mb-2">
-            Total 03 items
-          </p>
+        <div key={cart.id} className="rounded-xl p-4 mb-4 relative">
+          <p className="text-gray-400 text-sm mb-2">Total 03 items</p>
 
           <div className="flex gap-4">
             <div className="bg-gray-300 h-24 w-32 rounded-2xl" />
-
-            <div className="w-full">
+            <div className="w-full" onClick={() => navigate('/admin/chef-food-details')}>
               <div className="flex justify-between items-center">
-                <p className="font-medium text-sm">
-                  {cart.name}
-                </p>
+                <p className="font-medium text-sm">{cart.name}</p>
 
                 <button
                   onClick={() =>
-                    setOpenIndex(
-                      openIndex === index ? null : index
-                    )
+                    setOpenIndex(openIndex === index ? null : index)
                   }
                 >
                   <BsThreeDots size={22} />
@@ -124,9 +107,7 @@ const MyFood = () => {
                   </p>
                   <p className="text-gray-500">(10 Reviews)</p>
                 </div>
-                <p className="text-gray-500">
-                  {cart.orderStatus}
-                </p>
+                <p className="text-gray-500">{cart.orderStatus}</p>
               </div>
             </div>
           </div>
@@ -141,7 +122,7 @@ const MyFood = () => {
                 <MdEdit size={24} />
               </button>
               <button className="w-8 h-8 rounded-full px-1 mx-auto text-left text-red-600 hover:bg-gray-100">
-                <MdDelete size={24}/>
+                <MdDelete size={24} />
               </button>
             </div>
           )}

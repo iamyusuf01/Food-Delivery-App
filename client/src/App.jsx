@@ -80,7 +80,7 @@ function App() {
           <Route path="my-profile" element={<MyProfile />} />
           <Route path="add-item" element={<AddItem />} />
           <Route path="my-food-list" element={<MyFood />} />
-          <Route path="food-details" element={<ChefFoodDetails />} />
+          <Route path="chef-food-details" element={<ChefFoodDetails />} />
         </Route>
       </Routes>
     </div>

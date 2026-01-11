@@ -1,12 +1,14 @@
 import React from "react";
-import { FaChevronLeft } from "react-icons/fa6";
+import { FaChevronLeft, FaRegStar } from "react-icons/fa6";
+import { MdOutlineAccessTime } from "react-icons/md";
+import { TbTruckDelivery } from "react-icons/tb";
 import { Link, useNavigate } from "react-router";
 
 const ChefFoodDetails = () => {
   const navigate = useNavigate();
   return (
-    <div>
-      <div>
+    <div className=" p-6 overflow-hidden">
+      <div className=" flex justify-between items-center">
         <div className="flex items-center gap-4 ">
           <Link
             to={"/admin"}
@@ -60,16 +62,16 @@ const ChefFoodDetails = () => {
       </div>
       {/*Sizes  */}
       <div className="flex gap-6 items-center">
-        <h2 className="uppercase">Size: </h2>
+        <h2 className="uppercase"> </h2>
         <div className="flex gap-4">
           <p className=" w-10 h-10 rounded-full text-center pt-1.5 bg-gray-200">
-            10"
+            
           </p>
           <p className=" w-10 h-10 rounded-full text-center pt-1.5 bg-gray-200">
-            14"
+            
           </p>
           <p className=" w-10 h-10 rounded-full text-center pt-1.5 bg-gray-200">
-            16"
+            
           </p>
         </div>
       </div>

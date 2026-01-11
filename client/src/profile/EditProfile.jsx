@@ -58,7 +58,7 @@ const EditProfile = () => {
         }
         toast.success(data.message);
         navigate("profile/personal-info");
-        console.log(data)
+        console.log(data);
       } else {
         toast.error(data.message);
       }
