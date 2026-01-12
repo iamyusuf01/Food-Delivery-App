@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
 import { FaChevronLeft } from "react-icons/fa";
-import { Link, useNavigate, useParams } from "react-router";
+import { Link, useNavigate } from "react-router";
 import { BsCloudUpload } from "react-icons/bs";
 import { FaAngleDown } from "react-icons/fa6";
 import axios from "axios";
@@ -32,7 +32,6 @@ const AddItem = () => {
   const [price, setPrice] = useState("");
   const [description, setDescription] = useState("");
   const [preview, setPreview] = useState(null);
-  const { id } = useParams();
   const fileInputRef = useRef(null);
   const navigate = useNavigate();
 
@@ -50,9 +49,8 @@ const AddItem = () => {
     formData.append("name", name);
     formData.append("price", price);
     formData.append("description", description);
-    if (image) {
-      formData.append("avatar", image);
-    }
+    if (image) formData.append("image", image);
+
     try {
       const { data } = await axios.post(
         "http://localhost:4000/api/menu/add-item",
@@ -71,7 +69,7 @@ const AddItem = () => {
           fileInputRef.current.value = "";
         }
         toast.success(data.message);
-        navigate("/admin/my-food-list");
+        // navigate("/admin/my-food-list");
         console.log(data);
       } else {
         toast.error(data.message);
@@ -87,7 +85,7 @@ const AddItem = () => {
     };
   }, [preview]);
   return (
-    <div className="p-6 overflow-hidden">
+    <div className="p-6 bg-white overflow-hidden">
       <div className=" flex justify-between items-center  max-h-screen rounded-2xl">
         <div className="flex items-center gap-4 ">
           <Link
@@ -125,12 +123,15 @@ const AddItem = () => {
             />
             <label htmlFor="uploadItem" className="">
               <div className="w-32 h-32 rounded-xl relative text-center mt-1  shadow-lg">
-                {preview && <img src={preview} />}
-                <BsCloudUpload
-                  className="absolute left-10 top-10 "
-                  size={52}
-                  color="blue"
-                />
+                {preview ? (
+                  <img src={preview} className="w-full h-full object-cover" />
+                ) : (
+                  <BsCloudUpload
+                    className="absolute left-10 top-10 "
+                    size={52}
+                    color="blue"
+                  />
+                )}
               </div>
             </label>
           </div>

@@ -5,6 +5,12 @@ import User from "../models/userModel.js";
 
 export const addRestaurant = async (req, res) => {
   try {
+    if (!["seller", "admin"].includes(req.user.role)) {
+      return res.json({
+        success: false,
+        message: "Only seller or admin can create restaurant",
+      });
+    }
     if (typeof req.body.location === "string") {
       req.body.location = JSON.parse(req.body.location);
     }
@@ -100,7 +106,7 @@ export const getCurrentRestaurant = async (req, res) => {
     return res.json({
       success: true,
       message: "Fetching restaurants successfully",
-      restaurant
+      restaurant,
     });
   } catch (error) {
     console.log(error);

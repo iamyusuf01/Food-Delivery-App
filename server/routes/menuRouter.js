@@ -12,15 +12,15 @@ import auth, { authorizeRoles } from "../middlewares/authMiddleware.js";
 
 const router = express.Router();
 
-router.get("/get-menu/:menuItem", getMenuByRestaurant);
+router.get("/get-menu", getMenuByRestaurant);
 router.get("/all-menu", getAllMenu);
-router.get("/current-menu/:menuItem", getCurrentMenu);
+router.get("/current-menu", getCurrentMenu);
 
 router.post(
   "/add-item",
   auth,
   authorizeRoles("admin", "seller"),
-  upload.single("image"),
+  upload.fields([{ name: "image", maxCount: 1 }]),
   addItems
 );
 router.put(
@@ -30,6 +30,11 @@ router.put(
   upload.single("image"),
   updateItem
 );
-router.delete("/delete/:menuItem", auth, authorizeRoles("admin", "seller"), deleteItem);
+router.delete(
+  "/delete/:menuItem",
+  auth,
+  authorizeRoles("admin", "seller"),
+  deleteItem
+);
 
 export default router;

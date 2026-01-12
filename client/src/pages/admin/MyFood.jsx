@@ -5,11 +5,14 @@ import { BsThreeDots } from "react-icons/bs";
 import { IoMdStar } from "react-icons/io";
 import { CiEdit } from "react-icons/ci";
 import { MdDelete, MdEdit } from "react-icons/md";
+import axios from "axios";
+import { toast } from "react-toastify";
 
 const MyFood = () => {
   const [active, setActive] = useState("All");
   const [openIndex, setOpenIndex] = useState(null);
-  const navigate = useNavigate()
+  const [menu, setMenu] = useState([]);
+  const navigate = useNavigate();
 
   const categories = ["All", "Breakfast", "Lunch", "Dinner"];
 
@@ -38,6 +41,26 @@ const MyFood = () => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
+  console.log(menu)
+  const fetchMenu = async () => {
+    try {
+      const { data } = await axios.get(
+        "http://localhost:4000/api/menu/current-menu"
+      );
+      if (data.success) {
+        setMenu(data.menu);
+        console.log(data)
+      } else {
+        toast.error(data.message);
+      }
+    } catch (error) {
+      toast.error(error.message);
+    }
+  };
+
+  useEffect(() => {
+    fetchMenu
+  }, [])
   return (
     <div className="p-6 bg-white">
       {/* Header */}
@@ -79,7 +102,10 @@ const MyFood = () => {
 
           <div className="flex gap-4">
             <div className="bg-gray-300 h-24 w-32 rounded-2xl" />
-            <div className="w-full" onClick={() => navigate('/admin/chef-food-details')}>
+            <div
+              className="w-full"
+              onClick={() => navigate("/admin/chef-food-details")}
+            >
               <div className="flex justify-between items-center">
                 <p className="font-medium text-sm">{cart.name}</p>
 

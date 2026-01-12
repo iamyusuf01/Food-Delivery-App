@@ -1,13 +1,11 @@
 import Restaurant from "../models/restaurantModel.js";
 import { uploadOnCloudinary } from "../config/cloudinary.js";
 import Menu from "../models/menuModel.js";
-import { MongoCryptKMSRequestNetworkTimeoutError } from "mongodb";
 import mongoose from "mongoose";
 
 export const addItems = async (req, res) => {
   try {
     const { name, price, description } = req.body;
-    // const { id } = req.params;
 
     if (!name || !price || !description) {
       return res.json({
@@ -15,22 +13,21 @@ export const addItems = async (req, res) => {
         message: "All fields are required",
       });
     }
-
-    // const restaurant = await Restaurant.findById(id);
-    // if (!restaurant) {
-    //   return res.json({
-    //     success: false,
-    //     message: "Restaurant not found",
-    //   });
-    // }
-
-    if (
-      req.user.role === "seller" &&
-      restaurant.owner.toString() !== req.user._id.toString()
-    ) {
+    if (!["seller", "admin"].includes(req.user.role)) {
       return res.json({
         success: false,
-        message: "You cannot add menu to this restuarant",
+        message: "Only seller or admin can add items",
+      });
+    }
+
+    const restaurant = await Restaurant.findOne({
+      owner: req.user._id,
+    });
+
+    if (!restaurant) {
+      return res.json({
+        success: false,
+        message: "First create restaurant",
       });
     }
 
@@ -50,23 +47,14 @@ export const addItems = async (req, res) => {
       });
     }
 
-    // const lastItem = await Menu.findOne({ restaurant: restaurantId })
-    //   .sort({ itemId: -1 })
-    //   .select("itemId");
-
-    // const nextItemId = lastItem ? lastItem.itemId + 1 : 101;
-
     const menu = await Menu.create({
-      // itemId: nextItemId,
-      restaurant: id,
       name,
       price,
       description,
       image: image.url,
+      restaurant: restaurant._id,
+      createdBy: req.user._id,
     });
-
-    restaurant.menu.push(menu._id);
-    await restaurant.save();
 
     return res.json({
       success: true,
@@ -191,15 +179,17 @@ export const deleteItem = async (req, res) => {
 
 export const getMenuByRestaurant = async (req, res) => {
   try {
-    const { menuItem } = req.params;
+    const restaurant = await Restaurant.findOne({
+      owner: res.user._id,
+    });
 
-    if (!mongoose.Types.ObjectId.isValid(menuItem)) {
+    if (!restaurant) {
       return res.json({
         success: false,
-        message: "Invalid restaurant id",
+        message: "Restaurant not found",
       });
     }
-    const menu = await Menu.find({ restaurant: id });
+    const menu = await Menu.find({ restaurant: restaurant_.id });
     if (!menu.length) {
       return res.json({
         success: false,
@@ -238,9 +228,9 @@ export const getAllMenu = async (req, res) => {
 
 export const getCurrentMenu = async (req, res) => {
   try {
-    const { menuItem } = req.params;
+    const { id } = req.params;
 
-    const menu = await Menu.findById(menuItem).populate("restaurant");
+    const menu = await Menu.findById(id).populate("restaurant");
 
     if (!menu) {
       return res.json({
