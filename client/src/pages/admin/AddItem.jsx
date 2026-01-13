@@ -69,7 +69,7 @@ const AddItem = () => {
           fileInputRef.current.value = "";
         }
         toast.success(data.message);
-        // navigate("/admin/my-food-list");
+        navigate("/admin/my-food-list");
         console.log(data);
       } else {
         toast.error(data.message);

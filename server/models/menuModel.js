@@ -3,9 +3,9 @@ import mongoose from "mongoose";
 const menuSchema = new mongoose.Schema(
   {
     restaurant: {
-      type: mongoose.Schema.ObjectId,
-      ref: 'Restaurant',
-      required: true
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Restaurant",
+      required: true,
     },
     name: {
       type: String,
@@ -25,6 +25,10 @@ const menuSchema = new mongoose.Schema(
     },
     image: {
       type: String,
+    },
+    createdBy: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
     },
   },
   { timestamps: true }

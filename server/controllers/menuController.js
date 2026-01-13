@@ -13,10 +13,10 @@ export const addItems = async (req, res) => {
         message: "All fields are required",
       });
     }
-    if (!["seller", "admin"].includes(req.user.role)) {
-      return res.json({
+    if (req.user.role !== "seller" && req.user.role !== "admin") {
+      return res.status(403).json({
         success: false,
-        message: "Only seller or admin can add items",
+        message: "Only seller and admin can add items",
       });
     }
 
@@ -180,7 +180,7 @@ export const deleteItem = async (req, res) => {
 export const getMenuByRestaurant = async (req, res) => {
   try {
     const restaurant = await Restaurant.findOne({
-      owner: res.user._id,
+      owner: req.user._id,
     });
 
     if (!restaurant) {
@@ -189,13 +189,7 @@ export const getMenuByRestaurant = async (req, res) => {
         message: "Restaurant not found",
       });
     }
-    const menu = await Menu.find({ restaurant: restaurant_.id });
-    if (!menu.length) {
-      return res.json({
-        success: false,
-        message: "No menu found for this restaurant",
-      });
-    }
+    const menu = await Menu.find({ restaurant: restaurant._id });
 
     return res.json({
       success: true,
