@@ -14,6 +14,7 @@ const Admin = () => {
         "/admin/add-item",
         "/admin/my-food-list",
         "/admin/chef-food-details",
+        "/admin/add-restaurant",
        ];
 
     const hideLayout = hiddenRoutes.includes(location.pathname);

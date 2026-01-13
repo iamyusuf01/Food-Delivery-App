@@ -11,26 +11,26 @@ export const addRestaurant = async (req, res) => {
         message: "Only seller or admin can create restaurant",
       });
     }
-    if (typeof req.body.location === "string") {
-      req.body.location = JSON.parse(req.body.location);
-    }
-    const { name, location, type, deliveryTime } = req.body;
+    // if (typeof req.body.location === "string") {
+    //   req.body.location = JSON.parse(req.body.location);
+    // }
+    const { name, address, city, type, deliveryTime } = req.body;
 
-    if (!name || !type || !deliveryTime || !location) {
+    if (!name || !address || !city || !type || !deliveryTime) {
       return res.json({
         success: false,
         message: "All fields are required",
       });
     }
 
-    const { city, address } = location;
+    // const { city, address } = location;
 
-    if (!location.city || !location.address) {
-      return res.json({
-        success: false,
-        message: "City and address are required",
-      });
-    }
+    // if (!location.city || !location.address) {
+    //   return res.json({
+    //     success: false,
+    //     message: "City and address are required",
+    //   });
+    // }
 
     const avatarLocalPath = req.files?.avatar?.[0]?.path;
     if (!avatarLocalPath) {
@@ -65,10 +65,8 @@ export const addRestaurant = async (req, res) => {
       name,
       type,
       deliveryTime,
-      location: {
-        city,
-        address,
-      },
+      city,
+      address,
       avatar: avatar.url,
       owner: req.user._id,
     });
