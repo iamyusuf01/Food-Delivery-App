@@ -5,14 +5,16 @@ import {
   deleteItem,
   getAllMenu,
   getCurrentMenu,
-  getMenuByRestaurant,
+  getMyMenu,
+  getSellerFoodDetails,
   updateItem,
 } from "../controllers/menuController.js";
 import auth, { authorizeRoles } from "../middlewares/authMiddleware.js";
 
 const router = express.Router();
 
-router.get("/get-menu", getMenuByRestaurant);
+router.get("/my-food-list", auth, authorizeRoles("seller", "admin"), getMyMenu);
+router.get("/seller/:itemId", auth, authorizeRoles("seller", "admin"), getSellerFoodDetails);
 router.get("/all-menu", getAllMenu);
 router.get("/current-menu/:itemId", getCurrentMenu);
 

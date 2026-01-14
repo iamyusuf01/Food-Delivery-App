@@ -41,15 +41,16 @@ const MyFood = () => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  console.log(menu)
+  console.log(menu);
   const fetchMenu = async () => {
     try {
       const { data } = await axios.get(
-        "http://localhost:4000/api/menu/get-menu"
+        "http://localhost:4000/api/menu/my-food-list",
+        { withCredentials: true }
       );
       if (data.success) {
         setMenu(data.menu);
-        console.log(data)
+        console.log(data);
       } else {
         toast.error(data.message);
       }
@@ -59,8 +60,8 @@ const MyFood = () => {
   };
 
   useEffect(() => {
-    fetchMenu
-  }, [])
+    fetchMenu();
+  }, []);
   return (
     <div className="p-6 bg-white">
       {/* Header */}
@@ -95,16 +96,15 @@ const MyFood = () => {
         ))}
       </div>
 
+      <p className="text-gray-400 text-sm mb-2">Total 03 items</p>
       {/* Food List */}
-      {cartItem.map((cart, index) => (
+      {menu.map((cart, index) => (
         <div key={cart.id} className="rounded-xl p-4 mb-4 relative">
-          <p className="text-gray-400 text-sm mb-2">Total 03 items</p>
-
           <div className="flex gap-4">
             <div className="bg-gray-300 h-24 w-32 rounded-2xl" />
             <div
               className="w-full"
-              onClick={() => navigate("/admin/chef-food-details")}
+              onClick={() => navigate(`/admin/chef-food-details/${cart._id}`)}
             >
               <div className="flex justify-between items-center">
                 <p className="font-medium text-sm">{cart.name}</p>

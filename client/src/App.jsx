@@ -82,7 +82,7 @@ function App() {
           <Route path="add-restaurant" element={<AddRestaurant />} />
           <Route path="add-item" element={<AddItem />} />
           <Route path="my-food-list" element={<MyFood />} />
-          <Route path="chef-food-details" element={<ChefFoodDetails />} />
+          <Route path="chef-food-details/:itemId" element={<ChefFoodDetails />} />
         </Route>
       </Routes>
     </div>

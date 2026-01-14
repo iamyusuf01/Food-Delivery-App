@@ -105,7 +105,7 @@ export const updateItem = async (req, res) => {
         image: image.url,
       },
       { new: true }
-    ).populate('restaurant');
+    ).populate("restaurant");
 
     if (
       req.user?.role === "seller" &&
@@ -177,7 +177,7 @@ export const deleteItem = async (req, res) => {
   }
 };
 
-export const getMenuByRestaurant = async (req, res) => {
+export const getMyMenu = async (req, res) => {
   try {
     const restaurant = await Restaurant.findOne({
       owner: req.user._id,
@@ -186,13 +186,14 @@ export const getMenuByRestaurant = async (req, res) => {
     if (!restaurant) {
       return res.json({
         success: false,
-        message: "Restaurant not found",
+        message: "Restaurant not found. Create restaurant first",
       });
     }
     const menu = await Menu.find({ restaurant: restaurant._id });
 
     return res.json({
       success: true,
+      restaurant,
       count: menu.length,
       menu,
     });
@@ -224,11 +225,53 @@ export const getCurrentMenu = async (req, res) => {
   try {
     const { itemId } = req.params;
 
-    if(!itemId){
+    if (!itemId) {
       return res.json({
         success: false,
-        message: 'Item id not found'
-      })
+        message: "Item id not found",
+      });
+    }
+
+    const menu = await Menu.findById(itemId).populate("restaurant");
+
+    if (!menu) {
+      return res.json({
+        success: false,
+        message: "Menu item not found",
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      menu,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+export const getSellerFoodDetails = async (req, res) => {
+  try {
+    const { itemId } = req.params;
+
+    if (!itemId) {
+      return res.json({
+        success: false,
+        message: "Invalid menu id",
+      });
+    }
+
+    const restaurant = await Restaurant.findOne({
+      owner: req.user._id,
+    });
+
+    if (!restaurant) {
+      return res.json({
+        success: false,
+        message: "Restaurant not  found",
+      });
     }
 
     const menu = await Menu.findById(itemId).populate("restaurant");

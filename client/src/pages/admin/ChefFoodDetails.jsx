@@ -1,13 +1,37 @@
-import React from "react";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
 import { FaChevronLeft, FaRegStar } from "react-icons/fa6";
 import { MdOutlineAccessTime } from "react-icons/md";
 import { TbTruckDelivery } from "react-icons/tb";
-import { Link, useNavigate } from "react-router";
+import { Link, useNavigate, useParams } from "react-router";
+import { toast } from "react-toastify";
 
 const ChefFoodDetails = () => {
   const navigate = useNavigate();
+  const { itemId } = useParams();
+  const [sellerMenu, setSellerMenu] = useState([]);
+
+  const fetchSellerFoodDetails = async () => {
+    try {
+      const { data } = await axios.get(
+        `http://localhost:4000/api/menu/seller/${itemId}`,
+        { withCredentials: true }
+      );
+      if (data.success) {
+        setSellerMenu(data.menu);
+        // console.log(data);
+      } else {
+        toast.error(data.message);
+      }
+    } catch (error) {
+      toast.error(error.message);
+    }
+  };
+  useEffect(() => {
+    fetchSellerFoodDetails();
+  }, []);
   return (
-    <div className=" p-6 overflow-hidden">
+    <div className=" p-6 overflow-hidden bg-white">
       <div className=" flex justify-between items-center">
         <div className="flex items-center gap-4 ">
           <Link
@@ -21,58 +45,27 @@ const ChefFoodDetails = () => {
         <button className="uppercase text-orange-500">Edit</button>
       </div>
       <div className="my-4">
+        <img
+          src={sellerMenu?.image}
+          className=" bg-gray-300 h-32 w-full rounded-xl object-cover"
+        />
         <div className="py-4" id="_id">
-          <div className="">
-            <div>
-              <img
-                // src={menu?.image}
-                className=" bg-gray-300 h-32 w-full rounded-xl"
-              />
-              <p className="mt-6 pl-6 border border-gray-300 rounded-full w-2/3   h-8">
-                {/* {menu?.restaurant?.name} */}
-              </p>
-              {/* <p className="pt-2">{menu?.name}</p> */}
-            </div>
+          <div className="flex justify-between item-cneter py-1">
+            <p className="pt-2">{sellerMenu?.name}</p>
+            <p className=""> ${sellerMenu?.price}</p>
+          </div>
 
-            <div className="py-2">
-              {/* <p className=""> {menu?.description}</p> */}
+          <div className="flex justify-between items-center gap-2">
+            <p>{sellerMenu?.restaurant?.address}</p>
+            <div className="flex item-center gap-2 ">
+              <FaRegStar className="text-orange-500 mt-1" size={16}  />
+              <p>{sellerMenu?.restaurant?.rating} (10 Reviews)</p>
             </div>
           </div>
-          <div className="flex items-center gap-20">
-            <div className="flex items-center gap-2">
-              <p>
-                <FaRegStar size={20} color="orange" />
-              </p>
-              {/* <p>{menu?.restaurant?.rating}</p> */}
-            </div>
-            <div className="flex items-center gap-2">
-              <p>
-                <TbTruckDelivery size={22} color="orange" />
-              </p>
-              {/* <p>{menu?.restaurant?.location.city}</p> */}
-            </div>
-            <div className="flex items-center gap-2">
-              <p>
-                <MdOutlineAccessTime size={22} color="orange" />
-              </p>
-              {/* <p>{menu?.restaurant?.deliveryTime} Min</p> */}
-            </div>
+
+          <div className="flex items-center py-1 gap-2">
+            <p>{sellerMenu?.description}</p>
           </div>
-        </div>
-      </div>
-      {/*Sizes  */}
-      <div className="flex gap-6 items-center">
-        <h2 className="uppercase"> </h2>
-        <div className="flex gap-4">
-          <p className=" w-10 h-10 rounded-full text-center pt-1.5 bg-gray-200">
-            
-          </p>
-          <p className=" w-10 h-10 rounded-full text-center pt-1.5 bg-gray-200">
-            
-          </p>
-          <p className=" w-10 h-10 rounded-full text-center pt-1.5 bg-gray-200">
-            
-          </p>
         </div>
       </div>
     </div>
