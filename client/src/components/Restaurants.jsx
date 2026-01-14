@@ -51,13 +51,13 @@ const Restaurants = () => {
                 <p>
                   <FaRegStar size={20} color="orange" />
                 </p>
-                <p>{item.rating}</p>
+                <p>{item?.rating}</p>
               </div>
               <div className="flex items-center gap-2">
                 <p>
                   <TbTruckDelivery size={22} color="orange" />
                 </p>
-                <p>{item.location.city}</p>
+                <p>{item?.city}</p>
               </div>
               <div className="flex items-center gap-2">
                 <p>

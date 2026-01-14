@@ -11,9 +11,7 @@ export const addRestaurant = async (req, res) => {
         message: "Only seller or admin can create restaurant",
       });
     }
-    // if (typeof req.body.location === "string") {
-    //   req.body.location = JSON.parse(req.body.location);
-    // }
+
     const { name, address, city, type, deliveryTime } = req.body;
 
     if (!name || !address || !city || !type || !deliveryTime) {
@@ -22,15 +20,6 @@ export const addRestaurant = async (req, res) => {
         message: "All fields are required",
       });
     }
-
-    // const { city, address } = location;
-
-    // if (!location.city || !location.address) {
-    //   return res.json({
-    //     success: false,
-    //     message: "City and address are required",
-    //   });
-    // }
 
     const avatarLocalPath = req.files?.avatar?.[0]?.path;
     if (!avatarLocalPath) {
@@ -87,13 +76,8 @@ export const addRestaurant = async (req, res) => {
 export const getCurrentRestaurant = async (req, res) => {
   try {
     const { id } = req.params;
-    if (!id) {
-      return res.json({
-        success: false,
-        message: "Restaurant Id required",
-      });
-    }
-    const restaurant = await Restaurant.findById(id).populate("menu");
+
+    const restaurant = await Restaurant.findById(id);
     if (!restaurant) {
       return res.json({
         success: false,
@@ -101,10 +85,12 @@ export const getCurrentRestaurant = async (req, res) => {
       });
     }
 
+    const menu = await Menu.find({ restaurant: restaurant._id });
+
     return res.json({
       success: true,
-      message: "Fetching restaurants successfully",
       restaurant,
+      menu,
     });
   } catch (error) {
     console.log(error);
@@ -116,11 +102,10 @@ export const getCurrentRestaurant = async (req, res) => {
 };
 export const getAllRestaurants = async (req, res) => {
   try {
-    const restaurants = await Restaurant.find().populate("menu");
+    const restaurants = await Restaurant.find();
 
     return res.json({
       success: true,
-      message: "Fetching all restaurants successfully",
       restaurants,
     });
   } catch (error) {
@@ -134,14 +119,7 @@ export const getAllRestaurants = async (req, res) => {
 
 export const deleteRestaurant = async (req, res) => {
   try {
-    const { id } = req.body;
-
-    if (!id) {
-      return res.json({
-        success: false,
-        message: "Restaurant Id required",
-      });
-    }
+    const { id } = req.params;
 
     const restaurant = await Restaurant.findById(id);
     if (!restaurant) {
@@ -161,12 +139,9 @@ export const deleteRestaurant = async (req, res) => {
       });
     }
 
-    // if (restaurant.menu?.length) {
-    //   await Menu.deleteMany({ _id: { $in: restaurant.menu } });
-    // }
-
     await Menu.deleteMany({ restaurant: id });
     await Restaurant.findByIdAndDelete(id);
+
     return res.json({
       success: true,
       message: "Restaurant deleted successfully",
@@ -183,12 +158,6 @@ export const deleteRestaurant = async (req, res) => {
 export const updateRestaurantAvatar = async (req, res) => {
   try {
     const { id } = req.params;
-    if (!id) {
-      return res.json({
-        success: false,
-        message: "Unauthorized user",
-      });
-    }
 
     const restaurant = await Restaurant.findById(id);
     if (!restaurant) {
@@ -197,6 +166,7 @@ export const updateRestaurantAvatar = async (req, res) => {
         message: "Restaurant not found",
       });
     }
+
     if (
       req.user.role === "seller" &&
       restaurant.owner.toString() !== req.user._id.toString()
@@ -224,20 +194,13 @@ export const updateRestaurantAvatar = async (req, res) => {
       });
     }
 
-    const user = await User.findByIdAndUpdate(
-      id,
-      {
-        $set: {
-          avatar: avatar.url,
-        },
-      },
-      { new: true }
-    ).select("-password -refreshToken");
+    restaurant.avarat = avatar.url;
+    await restaurant.save();
 
     return res.json({
       success: true,
-      message: "Avatar updated",
-      user,
+      message: "Restaurant avatar updated",
+      restaurant,
     });
   } catch (error) {
     console.log(error);

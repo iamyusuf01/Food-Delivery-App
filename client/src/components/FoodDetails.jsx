@@ -11,14 +11,16 @@ import axios from "axios";
 import { toast } from "react-toastify";
 
 const FoodDetails = () => {
-  const { menuItem } = useParams();
+  const { itemId } = useParams();
   const { navigate, restaurants } = useContext(AuthContext);
   const [menu, setMenu] = useState([]);
+
+  // console.log(menu)
 
   const fetchMenu = async () => {
     try {
       const { data } = await axios.get(
-        `http://localhost:4000/api/menu/current-menu/${menuItem}`
+        `http://localhost:4000/api/menu/current-menu/${itemId}`
       );
       if (data.success) {
         setMenu(data.menu);
@@ -30,10 +32,10 @@ const FoodDetails = () => {
   };
 
   useEffect(() => {
-    if (menuItem) {
+    if (itemId) {
       fetchMenu();
     }
-  }, [menuItem]);
+  }, [itemId]);
 
   return (
     <div className=" overflow-hidden">
@@ -76,7 +78,7 @@ const FoodDetails = () => {
                 <p>
                   <TbTruckDelivery size={22} color="orange" />
                 </p>
-                <p>{menu?.restaurant?.location.city}</p>
+                <p>{menu?.restaurant?.city}</p>
               </div>
               <div className="flex items-center gap-2">
                 <p>

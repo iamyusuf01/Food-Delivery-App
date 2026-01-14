@@ -1,7 +1,6 @@
 import Restaurant from "../models/restaurantModel.js";
 import { uploadOnCloudinary } from "../config/cloudinary.js";
 import Menu from "../models/menuModel.js";
-import mongoose from "mongoose";
 
 export const addItems = async (req, res) => {
   try {
@@ -72,7 +71,8 @@ export const addItems = async (req, res) => {
 export const updateItem = async (req, res) => {
   try {
     const { name, description, price } = req.body;
-    const { menuItem } = req.params;
+    const { itemId } = req.params;
+
     if (!name || !description || !price) {
       return res.json({
         success: false,
@@ -97,7 +97,7 @@ export const updateItem = async (req, res) => {
     }
 
     const menu = await Menu.findByIdAndUpdate(
-      menuItem,
+      itemId,
       {
         name,
         description,
@@ -105,7 +105,7 @@ export const updateItem = async (req, res) => {
         image: image.url,
       },
       { new: true }
-    );
+    ).populate('restaurant');
 
     if (
       req.user?.role === "seller" &&
@@ -139,13 +139,13 @@ export const updateItem = async (req, res) => {
 
 export const deleteItem = async (req, res) => {
   try {
-    const { menuItem } = req.params;
+    const { itemId } = req.params;
 
-    const menu = await Menu.findById(menuItem).populate("restaurant");
+    const menu = await Menu.findById(itemId).populate("restaurant");
     if (!menu) {
       return res.json({
         success: false,
-        message: "Menu item not founds",
+        message: "Menu item not found",
       });
     }
 
@@ -222,9 +222,16 @@ export const getAllMenu = async (req, res) => {
 
 export const getCurrentMenu = async (req, res) => {
   try {
-    const { id } = req.params;
+    const { itemId } = req.params;
 
-    const menu = await Menu.findById(id).populate("restaurant");
+    if(!itemId){
+      return res.json({
+        success: false,
+        message: 'Item id not found'
+      })
+    }
+
+    const menu = await Menu.findById(itemId).populate("restaurant");
 
     if (!menu) {
       return res.json({

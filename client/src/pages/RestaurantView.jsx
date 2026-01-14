@@ -39,6 +39,8 @@ const RestaurantView = () => {
   const restaurant = restaurants.find(
     (restaurant) => restaurant._id?.toString() === id
   );
+
+  console.log(restaurant)
   const fetchAllMenu = async () => {
     try {
       const { data } = await axios.get(
@@ -100,7 +102,7 @@ const RestaurantView = () => {
               <p>
                 <TbTruckDelivery size={22} color="orange" />
               </p>
-              <p>{restaurant?.location.city}</p>
+              <p>{restaurant?.city}</p>
             </div>
             <div className="flex items-center gap-2">
               <p>

@@ -40,7 +40,7 @@ const restaurantSchema = new mongoose.Schema(
     },
     menu: [
       {
-        type: mongoose.Schema.ObjectId,
+        type: mongoose.Schema.Types.ObjectId,
         ref: "Menu",
       },
     ],
@@ -52,7 +52,6 @@ const restaurantSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
       required: true,
-      unique: true,
     },
   },
   { timestamps: true }

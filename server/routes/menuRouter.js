@@ -14,7 +14,7 @@ const router = express.Router();
 
 router.get("/get-menu", getMenuByRestaurant);
 router.get("/all-menu", getAllMenu);
-router.get("/current-menu", getCurrentMenu);
+router.get("/current-menu/:itemId", getCurrentMenu);
 
 router.post(
   "/add-item",

@@ -64,7 +64,7 @@ function App() {
         <Route path="/all-restaurants/:id" element={<RestaurantView />} />
         <Route path="/restaurants/:id" element={<RestaurantView />} />
         <Route path="/food" element={<Food />} />
-        <Route path="/food-details/:menuItem" element={<FoodDetails />} />
+        <Route path="/food-details/:itemId" element={<FoodDetails />} />
 
         {/* Payment Routes */}
         <Route path="/payment" element={<Payment />} />
