@@ -10,6 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@recharts/devtools": "^0.0.7",
     "@reduxjs/toolkit": "^2.11.1",
     "@tailwindcss/vite": "^4.1.17",
     "axios": "^1.13.2",
@@ -20,6 +21,7 @@
     "react-router-dom": "^7.10.0",
     "react-select": "^5.10.2",
     "react-toastify": "^11.0.5",
+    "recharts": "^3.6.0",
     "shadcn": "^3.6.3",
     "tailwindcss": "^4.1.17"
   },

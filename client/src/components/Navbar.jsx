@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { CgMenuLeft, CgSearch } from "react-icons/cg";
 import { FaCaretDown } from "react-icons/fa";
 import { IoBagHandle } from "react-icons/io5";
@@ -10,6 +10,7 @@ import { AuthContext } from "../context/AuthContext";
 const Navbar = () => {
   const { isAdmin } = useContext(AuthContext);
   const navigate = useNavigate();
+
   return (
     <div>
       {/*  */}

@@ -8,7 +8,7 @@ import { Link } from "react-router";
 const Footer = () => {
   return (
     <div className=" bg-white rounded-xl shadow-lg  ">
-      <ul className="flex justify-around items-center my-4 h-16">
+      <ul className="flex justify-around items-center mt-4 h-16">
         <Link>
           <RxDashboard size={26}  />
         </Link>

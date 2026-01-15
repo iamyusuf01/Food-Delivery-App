@@ -21,7 +21,7 @@ const Admin = () => {
   const hideLayout = hiddenRoutes.includes(location.pathname);
   return (
     isAdmin && (
-      <div className="bg-gray-200">
+      <div className="bg-gray-100">
         {!hideLayout && <Navbar />}
         <Outlet />
         {!hideLayout && <Footer />}
