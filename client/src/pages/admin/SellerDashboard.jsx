@@ -1,8 +1,8 @@
 import { RechartsDevtools } from "@recharts/devtools";
-import RunningOrders from "../../components/admin/RunningOrders";
 import React, { useEffect, useRef, useState } from "react";
 import { FaStar } from "react-icons/fa6";
 import { Line, LineChart } from "recharts";
+import OrderCards from "../../components/admin/OrderCards";
 
 const SellerDashboard = () => {
   const data = [
@@ -49,38 +49,58 @@ const SellerDashboard = () => {
       amt: 2100,
     },
   ];
-  const [openOrder, setOpenOrder] = useState(false);
-  const orderRef = useRef(null);
+
+  const runningOrders = [
+    {
+      orderId: 1,
+      name: "Chicken Thai Biryani",
+      type: "Breakfast",
+      price: 60,
+    },
+  ];
+  const orderRequests = [
+    {
+      orderId: 2,
+      name: "Paneer Biryani",
+      type: "Lunch",
+      price: 80,
+    },
+  ];
+  const [activePanel, setActivePanel] = useState(null);
+  const panelRef = useRef(null);
 
   useEffect(() => {
     const handleClickOutside = (e) => {
       if (
-        openOrder &&
-        orderRef.current &&
-        !orderRef.current.contains(e.target)
+        activePanel &&
+        panelRef.current &&
+        !panelRef.current.contains(e.target)
       ) {
-        setOpenOrder(false);
+        setActivePanel(null);
       }
     };
 
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, [openOrder]);
+  }, [activePanel]);
 
   return (
     <div className="p-6 relative">
       <div className="grid grid-cols-2 justify-items-center gap-4">
         <button
-          onClick={() => setOpenOrder(true)}
+          onClick={() => setActivePanel("running")}
           className=" shadow-sm px-4 rounded-xl bg-gray-50 w-full h-20 py-2"
         >
-          <p className="text-4xl font-bold">20</p>
+          <p className="text-4xl font-bold">{runningOrders.length}</p>
           <h2 className="uppercase text-sm pt-1 font-medium">Running Orders</h2>
         </button>
-        <div className="shadow-sm rounded-xl bg-gray-50 w-full h-20 py-2 px-4">
-          <p className="text-4xl font-bold">05</p>
+        <button
+          onClick={() => setActivePanel("request")}
+          className="shadow-sm rounded-xl bg-gray-50 w-full h-20 py-2 px-4"
+        >
+          <p className="text-4xl font-bold">{orderRequests.length}</p>
           <h2 className="uppercase text-sm pt-1 font-medium">Order Request</h2>
-        </div>
+        </button>
       </div>
       {/* Total Revenue Chart */}
       <div className="shadow-sm rounded-xl py-4 mt-6 px-2 bg-gray-50">
@@ -140,9 +160,25 @@ const SellerDashboard = () => {
         </div>
       </div>
       {/* Running Orders */}
-      {openOrder && (
-        <div ref={orderRef}>
-          <RunningOrders />
+      {activePanel === "running" && (
+        <div
+          ref={panelRef}
+          className="shadow-lg bg-white w-full px-6 rounded-3xl absolute py-4 -bottom-20 right-0 overflow-hidden"
+        >
+          <hr className="border-2 mt-1 w-12 mx-auto rounded text-gray-300" />
+          <h2 className="mt-4 text-md font-medium">{runningOrders.length} Running Order</h2>
+          <OrderCards orders={runningOrders} />
+        </div>
+      )}
+      {/* Orders Request */}
+      {activePanel === "request" && (
+        <div
+          ref={panelRef}
+          className="shadow-lg bg-white w-full px-6 rounded-3xl absolute py-4 -bottom-20 right-0 overflow-hidden"
+        >
+          <hr className="border-2 mt-1 w-12 mx-auto rounded text-gray-300" />
+          <h2 className="mt-4 text-md font-medium">{orderRequests.length} Order Request</h2>
+          <OrderCards orders={orderRequests} />
         </div>
       )}
     </div>
