@@ -18,7 +18,7 @@ const Footer = () => {
         <Link to={'/admin/add-item'}>
           <IoAddCircleOutline size={42} color="orange" className="" />
         </Link>
-        <Link>
+        <Link to={'/admin/chat'}>
           <IoIosNotificationsOutline size={28} />
         </Link>
         <Link>

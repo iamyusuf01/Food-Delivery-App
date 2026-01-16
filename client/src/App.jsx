@@ -26,6 +26,7 @@ import AddItem from "./pages/admin/AddItem";
 import ChefFoodDetails from "./pages/admin/ChefFoodDetails";
 import MyFood from "./pages/admin/MyFood";
 import AddRestaurant from "./pages/admin/AddRestaurant";
+import ViewNotification from "./pages/admin/ViewNotification";
 
 function App() {
   return (
@@ -83,6 +84,7 @@ function App() {
           <Route path="add-item" element={<AddItem />} />
           <Route path="my-food-list" element={<MyFood />} />
           <Route path="chef-food-details/:itemId" element={<ChefFoodDetails />} />
+          <Route path="chat" element={<ViewNotification />} />
         </Route>
       </Routes>
     </div>
