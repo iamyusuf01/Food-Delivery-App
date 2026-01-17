@@ -14,11 +14,11 @@ const Notification = () => {
     },
   ];
   return (
-    <div className="px-4">
+    <div className="px-4 h-screen">
       {notification.map((item) => (
         <div
           key={item}
-          className="flex py-2 justify-between gap-4 items-center"
+          className="flex py-2 gap-4 items-center"
         >
           <div className=" bg-gray-300 w-12 h-12 rounded-full">
             <img />

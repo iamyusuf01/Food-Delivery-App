@@ -16,7 +16,7 @@ const Messages = () => {
   ];
 
   return (
-    <div className="px-4">
+    <div className="px-4 h-screen">
       {messages.map((item) => (
         <div
           key={item}
@@ -33,7 +33,8 @@ const Messages = () => {
               <p className="text-xs py-1">{item.comment}</p>
             </div>
           </div>
-          <div className="">   
+          <div className="text-center">   
+            <p className=" text-sm pb-1">7:40</p>
             <p className=" bg-orange-400 text-white w-6 h-6 text-center rounded-full text-sm">1</p>
           </div>
         </div>
