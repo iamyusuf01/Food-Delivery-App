@@ -4,8 +4,6 @@ import Categories from "../components/Categories";
 import Search from "../components/Search";
 import Restaurants from "../components/Restaurants";
 import Offers from "../components/Offers";
-import { AuthContext } from "../context/AuthContext";
-import Login from "../auth/Login";
 import { useMatch } from "react-router-dom";
 
 const Home = () => {

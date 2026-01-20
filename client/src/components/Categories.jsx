@@ -1,14 +1,15 @@
-import React from "react";
+import React, { useState } from "react";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa6";
 
 const Categories = () => {
-  const itemList = [
+  const [active, setActive] = useState("All");
+  const tabs = [
     {
       name: "All",
       image: "",
     },
     {
-      name: "HotDog",
+      name: "Hot Dog",
       image: "",
     },
     {
@@ -21,28 +22,25 @@ const Categories = () => {
     },
   ];
   return (
-    <div>
+    <div className="font-ui text-[18px] py-4 ">
       <div className="flex justify-between items-center">
-        <h2>All Categories</h2>
+        <h2 className="">All Categories</h2>
         <div className="flex items-center gap-2">
-          <p>See All</p>
+          <p className="">See All</p>
           <FaChevronRight size={16} />
         </div>
       </div>
-      <div className="w-full flex gap-4 pt-4 overflow-x-scroll whitespace-nowrap h-23 no-scrollbar">
-        {itemList.map((item) => (
-          <div
-            key={item.name}
-            className="min-w-[140px] rounded-full bg-amber-400/60 shadow-lg max-h-15"
+      <div className="w-full flex gap-4 py-2 overflow-x-scroll whitespace-nowrap no-scrollbar">
+        {tabs.map((item) => (
+          <button key={item}
+            onClick={() => setActive(item.name)}
+            className={`flex shadow-md px-3 rounded-full gap-2 py-1 items-center ${active === item.name ? "bg-amber-400" : "text-black"}  `}
           >
-            <div className="flex items-center gap-2 text-center text-xl text-indigo-950 font-semibold p-2.5">
-              <img
-                className=" bg-gray-200 w-10 h-10 rounded-full"
-                src={item.image}
-              />
-              <span className="">{item.name}</span>
+            <div className="w-8 h-8 rounded-full bg-gray-300">
+              <img src={item.image} />
             </div>
-          </div>
+            <h2>{item.name}</h2>
+          </button>
         ))}
       </div>
     </div>

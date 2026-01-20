@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 import { restaurants } from "../assets/assets";
-import { FaChevronLeft, FaChevronRight } from "react-icons/fa6";
+import { FaChevronRight } from "react-icons/fa6";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { FaRegStar } from "react-icons/fa";
@@ -13,14 +13,14 @@ const Restaurants = () => {
 
   if (!OpenRestaurants || !restaurants.length) return null;
   return (
-    <div>
+    <div className="">
       <div className="flex justify-between items-center">
-        <h2>Open Restaurants</h2>
+        <h2 className="font-ui text-xl">Open Restaurants</h2>
         <div
           className="flex items-center gap-2 cursor-pointer"
           onClick={() => navigate("/all-restaurants")}
         >
-          <p>See All</p>
+          <p className="font-ui">See All</p>
           <FaChevronRight size={16} />
         </div>
       </div>
@@ -35,10 +35,10 @@ const Restaurants = () => {
             <div className="">
               <img
                 src={item.image}
-                className=" bg-gray-300 h-32 w-full rounded-xl"
+                className=" bg-gray-400 h-36 w-full rounded-xl"
               />
-              <h2 className="pt-2">{item.name}</h2>
-              <div className="py-2">
+              <h2 className="pt-1 font-medium font-ui text-xl">{item.name}</h2>
+              <div className="pt-1">
                 {item?.menu?.map((item, index) => (
                   <div key={index} className="">
                     <p className="">{item.name}</p>
@@ -46,23 +46,17 @@ const Restaurants = () => {
                 ))}
               </div>
             </div>
-            <div className="flex justify-between pb-4">
+            <div className="flex gap-12 pb-4">
               <div className="flex items-center gap-2">
-                <p>
-                  <FaRegStar size={20} color="orange" />
-                </p>
-                <p>{item?.rating}</p>
+                <FaRegStar size={20} color="orange" className="" />
+                <p className="font-medium">{item?.rating}</p>
               </div>
               <div className="flex items-center gap-2">
-                <p>
-                  <TbTruckDelivery size={22} color="orange" />
-                </p>
+                <TbTruckDelivery size={22} color="orange" />
                 <p>{item?.city}</p>
               </div>
               <div className="flex items-center gap-2">
-                <p>
-                  <MdOutlineAccessTime size={22} color="orange" />
-                </p>
+                <MdOutlineAccessTime size={22} color="orange" />
                 <p>{item.deliveryTime} Min</p>
               </div>
             </div>
