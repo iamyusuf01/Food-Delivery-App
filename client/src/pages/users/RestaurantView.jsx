@@ -1,7 +1,7 @@
 import React, { use, useContext, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router";
 import { restaurants } from "../../assets/assets";
-import { FaChevronLeft, FaChevronRight } from "react-icons/fa6";
+import { FaCartPlus, FaChevronLeft, FaChevronRight, FaPlus } from "react-icons/fa6";
 import { HiOutlineDotsHorizontal } from "react-icons/hi";
 import { FaRegStar } from "react-icons/fa";
 import { TbTruckDelivery } from "react-icons/tb";
@@ -12,10 +12,11 @@ import Filter from "../../components/users/Filter";
 import { AuthContext } from "../../context/AuthContext";
 import axios from "axios";
 import { toast } from "react-toastify";
+import { BsPlus } from "react-icons/bs";
 
 const tabs = [
   {
-    name: "Burger",
+    name: "All",
   },
   {
     name: "Sandwich",
@@ -33,7 +34,7 @@ const RestaurantView = () => {
 
   const [open, setOpen] = useState(false);
   const [menu, setMenu] = useState([]);
-  const [active, setActive] = useState("Burger");
+  const [active, setActive] = useState("All");
 
   const { id } = useParams();
 
@@ -56,6 +57,7 @@ const RestaurantView = () => {
     }
   };
 
+  
   useEffect(() => {
     fetchAllMenu();
   }, []);
@@ -116,25 +118,28 @@ const RestaurantView = () => {
           <div key={index}>
             <button
               onClick={() => setActive(item.name)}
-              className={`border w-full ${active === item.name ? "bg-amber-400" : "text-black"} border-gray-300 shadow-md h-8 rounded-2xl text-center`}
+              className={`border w-full ${active === item.name ? "bg-orange-400 text-white" : "text-black"} border-gray-300 shadow-md h-8 rounded-2xl text-center`}
             >
               {item.name}
             </button>
           </div>
         ))}
       </div>
-      <div className="grid grid-cols-2 justify-between  my-12">
+      <div className="py-6">
+        <p className="text-xl font-ui">{active}</p>
+      </div>
+      <div className="grid grid-cols-2 justify-between gap-4 ">
         {menu.map((menuItem, i) => (
           <div key={i} className="rounded-2xl shadow-lg px-4 py-4">
             <div>
-              <img src="" className=" w-full h-32 bg-gray-200 " />
-              <p className="text-xl font-medium pt-2">{menuItem.name}</p>
-              <p className="text-xl">{restaurant?.name}</p>
+              <img src="" className=" w-full h-24 rounded-2xl bg-gray-300 object-cover" />
+              <p className="text-xl font-medium pt-2 font-ui">{menuItem.name}</p>
+              <p className="text-sm font-ui text-gray-500">{restaurant?.name}</p>
             </div>
             <div className="flex justify-between items-center pt-2">
-              <p>${menuItem.price}</p>
-              <button onClick={() => navigate(`/food-details/${menuItem._id}`)}>
-                Add
+              <p className="font-bold ">${menuItem.price}</p>
+              <button className="w-8 h-8 cursor-pointer rounded-full bg-orange-400 item-center" onClick={() => navigate(`/food-details/${menuItem._id}`)}>
+                <FaPlus className="mx-auto text-white"/>
               </button>
             </div>
           </div>

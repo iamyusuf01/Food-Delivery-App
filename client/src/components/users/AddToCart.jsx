@@ -19,9 +19,9 @@ const AddToCart = ({ restaurants, menu }) => {
     addToCartItems({
       ...menu,
       quantity: count,
-      restaurantId: restaurants.id,
-      restaurantName: restaurants.name,
-      restaurantImage: restaurants.image,
+      restaurant: restaurants?.id,
+      restaurantName: restaurants?.name,
+      restaurantImage: restaurants?.image,
       totalPrice: total,
     });
     navigate("/my-cart");

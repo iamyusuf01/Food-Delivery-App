@@ -20,7 +20,7 @@ const FoodDetails = () => {
   const fetchMenu = async () => {
     try {
       const { data } = await axios.get(
-        `http://localhost:4000/api/menu/current-menu/${itemId}`
+        `http://localhost:4000/api/menu/current-menu/${itemId}`,
       );
       if (data.success) {
         setMenu(data.menu);
@@ -38,7 +38,7 @@ const FoodDetails = () => {
   }, [itemId]);
 
   return (
-    <div className=" overflow-hidden">
+    <div className=" overflow-hidden font-ui">
       <div className="p-6">
         <div className="flex items-center gap-4 ">
           <button
@@ -47,32 +47,28 @@ const FoodDetails = () => {
           >
             <FaChevronLeft />
           </button>
-          <h2 className="font-medium">Details</h2>
+          <h2 className="font-medium text-xl">Details</h2>
         </div>
         <div className="my-4">
           <div className="py-4" id="_id">
             <div className="">
-              <div>
-                <img
-                  // src={menu?.image}
-                  className=" bg-gray-300 h-32 w-full rounded-xl"
-                />
-                <p className="mt-6 pl-6 border border-gray-300 rounded-full w-2/3   h-8">
-                  {menu?.restaurant?.name}
-                </p>
-                <p className="pt-2">{menu?.name}</p>
-              </div>
+              <img
+                // src={menu?.image}
+                className=" bg-gray-400 h-36 w-full rounded-xl"
+              />
+              <p className="my-6 px-6 border border-gray-300 rounded-full h-8 py-1 w-2/5 ">
+                {menu?.restaurant?.name}
+              </p>
+              <p className="py-2 text-xl font-medium">{menu?.name}</p>
 
-              <div className="py-2">
-                <p className=""> {menu?.description}</p>
-              </div>
+              <p className="pb-1 text-sm text-gray-500">{menu?.description}</p>
             </div>
-            <div className="flex items-center gap-20">
+            <div className="flex items-center gap-20 pt-2">
               <div className="flex items-center gap-2">
                 <p>
                   <FaRegStar size={20} color="orange" />
                 </p>
-                <p>{menu?.restaurant?.rating}</p>
+                <p className="">{menu?.restaurant?.rating}</p>
               </div>
               <div className="flex items-center gap-2">
                 <p>
