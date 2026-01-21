@@ -1,9 +1,9 @@
 import React, { useContext } from "react";
-import Navbar from "../components/Navbar";
-import SearchInput from "../components/Search";
+import Navbar from "../../components/users/Navbar";
+import SearchInput from "../../components/users/Search";
 import { FaChevronLeft } from "react-icons/fa6";
 import { IoBagHandle } from "react-icons/io5";
-import { AuthContext } from "../context/AuthContext";
+import { AuthContext } from "../../context/AuthContext";
 import { IoIosStarOutline } from "react-icons/io";
 import { FaRupeeSign } from "react-icons/fa";
 import { Link } from "react-router-dom";

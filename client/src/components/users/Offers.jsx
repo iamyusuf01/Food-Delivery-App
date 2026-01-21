@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { RxCross2 } from "react-icons/rx";
-import { BgImages } from "../assets/assets";
+import { BgImages } from "../../assets/assets";
 
 const Offers = () => {
   const [visible, setVisible ] = useState(true)

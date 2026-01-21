@@ -1,26 +1,34 @@
 import { Route, Routes} from "react-router";
-import Home from "./pages/Home";
-import Login from "./auth/Login";
-import Signup from "./auth/Signup";
-import ForgetPassword from "./auth/ForgetPassword";
-import Verification from "./auth/Verification";
-import Profile from "./pages/Profile";
+import { ToastContainer } from "react-toastify";
+
+/* Public Pages */
+import Home from "./pages/users/Home";
+import Login from "./pages/auth/Login";
+import Signup from "./pages/auth/Signup";
+import ForgetPassword from "./pages/auth/ForgetPassword";
+import Verification from "./pages/auth/Verification";
+import Search from "./pages/users/Search";
+import SpecificItem from "./pages/users/SpecificItem";
+
+/* User Pages */
+import Profile from "./pages/users/Profile";
 import PersonalInfo from "./profile/PersonalInfo";
 import EditProfile from "./profile/EditProfile";
-import AllRestaurants from "./components/AllRestaurants";
-import RestaurantView from "./pages/RestaurantView";
-import FoodDetails from "./components/FoodDetails";
-import Food from "./pages/Food";
-import MyCart from "./pages/MyCart";
-import Payment from "./pages/Payment";
+import AllRestaurants from "./components/users/AllRestaurants";
+import RestaurantView from "./pages/users/RestaurantView";
+import FoodDetails from "./components/users/FoodDetails";
+import Food from "./pages/users/Food";
+import MyCart from "./pages/users/MyCart";
+import Payment from "./pages/users/Payment";
+
+/* Payments */
 import AddCard from "./payment/AddCard";
 import CheckPayment from "./payment/CheckPayment";
-import { ToastContainer } from "react-toastify";
-import Search from "./pages/Search";
-import SpecificItem from "./pages/SpecificItem";
-import PublicRoute from "./routes/PublicRoute";
-import SellerDashboard from "./pages/admin/SellerDashboard";
+
+/* Admin & Seller */
 import Admin from "./pages/admin/Admin";
+import SellerDashboard from "./pages/admin/SellerDashboard";
+import PublicRoute from "./routes/PublicRoute";
 import MyProfile from "./pages/admin/MyProfile";
 import AddItem from "./pages/admin/AddItem";
 import ChefFoodDetails from "./pages/admin/ChefFoodDetails";

@@ -1,12 +1,12 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import { AuthContext } from "../context/AuthContext";
+import { AuthContext } from "../../context/AuthContext";
 import { FaChevronLeft, FaPlus, FaSortDown } from "react-icons/fa";
 import {  CgSearch } from "react-icons/cg";
 import { RiSoundModuleLine } from "react-icons/ri";
 // import Select from "react-select";
 import { FaX } from "react-icons/fa6";
-import OpenRestaurants from "../components/OpenRestaurants";
+import OpenRestaurants from "../../components/users/OpenRestaurants";
 
 const SpecificItem = () => {
   const { item } = useParams();

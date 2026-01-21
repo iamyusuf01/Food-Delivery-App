@@ -1,12 +1,12 @@
 import React from "react";
-import { restaurants } from "../assets/assets";
+import { restaurants } from "../../assets/assets";
 import { FaChevronLeft } from "react-icons/fa6";
 import { Link, useNavigate } from "react-router";
 import { FaRegStar } from "react-icons/fa";
 import { TbTruckDelivery } from "react-icons/tb";
 import { MdOutlineAccessTime } from "react-icons/md";
 import { useContext } from "react";
-import { AuthContext } from "../context/AuthContext";
+import { AuthContext } from "../../context/AuthContext";
 
 const AllRestaurants = () => {
   const navigate = useNavigate();

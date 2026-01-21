@@ -1,12 +1,12 @@
 import { useParams } from "react-router";
-import { restaurants } from "../assets/assets";
+import { restaurants } from "../../assets/assets";
 import { FaChevronLeft, FaRegStar } from "react-icons/fa";
 import { TbTruckDelivery } from "react-icons/tb";
 import { MdOutlineAccessTime } from "react-icons/md";
 import { FaPlus, FaMinus } from "react-icons/fa";
 import AddToCart from "./AddToCart";
 import { useContext, useEffect, useState } from "react";
-import { AuthContext } from "../context/AuthContext";
+import { AuthContext } from "../../context/AuthContext";
 import axios from "axios";
 import { toast } from "react-toastify";
 

@@ -1,8 +1,8 @@
 import React, { useContext } from "react";
-import { restaurants } from "../assets/assets";
+import { restaurants } from "../../assets/assets";
 import { FaPlus } from "react-icons/fa";
-import { AuthContext } from "../context/AuthContext";
-import Navbar from "../components/Navbar";
+import { AuthContext } from "../../context/AuthContext";
+import Navbar from "../../components/users/Navbar";
 
 const Food = () => {
   const { navigate } = useContext(AuthContext);

@@ -5,7 +5,7 @@ import { IoBagHandle } from "react-icons/io5";
 import Search from "./Search";
 import { Link, useNavigate } from "react-router";
 import { useContext } from "react";
-import { AuthContext } from "../context/AuthContext";
+import { AuthContext } from "../../context/AuthContext";
 
 const Navbar = () => {
   const { isAdmin } = useContext(AuthContext);

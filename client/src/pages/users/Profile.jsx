@@ -11,7 +11,7 @@ import { CiSettings } from "react-icons/ci";
 import { IoLogOutOutline } from "react-icons/io5";
 import { CiMap } from "react-icons/ci";
 import { NavLink, useNavigate } from "react-router";
-import { AuthContext } from "../context/AuthContext";
+import { AuthContext } from "../../context/AuthContext";
 import axios from "axios";
 import { toast } from "react-toastify";
 

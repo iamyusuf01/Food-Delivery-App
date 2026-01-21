@@ -1,7 +1,7 @@
 import React, { useContext, useState } from "react";
 import { FaChevronLeft, FaMinus, FaPlus, FaSleigh } from "react-icons/fa";
 // import { useParams } from "react-router";
-import { CartContext } from "../context/CartContext";
+import { CartContext } from "../../context/CartContext";
 import { NavLink } from "react-router";
 // import { restaurants } from "../assets/assets";
 

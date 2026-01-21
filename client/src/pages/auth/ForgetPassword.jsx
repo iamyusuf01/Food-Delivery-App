@@ -1,8 +1,8 @@
 import React, { useContext, useState } from "react";
-import { BgImages } from "../assets/assets.js";
+import { BgImages } from "../../assets/assets.js";
 import { useNavigate } from "react-router";
 import { FaChevronLeft } from "react-icons/fa6";
-import { AuthContext } from "../context/AuthContext.jsx";
+import { AuthContext } from "../../context/AuthContext.jsx";
 import axios from "axios";
 import { toast } from "react-toastify";
 

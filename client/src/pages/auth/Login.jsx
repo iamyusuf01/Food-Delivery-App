@@ -1,10 +1,10 @@
 import React, { useContext, useState } from "react";
-import { BgImages } from "../assets/assets.js";
+import { BgImages } from "../../assets/assets.js";
 import { FaChevronLeft, FaFacebook } from "react-icons/fa";
 import { AiFillTwitterCircle } from "react-icons/ai";
 import { FaApple } from "react-icons/fa6";
 import { NavLink, useNavigate } from "react-router";
-import { AuthContext } from "../context/AuthContext.jsx";
+import { AuthContext } from "../../context/AuthContext.jsx";
 import { toast } from "react-toastify";
 import axios from "axios";
 import { useEffect } from "react";

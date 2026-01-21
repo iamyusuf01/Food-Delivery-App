@@ -1,9 +1,9 @@
 import React, { useContext } from "react";
-import Navbar from "../components/Navbar";
-import Categories from "../components/Categories";
-import Search from "../components/Search";
-import Restaurants from "../components/Restaurants";
-import Offers from "../components/Offers";
+import Navbar from "../../components/users/Navbar";
+import Categories from "../../components/users/Categories";
+import Search from "../../components/users/Search";
+import Restaurants from "../../components/users/Restaurants";
+import Offers from "../../components/users/Offers";
 import { useMatch } from "react-router-dom";
 
 const Home = () => {

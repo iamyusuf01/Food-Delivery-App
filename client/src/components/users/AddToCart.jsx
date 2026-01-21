@@ -1,7 +1,7 @@
 import React, { useContext, useState } from "react";
 import { useNavigate, useParams } from "react-router";
 import { FaMinus, FaPlus } from "react-icons/fa";
-import { CartContext } from "../context/CartContext";
+import { CartContext } from "../../context/CartContext";
 const AddToCart = ({ restaurants, menu }) => {
   // const { id, itemId } = useParams();
   const navigate = useNavigate();

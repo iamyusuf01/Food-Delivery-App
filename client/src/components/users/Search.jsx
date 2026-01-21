@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { CiSearch } from "react-icons/ci";
-import { AuthContext } from "../context/AuthContext";
+import { AuthContext } from "../../context/AuthContext";
 
 const Search = () => {
   const { restaurants, setRegisteredRestaurants, setAllDish } =

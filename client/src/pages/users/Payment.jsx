@@ -4,9 +4,9 @@ import { PiHandCoins } from "react-icons/pi";
 import { RiVisaLine } from "react-icons/ri";
 import { SiMastercard } from "react-icons/si";
 
-import Card from "../assets/Card.png";
-import CardInput from "../payment/AddCard";
-import AddCard from "../payment/AddCard";
+import Card from "../../assets/Card.png";
+import CardInput from "../../payment/AddCard";
+import AddCard from "../../payment/AddCard";
 import { useNavigate } from "react-router";
 const Payment = () => {
   const [input, setInput] = useState(false);
