@@ -19,7 +19,7 @@ const tabs = [
     name: "All",
   },
   {
-    name: "Sandwich",
+    name: "Burger",
   },
   {
     name: "Pizza ",

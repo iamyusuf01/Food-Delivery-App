@@ -32,21 +32,22 @@ export const AppContextProvider = (props) => {
   const [restaurants, setRestaurants] = useState([]);
 
   const [allRestaurants, setRegisteredRestaurants] = useState(
-    [...restaurants].sort((a, b) => b.rating - a.rating)
+    [...restaurants].sort((a, b) => b.rating - a.rating),
   );
   const [allDish, setAllDish] = useState(
-    restaurants.map((res) => res.menu).flat()
+    restaurants.map((res) => res.menu).flat(),
   );
   const token = localStorage.getItem("accessToken");
-    // const { id } = useParams();
+  // const { id } = useParams();
 
   const getAuthState = async () => {
     try {
       const { data } = await axios.post(
         "http://localhost:4000/api/auth/is-auth",
-        { withCredentials: true }
+        null,
+        { withCredentials: true, validateStatus: () => true },
       );
-      if (data.success) {
+      if (data?.success) {
         setIsLoggedIn(true);
         getUserData();
       }
@@ -62,13 +63,13 @@ export const AppContextProvider = (props) => {
         {
           headers: { Authorization: `Bearer ${token}` },
         },
-        { withCredentials: true }
+        { withCredentials: true },
       );
       if (data?.success) {
         setIsLoggedIn(true);
-        setUserData(data.userData);
-        data.userData?.role === "admin" && setIsAdmin(true);
-        console.log(data.userData.role);
+        setUserData(data?.userData);
+        setIsAdmin(data.userData.role === "admin");
+        // console.log(data.userData.role);
       } else {
         toast.error(data.message);
       }
@@ -77,38 +78,36 @@ export const AppContextProvider = (props) => {
     }
   };
 
-  const getRestaurantData = async () => {
-    try {
-      const { data } = await axios.get(
-        "http://localhost:4000/api/restaurant/current-restaurant"
-      );
-      if (data.success) {
-        setRestaurantData(data.restaurantData);
-        console.log(data);
-      } else {
-        toast.error(data.message);
-      }
-    } catch (error) {
-      toast.error(error.message);
-    }
-  };
+  // const getRestaurantData = async () => {
+  //   try {
+  //     const { data } = await axios.get(
+  //       "http://localhost:4000/api/restaurant/current-restaurant"
+  //     );
+  //     if (data.success) {
+  //       setRestaurantData(data.restaurantData);
+  //       console.log(data);
+  //     } else {
+  //       toast.error(data.message);
+  //     }
+  //   } catch (error) {
+  //     toast.error(error.message);
+  //   }
+  // };
 
   const fetchAllRestaurants = async () => {
     try {
       const { data } = await axios.get(
-        "http://localhost:4000/api/restaurant/all"
+        "http://localhost:4000/api/restaurant/all",
       );
       if (data.success) {
         setRestaurants(data.restaurants);
-        setOpenRestaurants(data.restaurants.some(r => r.isOpen) || false)
+        setOpenRestaurants(data.restaurants.some((r) => r.isOpen) || false);
       }
       console.log(data);
     } catch (error) {
       toast.error(error.message);
     }
   };
-  
-
 
   useEffect(() => {
     fetchAllRestaurants();
@@ -119,9 +118,8 @@ export const AppContextProvider = (props) => {
   }, []);
 
   useEffect(() => {
-    if (!token) {
-      getUserData();
-    }
+    if (!token) return;
+    getUserData();
   }, [token]);
 
   const value = {

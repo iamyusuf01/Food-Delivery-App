@@ -55,7 +55,7 @@ const Profile = () => {
             </div>
           </div>
           {/*  */}
-          <div className="flex items-center justify-between py-12">
+          <div className="flex items-center justify-between pt-8 pb-4">
             <div className="w-32 h-32 rounded-full bg-orange-200 overflow-hidden">
               <img src={userData?.avatar} className="w-full h-full object-cover" />
             </div>
