@@ -35,6 +35,7 @@ import ChefFoodDetails from "./pages/admin/ChefFoodDetails";
 import MyFood from "./pages/admin/MyFood";
 import AddRestaurant from "./pages/admin/AddRestaurant";
 import ViewNotification from "./pages/admin/ViewNotification";
+import MyOrders from "./pages/users/MyOrders";
 
 function App() {
   return (
@@ -67,6 +68,8 @@ function App() {
         <Route path="/profile" element={<Profile />} />
         <Route path="/profile/personal-info" element={<PersonalInfo />} />
         <Route path="/personal-info/edit-profile" element={<EditProfile />} />
+        <Route path="/my-orders" element={<MyOrders />} />
+
 
         {/* Restaurant Routes */}
         <Route path="/all-restaurants" element={<AllRestaurants />} />
