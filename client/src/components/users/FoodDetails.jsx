@@ -56,14 +56,14 @@ const FoodDetails = () => {
                 // src={menu?.image}
                 className=" bg-gray-400 h-36 w-full rounded-xl"
               />
-              <p className="my-6 px-6 border border-gray-300 rounded-full h-8 py-1 w-2/5 ">
+              <p className="mt-4 px-6 border border-gray-300 rounded-full h-8 py-1 w-2/4 ">
                 {menu?.restaurant?.name}
               </p>
               <p className="py-2 text-xl font-medium">{menu?.name}</p>
 
               <p className="pb-1 text-sm text-gray-500">{menu?.description}</p>
             </div>
-            <div className="flex items-center gap-20 pt-2">
+            <div className="flex items-center gap-12 pt-2">
               <div className="flex items-center gap-2">
                 <p>
                   <FaRegStar size={20} color="orange" />

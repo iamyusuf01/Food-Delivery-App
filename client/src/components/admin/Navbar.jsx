@@ -31,7 +31,6 @@ const Navbar = () => {
         <div className="">
           <img
             className="w-10 h-10 rounded-full bg-gray-400"
-            // onClick={() => navigate("/my-cart")}
           />
         </div>
       </div>

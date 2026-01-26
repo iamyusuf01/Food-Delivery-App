@@ -1,56 +1,57 @@
-import React, { useState } from 'react'
+import React, { useState } from "react";
 import { RxCross2 } from "react-icons/rx";
 
 const Filter = () => {
-  const [active, setActive] = useState(false)
-  const [close, setClose] = useState(false)
+  const [activeOffer, setActiveOffer] = useState("");
+  const [activeTime, setActiveTime] = useState("");
 
-  const handleClick = () => {
-    setActive(!active)
-  }
+  const offers = [
+    { name: "Delivery" },
+    { name: "Pick Up" },
+    { name: "Offers" },
+    { name: "Online payment available" },
+  ];
 
-
-  const list = [
-    {name: 'Delivery',
-      mintues: '10-15 min'
-    },
-
-    {name: 'Pick Up', mintues: '20 min'},
-    {name: 'Offers', mintues: '30-40 min'},
-    {name: 'Online payment available', mintues: '45 min' },
-  ]
+  const times = [
+    { minutes: "10-15 min" },
+    { minutes: "20 min" },
+    { minutes: "30-40 min" },
+  ];
   return (
-    <div className=''>
-        {/*  */}
-        
-        {/* Offers */}
-        <div className='flex flex-wrap items-center pt-6 gap-4'>
-           {list.map((item, index) => (
-            <div key={index.name} className=''>
-              <ul className='border border-gray-300 w-full h-8 text-center rounded-full mx-4'>
-                <li className='text-xl'>{item.name}</li>
-              </ul>
-            </div>
-           ))}
+    <div className="font-ui">
+      {/* Offers */}
+      <div className="flex flex-wrap items-center pt-6 gap-2">
+        {offers.map((item, index) => (
+          <button
+            key={index}
+            onClick={() => setActiveOffer(item.name)}
+            className={`border px-4 border-gray-300 h-8 text-center rounded-full ${activeOffer === item.name ? "bg-orange-500 text-white" : "text-black"}`}
+          >
+            <p className="text-xl ">{item.name}</p>
+          </button>
+        ))}
+      </div>
+      {/* Delivery Time */}
+      <div className="pt-8">
+        <h2 className="text-xl uppercase">Delivery Time</h2>
+        <div className="flex flex-wrap items-center pt-6 gap-3">
+          {times.map((item, key) => (
+            <button
+              key={key}
+              onClick={() => setActiveTime(item.minutes)}
+              className={`border px-2 border-gray-300 h-8 text-center rounded-full cursor-pointer ${activeTime === item.minutes ? "bg-orange-500 text-white" : "text-black"}`}
+            >
+              <p className="text-xl">{item.minutes}</p>
+            </button>
+          ))}
         </div>
-        {/* Delivery Time */}
-        <div className='pt-8'>
-           <h2 className='text-xl uppercase'>Delivery Time</h2>
-           <div className='flex flex-wrap items-center pt-6 gap-4'>
-              {list.map((item, key) => (
-                <div key={key.mintues}>
-                   <div className={`border border-gray-200 w-full h-8 text-center rounded-full mx-4 cursor-pointer hover:bg-orange-400 hover:text-white ${active ? 'bg-orange-400 text-white' : ''}`}
-                   onClick={handleClick}>
-                      <p className='text-xl'>{item.mintues}</p>
-                   </div>
-                </div>
-              ))}
-           </div>
-        </div>
-        {/* Rating */}
-        <button className='w-full bg-orange-500 rounded h-10 mt-10 text-white uppercase text-xl'>Filter</button>
+      </div>
+      {/* Rating */}
+      <button className="w-full bg-orange-500 rounded h-10 mt-10 text-white uppercase text-xl">
+        Filter
+      </button>
     </div>
-  )
-}
+  );
+};
 
-export default Filter
+export default Filter;

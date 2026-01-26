@@ -44,7 +44,7 @@ const Footer = () => {
 
         {/* Profile */}
         <NavLink
-          to="/admin/my-profile"
+          to=""
           className={({ isActive }) => (isActive ? active : inactive)}
         >
           <BsPerson size={28} />

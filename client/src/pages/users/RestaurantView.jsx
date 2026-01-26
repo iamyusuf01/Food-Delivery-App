@@ -148,7 +148,7 @@ const RestaurantView = () => {
       {/* Filter Search */}
       {open && (
         <div className="absolute p-6 rounded-xl right-6 left-6 m-auto top-10 bg-white shadow-lg">
-          <div className="flex justify-between items-center">
+          <div className="flex justify-between items-center font-ui">
             <h2 className="text-xl">Filter your search</h2>
             <p
               onClick={() => setOpen(false)}
