@@ -1,3 +1,4 @@
+import History from "../../components/users/History";
 import Ongoing from "../../components/users/Ongoing";
 import React, { useState } from "react";
 import { FaChevronLeft } from "react-icons/fa6";
@@ -45,6 +46,7 @@ const MyOrders = () => {
         ))}
       </div>
       {active === 'Ongoing' && <Ongoing/>}
+      {active === 'History' && <History/>}
     </div>
   );
 };
