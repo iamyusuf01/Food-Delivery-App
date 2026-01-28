@@ -118,8 +118,9 @@ export const AppContextProvider = (props) => {
   }, []);
 
   useEffect(() => {
-    if (!token) return;
-    getUserData();
+    if (token){
+      getUserData();
+    };
   }, [token]);
 
   const value = {

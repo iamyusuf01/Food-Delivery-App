@@ -22,7 +22,8 @@ const Profile = () => {
   const logout = async () => {
     try {
       const { data } = await axios.post(
-        "http://localhost:4000/api/auth/logout", {}
+        "http://localhost:4000/api/auth/logout",
+        {},
       );
       if (data.success) {
         setIsLoggedIn(false);
@@ -57,7 +58,10 @@ const Profile = () => {
           {/*  */}
           <div className="flex items-center justify-between pt-8 pb-4">
             <div className="w-32 h-32 rounded-full bg-orange-200 overflow-hidden">
-              <img src={userData?.avatar} className="w-full h-full object-cover" />
+              <img
+                src={userData?.avatar}
+                className="w-full h-full object-cover"
+              />
             </div>
             <div className="">
               <h1 className="font-medium text-xl">{userData?.name}</h1>
@@ -83,7 +87,10 @@ const Profile = () => {
                   </p>
                 </li>
               </div>
-              <div className="flex justify-between items-center mt-2">
+              <div
+                className="flex justify-between items-center mt-2"
+                onClick={() => navigate("/profile/my-address")}
+              >
                 <li className="flex items-center gap-4">
                   <p className="w-10 h-10 rounded-full p-2 bg-gray-50">
                     <CiMap size={24} color="blue" />

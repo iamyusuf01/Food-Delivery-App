@@ -20,6 +20,9 @@ import FoodDetails from "./components/users/FoodDetails";
 import Food from "./pages/users/Food";
 import MyCart from "./pages/users/MyCart";
 import Payment from "./pages/users/Payment";
+import MyOrders from "./pages/users/MyOrders";
+import MyAddress from "./pages/users/MyAddress";
+import AddNewAddress from "./components/users/AddNewAddress";
 
 /* Payments */
 import AddCard from "./payment/AddCard";
@@ -35,7 +38,7 @@ import ChefFoodDetails from "./pages/admin/ChefFoodDetails";
 import MyFood from "./pages/admin/MyFood";
 import AddRestaurant from "./pages/admin/AddRestaurant";
 import ViewNotification from "./pages/admin/ViewNotification";
-import MyOrders from "./pages/users/MyOrders";
+
 
 function App() {
   return (
@@ -67,6 +70,8 @@ function App() {
         {/* User Profile Routes */}
         <Route path="/profile" element={<Profile />} />
         <Route path="/profile/personal-info" element={<PersonalInfo />} />
+        <Route path="/profile/my-address" element={<MyAddress />} />
+        <Route path="/profile/add-address" element={<AddNewAddress />} />
         <Route path="/personal-info/edit-profile" element={<EditProfile />} />
         <Route path="/my-orders" element={<MyOrders />} />
 
