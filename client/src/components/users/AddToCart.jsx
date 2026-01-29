@@ -43,7 +43,7 @@ const AddToCart = ({ restaurants, menu }) => {
       </div>
       <button
         onClick={handleAddToCart}
-        className="uppercase bg-orange-400 text-white items-center w-full h-12 rounded "
+        className="uppercase bg-orange-500 text-white items-center w-full h-12 rounded "
       >
         Add To Cart
       </button>
