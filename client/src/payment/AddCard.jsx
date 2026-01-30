@@ -1,27 +1,30 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { FaChevronLeft } from "react-icons/fa";
-import { NavLink } from "react-router";
+import { NavLink, useLocation, useNavigate } from "react-router";
 
 const AddCard = () => {
   const [name, setName] = useState("");
   const [number, setNumber] = useState("");
   const [cvv, setCvv] = useState("");
   const [expire, setExpire] = useState("");
-  const [otp, setOtp] = useState("");
-  const [sendOtp, setSendOtp] = useState(false);
 
-  // const AddCardDetails = {
-  //   id: "1",
-  //   name: "Md Yusuf",
-  //   number: "123456789067890",
-  //   expire: "12/2025",
-  //   cvv: "123",
-  // };
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const cardType = location.state?.method;
+
+  const handleExpire = (e) => {
+    let value = e.target.value.replace(/\D/g, "").slice(0, 4);
+    if (value.length >= 3) {
+      value = value.slice(0, 2) + "/" + value.slice(2);
+    }
+    setExpire(value);
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    if (number.length < 16) {
+    if (number.length !== 16) {
       alert("Invalid card number");
       return;
     }
@@ -31,100 +34,91 @@ const AddCard = () => {
       return;
     }
 
-    console.log({
+    const cardData = {
+      type: cardType,
       name,
       number,
       expire,
-      cvv,
-    });
-
-    alert("Payment Successful ✅");
+    };
+    localStorage.setItem("savedCard", JSON.stringify(cardData));
+    navigate("/payment");
   };
 
-  const handleExpire = (e) => {
-  let value = e.target.value.replace(/\D/g, "");
-  if (value.length >= 3) {
-    value = value.slice(0, 2) + "/" + value.slice(2, 4);
-  }
-  setExpire(value);
-};
-
-
-  // const navigate = useNavigate();
-  // const AddToCard = () => {
-  //   setName(AddCardDetails.name);
-  //   setNumber(AddCardDetails.number);
-  //   setExpire(AddCardDetails.expire);
-  //   setCvv(AddCardDetails.cvv);
-  // };
-
+  const isValid =
+    name && number.length === 16 && cvv.length === 3 && expire.length === 5;
 
   return (
-    <div className="p-6">
-      <div className="flex gap-4 items-center">
+    <div className="h-screen flex flex-col p-6 font-ui bg-white">
+      <div className="flex gap-4 items-center mb-6">
         <NavLink
-          to={"/payment"}
-          className="w-10 h-10 rounded-full bg-gray-300 py-3 px-3"
+          to="/payment"
+          className="w-10 h-10 rounded-full bg-gray-300 flex items-center justify-center"
         >
           <FaChevronLeft />
         </NavLink>
         <p className="text-xl">Add Card</p>
       </div>
-      <form onSubmit={handleSubmit}>
-        <div className=" min-h-screen pt-8">
-          <div className="">
-            <p className="text-gray-400 uppercase">Card Holder Name</p>
+      <form
+        onSubmit={handleSubmit}
+        className="flex-1 flex flex-col justify-between"
+      >
+        <div>
+          <div className="mb-3">
+            <p className="text-gray-400 uppercase text-sm">Card Holder Name</p>
             <input
               type="text"
-              placeholder="enter your name"
-              onChange={(e) => setName(e.target.value)}
+              placeholder="Enter your name"
               value={name}
+              onChange={(e) => setName(e.target.value)}
+              className="outline-none border rounded px-2 border-gray-300 w-full h-10"
               required
-              className="outline-none border rounded px-2 border-gray-300 w-full h-10 my-1"
             />
           </div>
-          <div className="">
-            <p className="text-gray-400 uppercase">Card Number</p>
+          <div className="mb-3">
+            <p className="text-gray-400 uppercase text-sm">Card Number</p>
             <input
               type="text"
               maxLength={16}
-              placeholder="enter card number"
-              onChange={(e) => setNumber(e.target.value.replace(/\D/g, ""))}
+              placeholder="1234 5678 9012 3456"
               value={number}
+              onChange={(e) => setNumber(e.target.value.replace(/\D/g, ""))}
+              className="outline-none border rounded px-2 border-gray-300 w-full h-10"
               required
-              className="outline-none border rounded px-2 border-gray-300 w-full h-10 my-1"
             />
           </div>
-          <div className="flex justify-between gap-4 my-2">
-            <div className="">
-              <p className="text-gray-400 uppercase">Expire Date</p>
+          <div className="flex gap-4">
+            <div className="w-1/2">
+              <p className="text-gray-400 uppercase text-sm">Expiry (MM/YY)</p>
               <input
                 type="text"
-                placeholder="mm/yyyy"
-                onChange={handleExpire }
+                placeholder="MM/YY"
                 value={expire}
+                onChange={handleExpire}
+                className="outline-none border rounded px-2 border-gray-300 w-full h-10"
                 required
-                className="outline-none border rounded px-2 border-gray-300 w-full h-10 my-1"
               />
             </div>
-            <div className="">
-              <p className="text-gray-400 uppercase">CVC</p>
+
+            <div className="w-1/2">
+              <p className="text-gray-400 uppercase text-sm">CVV</p>
               <input
                 type="password"
                 maxLength={3}
-                onChange={(e) => setCvv(e.target.value.replace(/\D/g, ""))}
                 value={cvv}
+                onChange={(e) => setCvv(e.target.value.replace(/\D/g, ""))}
+                className="outline-none border rounded px-2 border-gray-300 w-full h-10"
                 required
-                className="outline-none border rounded px-2 border-gray-300 w-full h-10 my-1"
               />
             </div>
           </div>
         </div>
-
         <button
-          // onClick={AddToCard}
           type="submit"
-          className="uppercase text-white bg-orange-500 w-full mt-4 h-12 rounded font-medium cursor-pointer"
+          disabled={!isValid}
+          className={`uppercase w-full h-12 rounded font-medium mt-6
+            ${
+              isValid ? "bg-orange-500 text-white" : "bg-gray-300 text-gray-500"
+            }`}
         >
           Add & Make Payment
         </button>
