@@ -38,6 +38,7 @@ import ChefFoodDetails from "./pages/admin/ChefFoodDetails";
 import MyFood from "./pages/admin/MyFood";
 import AddRestaurant from "./pages/admin/AddRestaurant";
 import ViewNotification from "./pages/admin/ViewNotification";
+import Order from "./pages/TrackOrders/Order";
 
 
 function App() {
@@ -87,6 +88,9 @@ function App() {
         <Route path="/payment" element={<Payment />} />
         <Route path="/payment/add-card" element={<AddCard />} />
         <Route path="/payment/verify-payment" element={<CheckPayment />} />
+
+        {/* Tracking Orders */}
+        <Route path="/track-order" element={<Order />} />
 
         {/* Search Routes */}
         <Route path="/search" element={<Search />} />

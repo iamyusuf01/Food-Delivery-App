@@ -2,8 +2,8 @@ import React from 'react'
 
 const CheckPayment = () => {
   return (
-    <div className="p-6">
-      <div className='flex flex-col justify-center items-center pt-26'>
+    <div className="p-6 font-ui overflow-hidden">
+      <div className='flex flex-col justify-center items-center min-h-screen'>
         <div className=' bg-gray-300 w-52 h-32 rounded-2xl'>
           <img  className='' src=''/>
         </div>
@@ -12,9 +12,9 @@ const CheckPayment = () => {
           <p className='py-2'>You successfully maked a payment, <br/> enjoy our service!</p>
         </div>
       </div>
-      <div className='text-center my-12 h-12 rounded bg-orange-500'>
-        <p className='pt-2 text-white text-xl uppercase'>Track order</p>
-      </div>
+      <button className='uppercase text-center w-full mt-4 h-12 rounded font-medium bg-orange-500 text-white'>
+        Track order
+      </button>
     </div>
   )
 }

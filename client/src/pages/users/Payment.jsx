@@ -29,7 +29,7 @@ const Payment = () => {
     <div className="p-6 font-ui">
       <div className="flex gap-4 items-center">
         <div
-          onClick={() => navigate(-1)}
+          onClick={() => navigate('/profile')}
           className="w-10 h-10 rounded-full bg-gray-300 flex items-center justify-center cursor-pointer"
         >
           <FaChevronLeft />
