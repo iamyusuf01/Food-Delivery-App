@@ -1,4 +1,4 @@
-import { Route, Routes} from "react-router";
+import { Route, Routes } from "react-router";
 import { ToastContainer } from "react-toastify";
 
 /* Public Pages */
@@ -39,7 +39,7 @@ import MyFood from "./pages/admin/MyFood";
 import AddRestaurant from "./pages/admin/AddRestaurant";
 import ViewNotification from "./pages/admin/ViewNotification";
 import Order from "./pages/TrackOrders/Order";
-
+import PrivateRoute from "./routes/PrivateRoute";
 
 function App() {
   return (
@@ -76,7 +76,6 @@ function App() {
         <Route path="/personal-info/edit-profile" element={<EditProfile />} />
         <Route path="/my-orders" element={<MyOrders />} />
 
-
         {/* Restaurant Routes */}
         <Route path="/all-restaurants" element={<AllRestaurants />} />
         <Route path="/all-restaurants/:id" element={<RestaurantView />} />
@@ -96,15 +95,20 @@ function App() {
         <Route path="/search" element={<Search />} />
         <Route path="/search/:item" element={<SpecificItem />} />
 
-        {/* Admin Routes */}
-        <Route path="/admin" element={<Admin />}>
-          <Route index element={<SellerDashboard />} />
-          <Route path="my-profile" element={<MyProfile />} />
-          <Route path="add-restaurant" element={<AddRestaurant />} />
-          <Route path="add-item" element={<AddItem />} />
-          <Route path="my-food-list" element={<MyFood />} />
-          <Route path="chef-food-details/:itemId" element={<ChefFoodDetails />} />
-          <Route path="chat" element={<ViewNotification />} />
+        {/* Admin & Seller Routes */}
+        <Route element={<PrivateRoute allowedRoles={["admin", "seller"]} />}>
+          <Route path="/admin" element={<Admin />}>
+            <Route index element={<SellerDashboard />} />
+            <Route path="my-profile" element={<MyProfile />} />
+            <Route path="add-restaurant" element={<AddRestaurant />} />
+            <Route path="add-item" element={<AddItem />} />
+            <Route path="my-food-list" element={<MyFood />} />
+            <Route
+              path="chef-food-details/:itemId"
+              element={<ChefFoodDetails />}
+            />
+            <Route path="chat" element={<ViewNotification />} />
+          </Route>
         </Route>
       </Routes>
     </div>

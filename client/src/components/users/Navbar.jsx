@@ -35,13 +35,21 @@ const Navbar = () => {
         </div>
         <div className="flex items-center gap-5">
           {isAdmin ? (
-            <button
-              onClick={() => navigate("/admin")}
-              className="bg-gray-500/30 w-full h-8 rounded-xl p-1"
-            >
-              {/* <CgSearch size={32} className="text-black mt-0.5 mr-0.5" /> */}
-              Admin
-            </button>
+            <div className="flex gap-4">
+              <button
+                onClick={() => navigate("/admin")}
+                className="bg-gray-500/30 h-8 rounded-xl px-4"
+              >
+                {/* <CgSearch size={32} className="text-black mt-0.5 mr-0.5" /> */}
+                Admin
+              </button>
+              <button
+              onClick={() => navigate("/admin/add-restaurant")}
+                className="bg-gray-500/30  h-8 rounded-xl px-4" 
+              >
+                Add Restaurant
+              </button>
+            </div>
           ) : (
             <div className="flex items-center gap-5">
               <Link to="/search" className="bg-gray-500/30 rounded-full p-1">

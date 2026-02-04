@@ -37,7 +37,7 @@ const Login = () => {
     }
   };
   return (
-    <div className="justify-center items-center">
+    <div className="font-ui">
       <div className=" bg-[#1E1E2E]">
         <div className=" text-white   pb-6">
           <div className="h-38">

@@ -71,7 +71,7 @@ const AddRestaurant = () => {
     };
   }, [preview]);
   return (
-    <div className="p-6 bg-white overflow-hidden">
+    <div className="p-6 bg-white overflow-hidden font-ui">
       <div className=" flex justify-between items-center  max-h-screen rounded-2xl">
         <div className="flex items-center gap-4 ">
           <Link
