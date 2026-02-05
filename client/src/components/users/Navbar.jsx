@@ -16,7 +16,7 @@ const Navbar = () => {
       {/*  */}
 
       <div className="flex justify-between items-center">
-        <div className="flex gap-4">
+        <div className="flex justify-between gap-4">
           <button
             className=" w-10 h-10 bg-gray-300 rounded-full p-2"
             onClick={() => navigate("/profile")}
@@ -33,19 +33,19 @@ const Navbar = () => {
             </div>
           </div>
         </div>
-        <div className="flex items-center gap-5">
+        <div className="flex items-center gap-5 text-sm">
           {isAdmin ? (
-            <div className="flex gap-4">
+            <div className="flex gap-2">
               <button
                 onClick={() => navigate("/admin")}
-                className="bg-gray-500/30 h-8 rounded-xl px-4"
+                className="bg-gray-500/30 h-8 rounded-xl px-2"
               >
                 {/* <CgSearch size={32} className="text-black mt-0.5 mr-0.5" /> */}
                 Admin
               </button>
               <button
               onClick={() => navigate("/admin/add-restaurant")}
-                className="bg-gray-500/30  h-8 rounded-xl px-4" 
+                className="bg-gray-500/30 h-8 rounded-xl px-2" 
               >
                 Add Restaurant
               </button>

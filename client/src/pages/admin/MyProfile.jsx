@@ -1,26 +1,24 @@
 import React, { useContext } from "react";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa6";
 import { IoPersonOutline } from "react-icons/io5";
-import { PiHandWithdraw, PiHandWithdrawThin, PiScrollThin } from "react-icons/pi";
-import { CiHeart, CiSaveDown2 } from "react-icons/ci";
+import { PiHandWithdrawThin, PiScrollThin } from "react-icons/pi";
+import { CiSaveDown2 } from "react-icons/ci";
 import { MdOutlineReviews } from "react-icons/md";
 import { CiSettings } from "react-icons/ci";
-import { IoLogOutOutline } from "react-icons/io5";
 import { Link, NavLink, useNavigate } from "react-router";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { AuthContext } from "../../context/AuthContext";
 
 const MyProfile = () => {
-  const { isLoggedIn, isAdmin,  setIsLoggedIn } =
-    useContext(AuthContext);
+  const { isLoggedIn, isAdmin, setIsLoggedIn } = useContext(AuthContext);
   const navigate = useNavigate();
 
   const logout = async () => {
     try {
       const { data } = await axios.post(
         "http://localhost:4000/api/auth/logout",
-        {}
+        {},
       );
       if (data.success) {
         setIsLoggedIn(false);
@@ -36,24 +34,55 @@ const MyProfile = () => {
   return (
     <div>
       {isLoggedIn && isAdmin ? (
-        <div className="bg-white" >
+        <div className="bg-white">
           {/*  */}
-          <div className=" items-center bg-orange-500 max-h-screen p-6 text-white rounded-2xl">
-            <div className="flex items-center gap-4 ">
-              <Link
-                className="w-10 h-10 rounded-full p-3 bg-gray-200 text-black"
-                to={"/admin"}
-              >
-                <FaChevronLeft />
-              </Link>
-              <h2 className="text-xl">My Profile</h2>
+          {isAdmin ? (
+            <div className="p-6">
+              <div className="flex items-center gap-4 pb-6">
+                <Link
+                  className="w-10 h-10 rounded-full p-3 bg-gray-200 text-black"
+                  to={"/admin"}
+                >
+                  <FaChevronLeft />
+                </Link>
+                {/* <h2 className="text-xl">My Profile</h2> */}
+              </div>
+              <ul className=" bg-gray-100 rounded-xl p-6">
+                <div className="flex justify-between items-center">
+                  <li className="flex items-center gap-4">
+                    <p className="w-10 h-10 rounded-full p-2 bg-white">
+                      <IoPersonOutline size={24} color="orange" />
+                    </p>
+                    <h2 className="font-medium ">All Users</h2>
+                  </li>
+                  <li>
+                    <p>
+                      <FaChevronRight />
+                    </p>
+                  </li>
+                </div>
+              </ul>
             </div>
-            <div className="text-center pt-4">
-              <h2 className="py-1">Available Balance</h2>
-              <p className="text-4xl font-semibold">$500.00</p>
-              <button className="my-6 h-8 w-28 rounded-md border">Withdraw</button>
+          ) : (
+            <div className=" items-center bg-orange-500 max-h-screen p-6 text-white rounded-2xl">
+              <div className="flex items-center gap-4 ">
+                <Link
+                  className="w-10 h-10 rounded-full p-3 bg-gray-200 text-black"
+                  to={"/admin"}
+                >
+                  <FaChevronLeft />
+                </Link>
+                <h2 className="text-xl">My Profile</h2>
+              </div>
+              <div className="text-center pt-4">
+                <h2 className="py-1">Available Balance</h2>
+                <p className="text-4xl font-semibold">$500.00</p>
+                <button className="my-6 h-8 w-28 rounded-md border">
+                  Withdraw
+                </button>
+              </div>
             </div>
-          </div>
+          )}
           {/*  */}
           <div className="p-6">
             <ul className=" bg-gray-100 rounded-xl p-8">
@@ -112,9 +141,7 @@ const MyProfile = () => {
                   <h2 className="font-medium">Number of Orders</h2>
                 </li>
                 <li>
-                  <p>
-                    {/* <FaChevronRight /> */} 20k
-                  </p>
+                  <p>{/* <FaChevronRight /> */} 20k</p>
                 </li>
               </div>
             </ul>

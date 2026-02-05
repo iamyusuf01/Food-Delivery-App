@@ -29,9 +29,7 @@ const Navbar = () => {
           </div>
         </div>
         <div className="">
-          <img
-            className="w-10 h-10 rounded-full bg-gray-400"
-          />
+          <img className="w-10 h-10 rounded-full bg-gray-400" />
         </div>
       </div>
     </div>
