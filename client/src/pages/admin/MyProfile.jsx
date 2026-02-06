@@ -2,16 +2,17 @@ import React, { useContext } from "react";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa6";
 import { IoPersonOutline } from "react-icons/io5";
 import { PiHandWithdrawThin, PiScrollThin } from "react-icons/pi";
-import { CiSaveDown2 } from "react-icons/ci";
+import { CiSaveDown2, CiSettings } from "react-icons/ci";
 import { MdOutlineReviews } from "react-icons/md";
-import { CiSettings } from "react-icons/ci";
 import { Link, NavLink, useNavigate } from "react-router";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { AuthContext } from "../../context/AuthContext";
 
 const MyProfile = () => {
-  const { isLoggedIn, isAdmin, setIsLoggedIn } = useContext(AuthContext);
+  const { isLoggedIn, isAdmin, isSeller, setIsLoggedIn } =
+    useContext(AuthContext);
+
   const navigate = useNavigate();
 
   const logout = async () => {
@@ -19,194 +20,161 @@ const MyProfile = () => {
       const { data } = await axios.post(
         "http://localhost:4000/api/auth/logout",
         {},
+        { withCredentials: true }
       );
+
       if (data.success) {
         setIsLoggedIn(false);
-        navigate("/login");
+        navigate("/");
       } else {
         toast.error(data.message);
       }
-      console.log(data);
     } catch (error) {
       toast.error(error.message);
     }
   };
-  return (
-    <div>
-      {isLoggedIn && isAdmin ? (
-        <div className="bg-white">
-          {/*  */}
-          {isAdmin ? (
-            <div className="p-6">
-              <div className="flex items-center gap-4 pb-6">
-                <Link
-                  className="w-10 h-10 rounded-full p-3 bg-gray-200 text-black"
-                  to={"/admin"}
-                >
-                  <FaChevronLeft />
-                </Link>
-                {/* <h2 className="text-xl">My Profile</h2> */}
-              </div>
-              <ul className=" bg-gray-100 rounded-xl p-6">
-                <div className="flex justify-between items-center">
-                  <li className="flex items-center gap-4">
-                    <p className="w-10 h-10 rounded-full p-2 bg-white">
-                      <IoPersonOutline size={24} color="orange" />
-                    </p>
-                    <h2 className="font-medium ">All Users</h2>
-                  </li>
-                  <li>
-                    <p>
-                      <FaChevronRight />
-                    </p>
-                  </li>
-                </div>
-              </ul>
-            </div>
-          ) : (
-            <div className=" items-center bg-orange-500 max-h-screen p-6 text-white rounded-2xl">
-              <div className="flex items-center gap-4 ">
-                <Link
-                  className="w-10 h-10 rounded-full p-3 bg-gray-200 text-black"
-                  to={"/admin"}
-                >
-                  <FaChevronLeft />
-                </Link>
-                <h2 className="text-xl">My Profile</h2>
-              </div>
-              <div className="text-center pt-4">
-                <h2 className="py-1">Available Balance</h2>
-                <p className="text-4xl font-semibold">$500.00</p>
-                <button className="my-6 h-8 w-28 rounded-md border">
-                  Withdraw
-                </button>
-              </div>
-            </div>
-          )}
-          {/*  */}
-          <div className="p-6">
-            <ul className=" bg-gray-100 rounded-xl p-8">
-              <div
-                className="flex justify-between items-center"
-                onClick={() => navigate("/profile/personal-info")}
-              >
-                <li className="flex items-center gap-4">
-                  <p className="w-10 h-10 rounded-full p-2 bg-white">
-                    <IoPersonOutline size={24} color="orange" />
-                  </p>
-                  <h2 className="font-medium">Personal Info</h2>
-                </li>
-                <li>
-                  <p>
-                    <FaChevronRight />
-                  </p>
-                </li>
-              </div>
-              <div className="flex justify-between items-center mt-3">
-                <li className="flex items-center gap-4">
-                  <p className="w-10 h-10 rounded-full p-2 bg-white">
-                    <CiSettings size={24} color="blue" />
-                  </p>
-                  <h2 className="font-medium">Setting</h2>
-                </li>
-                <li>
-                  <p>
-                    <FaChevronRight />
-                  </p>
-                </li>
-              </div>
-            </ul>
-          </div>
-          {/*  */}
-          <div className="p-6">
-            <ul className=" bg-gray-100 rounded-xl p-6">
-              <div className="flex justify-between items-center">
-                <li className="flex items-center gap-4">
-                  <p className="w-10 h-10 rounded-full p-2 bg-white">
-                    <PiHandWithdrawThin size={24} color="orange" />
-                  </p>
-                  <h2 className="font-medium">Withdrawal History</h2>
-                </li>
-                <li>
-                  <p>
-                    <FaChevronRight />
-                  </p>
-                </li>
-              </div>
-              <div className="flex justify-between items-center mt-3">
-                <li className="flex items-center gap-4">
-                  <p className="w-10 h-10 rounded-full p-2 bg-white">
-                    <PiScrollThin size={24} color="blue" />
-                  </p>
-                  <h2 className="font-medium">Number of Orders</h2>
-                </li>
-                <li>
-                  <p>{/* <FaChevronRight /> */} 20k</p>
-                </li>
-              </div>
-            </ul>
-          </div>
-          {/*  */}
-          <div className="p-6">
-            <ul className=" bg-gray-100 rounded-xl p-6">
-              <div className="flex justify-between items-center">
-                <li className="flex items-center gap-4">
-                  <p className="w-10 h-10 rounded-full p-2 bg-white">
-                    <MdOutlineReviews size={24} color="purple" />
-                  </p>
-                  <h2 className="font-medium ">User Reviews</h2>
-                </li>
-                <li>
-                  <p>
-                    <FaChevronRight />
-                  </p>
-                </li>
-              </div>
-            </ul>
-          </div>
-          {/* Button Logout */}
-          <div className="p-6" onClick={logout}>
-            <ul className=" bg-gray-100 rounded-xl p-6  ">
-              <div className="flex justify-between items-center">
-                <li className="flex items-center gap-4">
-                  <p className="w-10 h-10 rounded-full p-2 bg-white">
-                    <CiSaveDown2 size={24} color="red" />
-                  </p>
-                  <button className="">Logout</button>
-                </li>
-                <p>
-                  <FaChevronRight />
-                </p>
-              </div>
-            </ul>
-          </div>
+
+  /* ---------- NOT LOGGED IN ---------- */
+  if (!isLoggedIn) {
+    return (
+      <div className="pt-6">
+        <div className="flex items-center gap-4 px-6">
+          <button
+            className="w-10 h-10 rounded-full p-3 bg-gray-200"
+            onClick={() => navigate("/")}
+          >
+            <FaChevronLeft />
+          </button>
+          <h2 className="font-medium">Profile</h2>
         </div>
-      ) : (
-        <div className="pt-6">
-          <div className="flex justify-between items-center py-4">
-            <div className="flex items-center gap-4 ">
-              <button
-                className="w-10 h-10 rounded-full p-3 bg-gray-200"
-                onClick={() => navigate("/")}
-              >
-                <FaChevronLeft />
-              </button>
-              <h2 className="font-medium">Profile</h2>
-            </div>
+
+        <ul className="bg-gray-100 rounded-xl p-6 mt-4 mx-6">
+          <NavLink to="/login" className="flex justify-between items-center">
+            <span className="font-semibold">Login</span>
+            <FaChevronRight />
+          </NavLink>
+        </ul>
+      </div>
+    );
+  }
+
+  /* ---------- LOGGED IN ---------- */
+  return (
+    <div className="bg-white font-ui min-h-screen">
+
+      {/* ADMIN HEADER */}
+      {isAdmin && (
+        <div className="p-6">
+          <div className="flex items-center gap-4 pb-6">
+            <Link
+              to="/admin"
+              className="w-10 h-10 rounded-full p-3 bg-gray-200"
+            >
+              <FaChevronLeft />
+            </Link>
+            <h2 className="text-lg">Admin Profile</h2>
           </div>
-          <ul className=" bg-gray-100 rounded-xl py-4 px-8 ">
-            <div className="flex justify-between items-cente mt-2">
-              <li className="w-30 h-30 rounded-full p-3 bg-gray-200">
-                <img />
-              </li>
-              <NavLink to={"/login"} className="flex items-center gap-4">
-                <button className="font-semibold">Login</button>
-                <FaChevronRight />
-              </NavLink>
+
+          <ul className="bg-gray-100 rounded-xl p-6">
+            <div className="flex justify-between items-center">
+              <div className="flex items-center gap-4">
+                <IoPersonOutline size={24} className="text-orange-500" />
+                <span>All Users</span>
+              </div>
+              <FaChevronRight />
             </div>
           </ul>
         </div>
       )}
+
+      {/* SELLER HEADER */}
+      {isSeller && !isAdmin && (
+        <div className="bg-orange-500 p-6 text-white rounded-b-2xl">
+          <div className="flex items-center gap-4">
+            <Link
+              to="/seller"
+              className="w-10 h-10 rounded-full p-3 bg-gray-200 text-black"
+            >
+              <FaChevronLeft />
+            </Link>
+            <h2 className="text-xl">Seller Profile</h2>
+          </div>
+
+          <div className="text-center pt-4">
+            <p>Available Balance</p>
+            <p className="text-4xl font-semibold">$500.00</p>
+            <button className="my-6 h-8 w-28 rounded-md border">
+              Withdraw
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* COMMON SECTIONS */}
+      <div className="p-6 space-y-4">
+
+        <ul className="bg-gray-100 rounded-xl p-6">
+          <div
+            onClick={() => navigate("/profile/personal-info")}
+            className="flex justify-between items-center cursor-pointer"
+          >
+            <div className="flex items-center gap-4">
+              <IoPersonOutline size={24} className="text-orange-500" />
+              <span>Personal Info</span>
+            </div>
+            <FaChevronRight />
+          </div>
+
+          <div className="flex justify-between items-center mt-4">
+            <div className="flex items-center gap-4">
+              <CiSettings size={24} className="text-blue-500" />
+              <span>Settings</span>
+            </div>
+            <FaChevronRight />
+          </div>
+        </ul>
+
+        <ul className="bg-gray-100 rounded-xl p-6">
+          <div className="flex justify-between items-center">
+            <div className="flex items-center gap-4">
+              <PiHandWithdrawThin size={24} className="text-orange-500" />
+              <span>Withdrawal History</span>
+            </div>
+            <FaChevronRight />
+          </div>
+
+          <div className="flex justify-between items-center mt-4">
+            <div className="flex items-center gap-4">
+              <PiScrollThin size={24} className="text-blue-500" />
+              <span>Number of Orders</span>
+            </div>
+            <span>20k</span>
+          </div>
+        </ul>
+
+        <ul className="bg-gray-100 rounded-xl p-6">
+          <div className="flex justify-between items-center">
+            <div className="flex items-center gap-4">
+              <MdOutlineReviews size={24} className="text-purple-500" />
+              <span>User Reviews</span>
+            </div>
+            <FaChevronRight />
+          </div>
+        </ul>
+
+        {/* LOGOUT */}
+        <button
+          onClick={logout}
+          className="w-full bg-gray-100 rounded-xl p-6 flex justify-between items-center"
+        >
+          <div className="flex items-center gap-4">
+            <CiSaveDown2 size={24} className="text-red-500" />
+            <span>Logout</span>
+          </div>
+          <FaChevronRight />
+        </button>
+
+      </div>
     </div>
   );
 };

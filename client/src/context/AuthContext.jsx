@@ -26,6 +26,7 @@ export const AppContextProvider = (props) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userData, setUserData] = useState(null);
   const [isAdmin, setIsAdmin] = useState(false);
+  const [isSeller, setIsSeller] = useState(false);
   const [restaurantData, setRestaurantData] = useState(null);
   const [OpenRestaurants, setOpenRestaurants] = useState(false);
 
@@ -69,6 +70,7 @@ export const AppContextProvider = (props) => {
         setIsLoggedIn(true);
         setUserData(data?.userData);
         setIsAdmin(data.userData.role === "admin");
+        setIsSeller(data.userData.role === "seller");
         // console.log(data.userData.role);
       } else {
         toast.error(data.message);
@@ -130,6 +132,7 @@ export const AppContextProvider = (props) => {
     isLoggedIn,
     setIsLoggedIn,
     isAdmin,
+    isSeller,
     allRestaurants,
     setRegisteredRestaurants,
     restaurants,

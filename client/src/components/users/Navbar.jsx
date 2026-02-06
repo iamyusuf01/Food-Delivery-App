@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { CgMenuLeft, CgSearch } from "react-icons/cg";
 import { FaCaretDown } from "react-icons/fa";
 import { IoBagHandle } from "react-icons/io5";
@@ -8,7 +8,7 @@ import { useContext } from "react";
 import { AuthContext } from "../../context/AuthContext";
 
 const Navbar = () => {
-  const { isAdmin } = useContext(AuthContext);
+  const { isAdmin, isSeller } = useContext(AuthContext);
   const navigate = useNavigate();
 
   return (
@@ -34,7 +34,7 @@ const Navbar = () => {
           </div>
         </div>
         <div className="flex items-center gap-5 text-sm">
-          {isAdmin ? (
+          {isAdmin || isSeller ? (
             <div className="flex gap-2">
               <button
                 onClick={() => navigate("/admin")}
