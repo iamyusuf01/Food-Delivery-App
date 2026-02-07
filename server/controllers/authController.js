@@ -366,11 +366,12 @@ export const isAuthenticate = async (req, res) => {
 
 export const updateUserRole = async (req, res) => {
   try {
-    const { role } = req.body;
-    if (!req.user?._id || !role) {
+    const { email, role } = req.body;
+
+    if (!email || !role) {
       return res.json({
         success: false,
-        message: "UserId and role are required",
+        message: "Email and role are required",
       });
     }
 
@@ -381,8 +382,9 @@ export const updateUserRole = async (req, res) => {
       });
     }
 
-    const user = await User.findByIdAndUpdate(
-      req.user?._id,
+    // ❗ update TARGET user, not logged-in admin
+    const user = await User.findOneAndUpdate(
+      { email },
       { role },
       { new: true }
     ).select("-password");
@@ -396,8 +398,13 @@ export const updateUserRole = async (req, res) => {
 
     return res.json({
       success: true,
-      message: "Role updated succesfully",
+      message: "Role updated successfully",
       user,
     });
-  } catch (error) {}
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
 };

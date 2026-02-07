@@ -1,6 +1,7 @@
 import express from "express";
 import {
   addAddress,
+  getAllUsers,
   getUserData,
   paymentInstance,
   updateAccountDetails,
@@ -13,6 +14,7 @@ import { updateUserRole } from "../controllers/authController.js";
 const router = express.Router();
 
 router.get("/data", auth, getUserData);
+router.get("/all-users", auth, authorizeRoles("admin"),  getAllUsers);
 router.put(
   "/update-account",
   auth,

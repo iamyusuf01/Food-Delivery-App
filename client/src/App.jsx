@@ -40,6 +40,7 @@ import AddRestaurant from "./pages/admin/AddRestaurant";
 import ViewNotification from "./pages/admin/ViewNotification";
 import Order from "./pages/TrackOrders/Order";
 import PrivateRoute from "./routes/PrivateRoute";
+import Users from "./pages/admin/Users";
 
 function App() {
   return (
@@ -103,6 +104,7 @@ function App() {
             <Route path="add-restaurant" element={<AddRestaurant />} />
             <Route path="add-item" element={<AddItem />} />
             <Route path="my-food-list" element={<MyFood />} />
+            <Route path="all-users" element={<Users />} />
             <Route
               path="chef-food-details/:itemId"
               element={<ChefFoodDetails />}

@@ -6,7 +6,7 @@ import { Outlet, useLocation, useParams } from "react-router";
 import Footer from "../../components/admin/Footer";
 
 const Admin = () => {
-  const { isAdmin } = useContext(AuthContext);
+  const { isAdmin, isSeller } = useContext(AuthContext);
   const location = useLocation();
   const { itemId } = useParams();
 
@@ -21,7 +21,7 @@ const Admin = () => {
 
   const hideLayout = hiddenRoutes.includes(location.pathname);
   return (
-    isAdmin && (
+    isAdmin || isSeller && (
       <div className="bg-gray-100">
         {!hideLayout && <Navbar />}
         <Outlet />

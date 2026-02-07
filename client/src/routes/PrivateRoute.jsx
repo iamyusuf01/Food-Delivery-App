@@ -11,6 +11,11 @@ const PrivateRoute = ({ allowedRoles }) => {
     return <Navigate to="/login" replace />;
   }
 
+  // Still loading user data
+  if (!userData) {
+    return null;
+  }
+  
   // Role not allowed
   if (!allowedRoles.includes(userData?.role)) {
     return <Navigate to="/" replace />;

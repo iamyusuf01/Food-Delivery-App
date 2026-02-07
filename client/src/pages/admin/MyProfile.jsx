@@ -76,13 +76,13 @@ const MyProfile = () => {
           </div>
 
           <ul className="bg-gray-100 rounded-xl p-6">
-            <div className="flex justify-between items-center">
+            <NavLink to={'/admin/all-users'} className="flex justify-between items-center">
               <div className="flex items-center gap-4">
                 <IoPersonOutline size={24} className="text-orange-500" />
                 <span>All Users</span>
               </div>
               <FaChevronRight />
-            </div>
+            </NavLink>
           </ul>
         </div>
       )}

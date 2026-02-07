@@ -1,6 +1,7 @@
 import User from "../models/userModel.js";
 import { uploadOnCloudinary } from "../config/cloudinary.js";
 import stripe from "../config/stripe.js";
+import { response } from "express";
 
 export const getUserData = async (req, res) => {
   try {
@@ -34,6 +35,21 @@ export const getUserData = async (req, res) => {
   }
 };
 
+export const getAllUsers = async (req, res) => {
+  try {
+    const users = await User.find().select("-password");
+    return res.json({
+      success: true,
+      users,
+    });
+  } catch (error) {
+    return res.json({
+      success: false,
+      message: error.mnessage,
+    });
+  }
+};
+
 export const updateAccountDetails = async (req, res) => {
   try {
     const { name, email, phone, bio } = req.body;
@@ -62,13 +78,17 @@ export const updateAccountDetails = async (req, res) => {
       });
     }
 
-    const user = await User.findByIdAndUpdate(req.user?._id, {
-      name,
-      email,
-      phone,
-      bio,
-      avatar: avatar.url
-    }, {new: true}).select("-password -refreshToken");
+    const user = await User.findByIdAndUpdate(
+      req.user?._id,
+      {
+        name,
+        email,
+        phone,
+        bio,
+        avatar: avatar.url,
+      },
+      { new: true },
+    ).select("-password -refreshToken");
 
     if (!user) {
       return res.json({
@@ -123,7 +143,7 @@ export const uploadAvatar = async (req, res) => {
           avatar: avatar.url,
         },
       },
-      { new: true }
+      { new: true },
     ).select("-password -refreshToken");
 
     return res.json({
@@ -168,7 +188,7 @@ export const addAddress = async (req, res) => {
           appartment,
         },
       },
-      { new: true }
+      { new: true },
     );
 
     if (!user) {
