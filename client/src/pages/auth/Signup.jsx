@@ -23,7 +23,7 @@ const Signup = () => {
       e.preventDefault();
 
       axios.defaults.withCredentials = true
-      const {data} = await axios.post('http://localhost:4000/api/auth/register', {name, email, password}, {withCredentials: true})
+      const {data} = await axios.post(backendUrl + '/api/auth/register', {name, email, password}, {withCredentials: true})
       if(data.success){
         setIsLoggedIn(true)
         toast.success(data.message)

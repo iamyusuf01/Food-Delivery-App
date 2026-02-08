@@ -1,13 +1,14 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { FaChevronLeft } from "react-icons/fa";
 import { Link, useNavigate } from "react-router";
 import { BsCloudUpload } from "react-icons/bs";
 import { FaAngleDown } from "react-icons/fa6";
 import axios from "axios";
-// import { AuthContext } from "../../context/AuthContext";
+import { AuthContext } from "../../context/AuthContext";
 import { toast } from "react-toastify";
 
 const AddRestaurant = () => {
+  const {backendUrl} = useContext(AuthContext)
   const [name, setName] = useState("");
   const [type, setType] = useState("");
   const [address, setAddress] = useState("");
@@ -38,7 +39,7 @@ const AddRestaurant = () => {
 
     try {
       const { data } = await axios.post(
-        "http://localhost:4000/api/restaurant/add",
+        backendUrl + "/api/restaurant/add",
         formData,
         { withCredentials: true }
       );

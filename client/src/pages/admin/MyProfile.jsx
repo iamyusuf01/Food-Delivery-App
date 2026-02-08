@@ -10,7 +10,7 @@ import { toast } from "react-toastify";
 import { AuthContext } from "../../context/AuthContext";
 
 const MyProfile = () => {
-  const { isLoggedIn, isAdmin, isSeller, setIsLoggedIn } =
+  const { isLoggedIn, isAdmin, isSeller, setIsLoggedIn, backendUrl } =
     useContext(AuthContext);
 
   const navigate = useNavigate();
@@ -18,7 +18,7 @@ const MyProfile = () => {
   const logout = async () => {
     try {
       const { data } = await axios.post(
-        "http://localhost:4000/api/auth/logout",
+        backendUrl + "/api/auth/logout",
         {},
         { withCredentials: true }
       );

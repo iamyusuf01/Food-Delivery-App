@@ -34,7 +34,7 @@ const Navbar = () => {
           </div>
         </div>
         <div className="flex items-center gap-5 text-sm">
-          {isAdmin || isSeller ? (
+          {isAdmin ? (
             <div className="flex gap-2">
               <button
                 onClick={() => navigate("/admin")}

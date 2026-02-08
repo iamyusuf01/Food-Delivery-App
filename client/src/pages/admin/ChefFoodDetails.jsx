@@ -1,5 +1,6 @@
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import { AuthContext } from "../../context/AuthContext";
+import React, { useContext, useEffect, useState } from "react";
 import { BsStarFill } from "react-icons/bs";
 import { CiLocationOn } from "react-icons/ci";
 import { FaChevronLeft, FaRegStar } from "react-icons/fa6";
@@ -9,6 +10,7 @@ import { Link, useNavigate, useParams } from "react-router";
 import { toast } from "react-toastify";
 
 const ChefFoodDetails = () => {
+  const {backendUrl} = useContext(AuthContext)
   const navigate = useNavigate();
   const { itemId } = useParams();
   const [sellerMenu, setSellerMenu] = useState([]);
@@ -16,7 +18,7 @@ const ChefFoodDetails = () => {
   const fetchSellerFoodDetails = async () => {
     try {
       const { data } = await axios.get(
-        `http://localhost:4000/api/menu/seller/${itemId}`,
+        backendUrl + `/api/menu/seller/${itemId}`,
         { withCredentials: true },
       );
       if (data.success) {

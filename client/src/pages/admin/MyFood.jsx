@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { FaChevronLeft } from "react-icons/fa6";
 import { Link, useNavigate } from "react-router-dom";
 import { BsThreeDots } from "react-icons/bs";
@@ -7,8 +7,10 @@ import { CiEdit } from "react-icons/ci";
 import { MdDelete, MdEdit } from "react-icons/md";
 import axios from "axios";
 import { toast } from "react-toastify";
+import { AuthContext } from "../../context/AuthContext";
 
 const MyFood = () => {
+  const {backendUrl} = useContext(AuthContext)
   const [active, setActive] = useState("All");
   const [openIndex, setOpenIndex] = useState(null);
   const [menu, setMenu] = useState([]);
@@ -45,7 +47,7 @@ const MyFood = () => {
   const fetchMenu = async () => {
     try {
       const { data } = await axios.get(
-        "http://localhost:4000/api/menu/my-food-list",
+        backendUrl + "/api/menu/my-food-list",
         { withCredentials: true }
       );
       if (data.success) {

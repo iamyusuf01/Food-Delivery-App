@@ -16,13 +16,13 @@ import axios from "axios";
 import { toast } from "react-toastify";
 
 const Profile = () => {
-  const { isLoggedIn, userData, setIsLoggedIn } = useContext(AuthContext);
+  const { isLoggedIn, userData, setIsLoggedIn, backendUrl } = useContext(AuthContext);
   const navigate = useNavigate();
 
   const logout = async () => {
     try {
       const { data } = await axios.post(
-        "http://localhost:4000/api/auth/logout",
+        backendUrl + "/api/auth/logout",
         {},
       );
       if (data.success) {

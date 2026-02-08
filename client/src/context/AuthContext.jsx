@@ -17,7 +17,7 @@ const menuOptions = [
 
 export const AppContextProvider = (props) => {
   const backendUrl = import.meta.env.VITE_API_URL;
-  console.log(backendUrl);
+  console.log('backend',backendUrl);
 
   axios.defaults.withCredentials = true;
   const navigate = useNavigate();
@@ -44,7 +44,7 @@ export const AppContextProvider = (props) => {
   const getAuthState = async () => {
     try {
       const { data } = await axios.post(
-        "http://localhost:4000/api/auth/is-auth",
+         backendUrl + '/api/auth/is-auth',
         null,
         { withCredentials: true, validateStatus: () => true },
       );
@@ -60,7 +60,7 @@ export const AppContextProvider = (props) => {
   const getUserData = async () => {
     try {
       const { data } = await axios.get(
-        "http://localhost:4000/api/user/data",
+        backendUrl + "/api/user/data",
         {
           headers: { Authorization: `Bearer ${token}` },
         },
@@ -99,7 +99,7 @@ export const AppContextProvider = (props) => {
   const fetchAllRestaurants = async () => {
     try {
       const { data } = await axios.get(
-        "http://localhost:4000/api/restaurant/all",
+        backendUrl + "/api/restaurant/all",
       );
       if (data.success) {
         setRestaurants(data.restaurants);
@@ -129,6 +129,7 @@ export const AppContextProvider = (props) => {
   const value = {
     token,
     navigate,
+    backendUrl,
     isLoggedIn,
     setIsLoggedIn,
     isAdmin,

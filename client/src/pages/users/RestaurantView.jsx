@@ -30,7 +30,7 @@ const tabs = [
 ];
 
 const RestaurantView = () => {
-  const { navigate, restaurants } = useContext(AuthContext);
+  const { navigate, restaurants, backendUrl } = useContext(AuthContext);
 
   const [open, setOpen] = useState(false);
   const [menu, setMenu] = useState([]);
@@ -46,7 +46,7 @@ const RestaurantView = () => {
   const fetchAllMenu = async () => {
     try {
       const { data } = await axios.get(
-        `http://localhost:4000/api/menu/all-menu`,
+        backendUrl + `/api/menu/all-menu`,
       );
       if (data.success) {
         setMenu(data.menu);

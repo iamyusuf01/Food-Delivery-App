@@ -12,7 +12,7 @@ const ForgetPassword = () => {
   const [isEmailSend, setIsEmailSend] = useState("");
   const [otp, setOtp] = useState(0);
   const [isOtpSubmit, setIsOtpSubmit] = useState(false);
-  const { setIsLoggedIn } = useContext(AuthContext);
+  const { setIsLoggedIn, backendUrl } = useContext(AuthContext);
 
   const inputRefs = React.useRef([]);
   const navigate = useNavigate();
@@ -43,7 +43,7 @@ const ForgetPassword = () => {
     e.preventDefault();
     try {
       const { data } = await axios.post(
-        "http://localhost:4000/api/auth/send-reset-otp",
+        backendUrl + "/api/auth/send-reset-otp",
         { email }
       );
       data.success ? toast.success(data.success) : toast.error(data.message);
@@ -65,7 +65,7 @@ const ForgetPassword = () => {
     e.preventDefault();
     try {
       const { data } = await axios.post(
-        "http://localhost:4000/api/auth/change-password",
+        backendUrl + "/api/auth/change-password",
         { email, otp, newPassword }
       );
       data.success ? toast.success(data.message) : toast.error(data.message);

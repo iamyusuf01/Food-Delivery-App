@@ -8,7 +8,7 @@ import { AuthContext } from "../context/AuthContext";
 import { toast } from "react-toastify";
 
 const EditProfile = () => {
-  const { token } = useContext(AuthContext);
+  const { backendUrl } = useContext(AuthContext);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
@@ -41,7 +41,7 @@ const EditProfile = () => {
 
     try {
       const { data } = await axios.put(
-        "http://localhost:4000/api/user/update-account",
+        backendUrl + "/api/user/update-account",
         formData,
         { withCredentials: true },
         { headers: { "Content-Type": "multipart/form-data" } }

@@ -1,15 +1,17 @@
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import { AuthContext } from "../../context/AuthContext";
+import React, { useContext, useEffect, useState } from "react";
 import { toast } from "react-toastify";
 
 const Users = () => {
+  const {backendUrl} = useContext(AuthContext)
   const [users, setUsers] = useState([]);
   const [loadingEmail, setLoadingEmail] = useState(null);
 
   const getAllUsers = async () => {
     try {
       const { data } = await axios.get(
-        "http://localhost:4000/api/user/all-users",
+        backendUrl + "/api/user/all-users",
         { withCredentials: true }
       );
 
@@ -26,7 +28,7 @@ const Users = () => {
       setLoadingEmail(email);
 
       const { data } = await axios.put(
-        "http://localhost:4000/api/user/update-role",
+        backendUrl + "/api/user/update-role",
         { email, role },
         { withCredentials: true }
       );

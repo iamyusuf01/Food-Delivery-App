@@ -4,11 +4,11 @@ import { Link, useNavigate } from "react-router";
 import { BsCloudUpload } from "react-icons/bs";
 import { FaAngleDown } from "react-icons/fa6";
 import axios from "axios";
-// import { AuthContext } from "../../context/AuthContext";
+import { AuthContext } from "../../context/AuthContext";
 import { toast } from "react-toastify";
 
 const AddItem = () => {
-  // const { token } = useContext(AuthContext);
+  const { backendUrl } = useContext(AuthContext);
   const basic = [
     { name: "Salt", image: "" },
     { name: "Chicken", image: "" },
@@ -53,7 +53,7 @@ const AddItem = () => {
 
     try {
       const { data } = await axios.post(
-        "http://localhost:4000/api/menu/add-item",
+        backendUrl + "/api/menu/add-item",
         formData,
         { withCredentials: true }
         // { headers: { "Content-Type": "multipart/form-data" } }

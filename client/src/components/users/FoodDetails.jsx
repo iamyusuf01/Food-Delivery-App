@@ -12,7 +12,7 @@ import { toast } from "react-toastify";
 
 const FoodDetails = () => {
   const { itemId } = useParams();
-  const { navigate, restaurants } = useContext(AuthContext);
+  const { navigate, restaurants, backendUrl } = useContext(AuthContext);
   const [menu, setMenu] = useState([]);
 
   // console.log(menu)
@@ -20,7 +20,7 @@ const FoodDetails = () => {
   const fetchMenu = async () => {
     try {
       const { data } = await axios.get(
-        `http://localhost:4000/api/menu/current-menu/${itemId}`,
+        backendUrl + `/api/menu/current-menu/${itemId}`,
       );
       if (data.success) {
         setMenu(data.menu);

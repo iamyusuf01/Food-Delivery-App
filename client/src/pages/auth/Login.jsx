@@ -7,7 +7,6 @@ import { NavLink, useNavigate } from "react-router";
 import { AuthContext } from "../../context/AuthContext.jsx";
 import { toast } from "react-toastify";
 import axios from "axios";
-import { useEffect } from "react";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -20,7 +19,7 @@ const Login = () => {
     e.preventDefault();
     try {
       const { data } = await axios.post(
-        "http://localhost:4000/api/auth/login",
+        backendUrl + "/api/auth/login",
         { email, password },
         { withCredentials: true }
       );
