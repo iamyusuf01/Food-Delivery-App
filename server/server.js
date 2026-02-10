@@ -33,19 +33,19 @@ const allowedOrigins = [
 ];
 app.use(
   cors({
-    origin: process.env.allowedOrigins,
+    origin: allowedOrigins,
     credentials: true,
   }),
 );
-
-app.get("/", (req, res) => {
-  res.send("Hello World");
-});
 
 app.use("/api/auth", authRouter);
 app.use("/api/user", userRouter);
 app.use("/api/restaurant", restaurantRouter);
 app.use("/api/menu", menuRouter);
+
+app.get("/", (req, res) => {
+  res.send("Hello World");
+});
 
 app.listen(PORT, () => {
   console.log(`Server Running on port ${PORT}`);
