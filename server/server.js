@@ -29,7 +29,7 @@ app.use(cookieParser());
 // app.cors(cors());
 const allowedOrigins = [
   "http://localhost:5173",
-  "https://frontend-food-delivery-o843464h0-md-yusufs-projects.vercel.app",
+  "https://frontend-food-delivery-app.vercel.app",
 ];
 
 app.use(
