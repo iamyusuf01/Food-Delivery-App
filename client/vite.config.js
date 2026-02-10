@@ -17,7 +17,10 @@ export default defineConfig({
   server: {
     cors: {
       // the origin you will be accessing via browser
-      origin: "https://backend-food-delivery-app-8s7p.onrender.com",
+      origin: [
+        "http://localhost:4000",
+        "https://backend-food-delivery-app-8s7p.onrender.com",
+      ],
     },
   },
 });
