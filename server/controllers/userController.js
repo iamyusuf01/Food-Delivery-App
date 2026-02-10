@@ -211,30 +211,3 @@ export const addAddress = async (req, res) => {
     });
   }
 };
-
-export const paymentInstance = async (req, res) => {
-  try {
-    const { amount, email } = req.body;
-
-    // amount must be in paise (₹25 = 2500)
-    const paymentIntent = await stripe.paymentIntents.create({
-      amount,
-      currency: "inr",
-      receipt_email: email,
-      automatic_payment_methods: {
-        enabled: true,
-      },
-      description: "Your Food Order",
-    });
-
-    res.status(200).json({
-      success: true,
-      clientSecret: paymentIntent.client_secret,
-    });
-  } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: error.message,
-    });
-  }
-};
