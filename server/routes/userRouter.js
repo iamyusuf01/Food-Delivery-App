@@ -3,7 +3,6 @@ import {
   addAddress,
   getAllUsers,
   getUserData,
-  paymentInstance,
   updateAccountDetails,
   uploadAvatar,
 } from "../controllers/userController.js";
@@ -24,6 +23,5 @@ router.put(
 router.post("/avatar", auth, upload.single("avatar"), uploadAvatar);
 router.post("/address", auth, addAddress);
 router.put("/update-role", auth, authorizeRoles("admin"), updateUserRole);
-router.get("/payment", paymentInstance);
 
 export default router;
