@@ -1,7 +1,5 @@
 import User from "../models/userModel.js";
 import { uploadOnCloudinary } from "../config/cloudinary.js";
-import stripe from "../config/stripe.js";
-import { response } from "express";
 
 export const getUserData = async (req, res) => {
   try {
