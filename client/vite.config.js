@@ -20,12 +20,4 @@ export default defineConfig({
       origin: "http://localhost:4000",
     },
   },
-  build: {
-    // generate .vite/manifest.json in outDir
-    manifest: true,
-    rollupOptions: {
-      // overwrite default .html entry
-      input: "/path/to/main.js",
-    },
-  },
 });
