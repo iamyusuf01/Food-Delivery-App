@@ -27,10 +27,7 @@ app.use(express.static("public"));
 app.use(cookieParser());
 
 // app.cors(cors());
-const allowedOrigins = [
-  "http://localhost:5173",
-  "https://frontend-food-delivery-app.vercel.app",
-];
+const allowedOrigins = [process.env.CORS_ORIGIN, "http://localhost:5173"];
 
 app.use(
   cors({
