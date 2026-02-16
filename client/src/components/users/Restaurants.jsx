@@ -13,7 +13,7 @@ const Restaurants = () => {
 
   if (!OpenRestaurants || !restaurants.length) return null;
   return (
-    <div className="">
+    <div className="font-ui">
       <div className="flex justify-between items-center">
         <h2 className="font-ui text-xl">Open Restaurants</h2>
         <div
@@ -34,9 +34,12 @@ const Restaurants = () => {
           >
             <div className="">
               <img
-                src={item.image}
-                className=" bg-gray-400 h-36 w-full rounded-xl"
+                src={item.avatar}
+                alt={item.name}
+                className="w-full h-44 bg-gray-200 rounded-xl object-cover"
+                onError={(e) => (e.target.src = "/fallback.png")}
               />
+
               <h2 className="pt-1 font-medium font-ui text-xl">{item.name}</h2>
               <div className="pt-1">
                 {item?.menu?.map((item, index) => (
@@ -53,11 +56,11 @@ const Restaurants = () => {
               </div>
               <div className="flex items-center gap-2">
                 <TbTruckDelivery size={22} color="orange" />
-                <p>{item?.city}</p>
+                <p>Free</p>
               </div>
               <div className="flex items-center gap-2">
                 <MdOutlineAccessTime size={22} color="orange" />
-                <p>{item.deliveryTime} Min</p>
+                <p>{item.deliveryTime}</p>
               </div>
             </div>
           </Link>

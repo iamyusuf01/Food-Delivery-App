@@ -1,7 +1,12 @@
 import React, { use, useContext, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router";
 import { restaurants } from "../../assets/assets";
-import { FaCartPlus, FaChevronLeft, FaChevronRight, FaPlus } from "react-icons/fa6";
+import {
+  FaCartPlus,
+  FaChevronLeft,
+  FaChevronRight,
+  FaPlus,
+} from "react-icons/fa6";
 import { HiOutlineDotsHorizontal } from "react-icons/hi";
 import { FaRegStar } from "react-icons/fa";
 import { TbTruckDelivery } from "react-icons/tb";
@@ -45,9 +50,7 @@ const RestaurantView = () => {
   // console.log(restaurant)
   const fetchAllMenu = async () => {
     try {
-      const { data } = await axios.get(
-        backendUrl + `/api/menu/all-menu`,
-      );
+      const { data } = await axios.get(backendUrl + `/api/menu/all-menu`);
       if (data.success) {
         setMenu(data.menu);
       }
@@ -57,12 +60,11 @@ const RestaurantView = () => {
     }
   };
 
-  
   useEffect(() => {
     fetchAllMenu();
   }, []);
   return (
-    <div className="p-6 relative">
+    <div className="p-6 relative font-ui">
       <div className="flex justify-between items-center">
         <div className="flex items-center gap-4 ">
           <button
@@ -84,30 +86,31 @@ const RestaurantView = () => {
         <div className="py-4" id="_id">
           <div className="">
             <img
-              src={restaurant?.avatar}
-              className=" bg-gray-300 h-36 w-full rounded-xl object-cover"
+              src={restaurant?.avatar || "/fallback.png"}
+              alt={restaurant?.name || "Restaurant Image"}
+              className="w-full h-44 bg-gray-200 rounded-xl object-cover"
+              onError={(e) => (e.target.src = "/fallback.png")}
             />
-            <h2 className="pt-1 font-medium font-ui text-xl">
+
+            <h2 className="pt-2 font-medium font-ui text-xl">
               {restaurant?.name}
             </h2>
-            <div className="py-3">
-              {/* {restaurant?.menu?.map((item) => (
-                <div key={item.description}>{item.description}</div>
-              ))} */}
-            </div>
+            <p className="py-2 text-sm text-gray-600">
+              {restaurant.description}
+            </p>
           </div>
-          <div className="flex gap-12 items-center">
+          <div className="flex gap-12 items-center py-2 ">
             <div className="flex items-center gap-2">
-              <FaRegStar size={20} color="orange" />
-              <p className="font-medium">{restaurant?.rating}</p>
+              <FaRegStar size={20} className="text-orange-500" />
+              <p className="font-medium  text-lg">{restaurant?.rating}</p>
             </div>
             <div className="flex items-center gap-2">
               <TbTruckDelivery size={22} color="orange" />
-              <p>{restaurant?.city}</p>
+              <p>Free</p>
             </div>
             <div className="flex items-center gap-2">
               <MdOutlineAccessTime size={22} color="orange" />
-              <p>{restaurant?.deliveryTime} Min</p>
+              <p>{restaurant?.deliveryTime}</p>
             </div>
           </div>
         </div>
@@ -132,14 +135,24 @@ const RestaurantView = () => {
         {menu.map((menuItem, i) => (
           <div key={i} className="rounded-2xl shadow-lg px-4 py-4">
             <div>
-              <img src="" className=" w-full h-24 rounded-2xl bg-gray-300 object-cover" />
-              <p className="text-xl font-medium pt-2 font-ui">{menuItem.name}</p>
-              <p className="text-sm font-ui text-gray-500">{restaurant?.name}</p>
+              <img
+                src=""
+                className=" w-full h-24 rounded-2xl bg-gray-300 object-cover"
+              />
+              <p className="text-xl font-medium pt-2 font-ui">
+                {menuItem.name}
+              </p>
+              <p className="text-sm font-ui text-gray-500">
+                {restaurant?.name}
+              </p>
             </div>
             <div className="flex justify-between items-center pt-2">
               <p className="font-bold ">${menuItem.price}</p>
-              <button className="w-8 h-8 cursor-pointer rounded-full bg-orange-400 item-center" onClick={() => navigate(`/food-details/${menuItem._id}`)}>
-                <FaPlus className="mx-auto text-white"/>
+              <button
+                className="w-8 h-8 cursor-pointer rounded-full bg-orange-400 item-center"
+                onClick={() => navigate(`/food-details/${menuItem._id}`)}
+              >
+                <FaPlus className="mx-auto text-white" />
               </button>
             </div>
           </div>

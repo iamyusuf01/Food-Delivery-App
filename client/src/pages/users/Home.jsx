@@ -20,7 +20,7 @@ const Home = () => {
         <Restaurants />
       </div>
       <div className="absolute top-36 left-16 right-16">
-        <Offers />
+        {/* <Offers /> */}
       </div>
     </div>
   );

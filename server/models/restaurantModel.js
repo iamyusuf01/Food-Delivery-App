@@ -7,6 +7,11 @@ const restaurantSchema = new mongoose.Schema(
       required: true,
       trim: true,
     },
+    description: {
+      type: String,
+      required: true,
+      trim: true,
+    },
     type: {
       type: String,
     },
@@ -24,14 +29,13 @@ const restaurantSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
-
     city: {
       type: String,
-      required: true,
+      // required: true,
     },
     address: {
       type: String,
-      required: true,
+      // required: true,
     },
 
     avatar: {
@@ -54,7 +58,7 @@ const restaurantSchema = new mongoose.Schema(
       required: true,
     },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 const Restaurant =

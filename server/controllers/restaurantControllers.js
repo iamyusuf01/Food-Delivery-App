@@ -1,7 +1,6 @@
 import { uploadOnCloudinary } from "../config/cloudinary.js";
 import Menu from "../models/menuModel.js";
 import Restaurant from "../models/restaurantModel.js";
-import User from "../models/userModel.js";
 
 export const addRestaurant = async (req, res) => {
   try {
@@ -12,14 +11,16 @@ export const addRestaurant = async (req, res) => {
       });
     }
 
-    const { name, address, city, type, deliveryTime } = req.body;
+    const { name, description, deliveryTime } = req.body;
 
-    if (!name || !address || !city || !type || !deliveryTime) {
+    if (!name?.trim() || !description?.trim()|| !deliveryTime?.trim()) {
       return res.json({
         success: false,
         message: "All fields are required",
       });
     }
+
+    console.log("Body", req.body)
 
     const avatarLocalPath = req.files?.avatar?.[0]?.path;
     if (!avatarLocalPath) {
@@ -52,10 +53,8 @@ export const addRestaurant = async (req, res) => {
 
     const restaurant = await Restaurant.create({
       name,
-      type,
+      description,
       deliveryTime,
-      city,
-      address,
       avatar: avatar.url,
       owner: req.user._id,
     });

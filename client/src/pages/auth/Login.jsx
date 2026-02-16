@@ -82,10 +82,10 @@ const Login = () => {
                 />
               </div>
               <div className="flex justify-between items-center mt-6 gap-6">
-                <div className="flex gap-2">
+                {/* <div className="flex gap-2">
                   <input type="checkbox" />
                   <p> Remember me</p>
-                </div>
+                </div> */}
                 <p
                   onClick={() => navigate("/forget-password")}
                   className="text-orange-400 cursor-pointer"
