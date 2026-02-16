@@ -40,14 +40,17 @@ const Restaurants = () => {
                 onError={(e) => (e.target.src = "/fallback.png")}
               />
 
-              <h2 className="pt-1 font-medium font-ui text-xl">{item.name}</h2>
-              <div className="pt-1">
+              <h2 className="pt-2 font-medium font-ui text-xl">{item.name}</h2>
+              <p className="py-2 text-sm text-gray-600">
+              {item?.description}
+            </p>
+              {/* <div className="pt-1">
                 {item?.menu?.map((item, index) => (
                   <div key={index} className="">
                     <p className="">{item.name}</p>
                   </div>
                 ))}
-              </div>
+              </div> */}
             </div>
             <div className="flex gap-12 pb-4">
               <div className="flex items-center gap-2">

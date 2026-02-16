@@ -32,6 +32,7 @@ const AddItem = () => {
   const [price, setPrice] = useState("");
   const [description, setDescription] = useState("");
   const [preview, setPreview] = useState(null);
+  const [loading, setLoading] = useState(false)
   const fileInputRef = useRef(null);
   const navigate = useNavigate();
 
@@ -45,6 +46,7 @@ const AddItem = () => {
 
   const ClickAddItem = async (e) => {
     e.preventDefault();
+    setLoading(true)
     const formData = new FormData();
     formData.append("name", name);
     formData.append("price", price);
@@ -142,7 +144,7 @@ const AddItem = () => {
                 onChange={(e) => setPrice(e.target.value)}
                 value={price}
                 type="number"
-                placeholder="$50"
+                placeholder="₹199"
                 className="border w-32 border-gray-400 rounded px-2 outline-none mt-2 py-1"
               />
               <div className="flex items-center gap-2 mt-2">
@@ -219,7 +221,7 @@ const AddItem = () => {
             type="submit"
             className="text-center w-full my-4 h-12 rounded-xl bg-orange-500 text-white uppercase text-xl"
           >
-            Save Change
+            {loading ? 'Adding...' : 'Add Item'}
           </button>
         </form>
       </div>

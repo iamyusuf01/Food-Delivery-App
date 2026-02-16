@@ -42,6 +42,9 @@ import Order from "./pages/TrackOrders/Order";
 import PrivateRoute from "./routes/PrivateRoute";
 import Users from "./pages/admin/Users";
 
+/* Seller */
+import SellerLayout from "./pages/seller/SellerLayout";
+
 function App() {
   return (
     <div>
@@ -96,8 +99,8 @@ function App() {
         <Route path="/search" element={<Search />} />
         <Route path="/search/:item" element={<SpecificItem />} />
 
-        {/* Admin & Seller Routes */}
-        <Route element={<PrivateRoute allowedRoles={["admin", "seller"]} />}>
+        {/* Admin Routes */}
+        <Route element={<PrivateRoute allowedRoles={["admin"]} />}>
           <Route path="/admin" element={<Admin />}>
             <Route index element={<SellerDashboard />} />
             <Route path="my-profile" element={<MyProfile />} />
@@ -110,6 +113,20 @@ function App() {
               element={<ChefFoodDetails />}
             />
             <Route path="chat" element={<ViewNotification />} />
+          </Route>
+        </Route>
+
+        {/* Seller Routes */}
+        <Route element={<PrivateRoute allowedRoles={["seller"]} />}>
+          <Route path="/seller" element={<SellerLayout />}>
+            <Route index element={<SellerDashboard />} />
+            <Route path="add-restaurant" element={<AddRestaurant />} />
+            <Route path="add-item" element={<AddItem />} />
+            <Route path="my-food-list" element={<MyFood />} />
+            <Route
+              path="chef-food-details/:itemId"
+              element={<ChefFoodDetails />}
+            />
           </Route>
         </Route>
       </Routes>

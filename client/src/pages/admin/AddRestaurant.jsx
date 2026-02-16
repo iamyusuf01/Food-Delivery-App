@@ -2,17 +2,15 @@ import React, { useContext, useEffect, useRef, useState } from "react";
 import { FaChevronLeft } from "react-icons/fa";
 import { Link, useNavigate } from "react-router";
 import { BsCloudUpload } from "react-icons/bs";
-import { FaAngleDown } from "react-icons/fa6";
 import axios from "axios";
 import { AuthContext } from "../../context/AuthContext";
 import { toast } from "react-toastify";
 
 const AddRestaurant = () => {
-  const {backendUrl} = useContext(AuthContext)
+  const { backendUrl } = useContext(AuthContext);
   const [name, setName] = useState("");
-  const [type, setType] = useState("");
-  const [address, setAddress] = useState("");
-  const [city, setCity] = useState("");
+  const [loading, setLoading] = useState(false)
+  const [description, setDescription] = useState("");
   const [deliveryTime, setDeliveryTime] = useState("");
   const [avatar, setAvatar] = useState(null);
   const [preview, setPreview] = useState(null);
@@ -29,25 +27,23 @@ const AddRestaurant = () => {
 
   const ClickToAddRestaurant = async (e) => {
     e.preventDefault();
+
+    setLoading(true)
     const formData = new FormData();
     formData.append("name", name);
-    formData.append("type", type);
+    formData.append("description", description);
     formData.append("deliveryTime", deliveryTime);
-    formData.append("address", address);
-    formData.append("city", city);
     if (avatar) formData.append("avatar", avatar);
 
     try {
       const { data } = await axios.post(
         backendUrl + "/api/restaurant/add",
         formData,
-        { withCredentials: true }
+        { withCredentials: true },
       );
       if (data.success) {
         setName("");
-        setAddress("");
-        setCity("");
-        setType("");
+        setDescription("");
         setDeliveryTime("");
         setAvatar(null);
         setPreview(null);
@@ -118,20 +114,22 @@ const AddRestaurant = () => {
               onChange={(e) => setName(e.target.value)}
               value={name}
               type="text"
+              required
               placeholder="add restaurant name"
               className="border border-gray-400 rounded px-2 outline-none mt-2 py-1 w-full"
             />
           </div>
-          <div className="py-4 flex gap-6 justify-between items-center">
+          <div className="py-4 flex flex-col gap-6">
             <div>
-              <p className="uppercase">Restaurant Type</p>
+              <p className="uppercase">Description</p>
               <div>
-                <input
-                  onChange={(e) => setType(e.target.value)}
-                  value={type}
-                  type="text"
-                  placeholder="indian"
-                  className="border w-full border-gray-400 rounded px-2 outline-none mt-2 py-1"
+                <textarea
+                  value={description}
+                  onChange={(e) => setDescription(e.target.value)}
+                  placeholder="Add description"
+                  rows={4}
+                  required
+                  className="w-full mt-2 px-3 py-2 border border-gray-400 rounded-md outline-none focus:ring-2 focus:ring-orange-400 resize-none"
                 />
               </div>
             </div>
@@ -142,34 +140,8 @@ const AddRestaurant = () => {
                   onChange={(e) => setDeliveryTime(e.target.value)}
                   value={deliveryTime}
                   type="text"
+                  required
                   placeholder="eg: 20 - 30 Min"
-                  className="border w-full border-gray-400 rounded px-2 outline-none mt-2 py-1"
-                />
-              </div>
-            </div>
-          </div>
-          <div className="py-4 flex justify-between items-center">
-            <div>
-              <p className="uppercase">Address</p>
-              <div>
-                <input
-                  onChange={(e) => setAddress(e.target.value)}
-                  value={address}
-                  type="text"
-                  placeholder="add your address"
-                  className="border w-full border-gray-400 rounded px-2 outline-none mt-2 py-1"
-                />
-              </div>
-            </div>
-
-            <div>
-              <p className="uppercase">City</p>
-              <div className="flex justify-between items-center">
-                <input
-                  onChange={(e) => setCity(e.target.value)}
-                  value={city}
-                  type="text"
-                  placeholder="your city"
                   className="border w-full border-gray-400 rounded px-2 outline-none mt-2 py-1"
                 />
               </div>
@@ -179,7 +151,7 @@ const AddRestaurant = () => {
             type="submit"
             className="text-center w-full my-4 h-12 rounded-xl bg-orange-500 text-white uppercase text-xl"
           >
-            Save
+            {loading ? 'Saving...' : 'Save'}
           </button>
         </form>
       </div>

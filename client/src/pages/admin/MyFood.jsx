@@ -10,7 +10,7 @@ import { toast } from "react-toastify";
 import { AuthContext } from "../../context/AuthContext";
 
 const MyFood = () => {
-  const {backendUrl} = useContext(AuthContext)
+  const { backendUrl } = useContext(AuthContext);
   const [active, setActive] = useState("All");
   const [openIndex, setOpenIndex] = useState(null);
   const [menu, setMenu] = useState([]);
@@ -46,10 +46,9 @@ const MyFood = () => {
   console.log(menu);
   const fetchMenu = async () => {
     try {
-      const { data } = await axios.get(
-        backendUrl + "/api/menu/my-food-list",
-        { withCredentials: true }
-      );
+      const { data } = await axios.get(backendUrl + "/api/menu/my-food-list", {
+        withCredentials: true,
+      });
       if (data.success) {
         setMenu(data.menu);
         console.log(data);
@@ -103,7 +102,14 @@ const MyFood = () => {
       {menu.map((cart, index) => (
         <div key={cart.id} className="rounded-xl p-4 mb-4 relative">
           <div className="flex gap-4">
-            <div className="bg-gray-300 h-24 w-32 rounded-2xl" />
+            <div className="w-32 h-24 rounded-2xl overflow-hidden bg-gray-200">
+              <img
+                src={cart?.image || "/fallback.png"}
+                alt={cart?.name || "Food Item"}
+                className="w-full h-full object-cover"
+                loading="lazy"
+              />
+            </div>
             <div
               className="w-full"
               onClick={() => navigate(`/admin/chef-food-details/${cart._id}`)}
@@ -124,7 +130,7 @@ const MyFood = () => {
                 <span className="bg-orange-200 text-orange-500 rounded-2xl px-3 text-sm">
                   {cart.type}
                 </span>
-                <p className="font-medium">${cart.price}</p>
+                <p className="font-medium">₹{cart.price}</p>
               </div>
 
               <div className="flex justify-between pt-2">

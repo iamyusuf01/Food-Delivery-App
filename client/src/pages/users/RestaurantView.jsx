@@ -96,7 +96,7 @@ const RestaurantView = () => {
               {restaurant?.name}
             </h2>
             <p className="py-2 text-sm text-gray-600">
-              {restaurant.description}
+              {restaurant?.description}
             </p>
           </div>
           <div className="flex gap-12 items-center py-2 ">
@@ -136,9 +136,12 @@ const RestaurantView = () => {
           <div key={i} className="rounded-2xl shadow-lg px-4 py-4">
             <div>
               <img
-                src=""
-                className=" w-full h-24 rounded-2xl bg-gray-300 object-cover"
+                src={menuItem?.image}
+                alt={menuItem?.name}
+                className="w-full h-28 rounded-2xl bg-gray-200 object-cover"
+                onError={(e) => (e.target.src = "/fallback.png")}
               />
+
               <p className="text-xl font-medium pt-2 font-ui">
                 {menuItem.name}
               </p>
@@ -146,8 +149,8 @@ const RestaurantView = () => {
                 {restaurant?.name}
               </p>
             </div>
-            <div className="flex justify-between items-center pt-2">
-              <p className="font-bold ">${menuItem.price}</p>
+            <div className="flex justify-between items-center pt-1">
+              <p className="font-bold ">₹{menuItem.price}</p>
               <button
                 className="w-8 h-8 cursor-pointer rounded-full bg-orange-400 item-center"
                 onClick={() => navigate(`/food-details/${menuItem._id}`)}

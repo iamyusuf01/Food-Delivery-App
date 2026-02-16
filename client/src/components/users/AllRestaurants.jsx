@@ -12,7 +12,7 @@ const AllRestaurants = () => {
   const navigate = useNavigate();
   const { restaurants } = useContext(AuthContext);
   return (
-    <div className="p-6">
+    <div className="p-6 font-ui">
       <div className="flex items-center gap-4 ">
         <button
           className="w-10 h-10 rounded-full p-3 bg-gray-200"
@@ -37,11 +37,12 @@ const AllRestaurants = () => {
                 className=" bg-gray-400 h-44 w-full rounded-xl object-cover"
               />
               <h2 className="pt-1 font-medium font-ui text-xl">{item.name}</h2>
-              <div className="py-3">
+              <p className="py-2 text-sm text-gray-600">{item?.description}</p>
+              {/* <div className="py-3">
                 {item?.menu?.map((item) => (
                   <div key={item.id}>{item.name}</div>
                 ))}
-              </div>
+              </div> */}
             </div>
             <div className="flex gap-12 pb-4">
               <div className="flex items-center gap-2">
@@ -50,13 +51,13 @@ const AllRestaurants = () => {
               </div>
               <div className="flex items-center gap-2">
                 <TbTruckDelivery size={22} color="orange" />
-                <p>{item.city}</p>
+                <p>Free</p>
               </div>
               <div className="flex items-center gap-2">
                 <p>
                   <MdOutlineAccessTime size={22} color="orange" />
                 </p>
-                <p>{item.deliveryTime} Min</p>
+                <p>{item.deliveryTime}</p>
               </div>
             </div>
           </Link>
