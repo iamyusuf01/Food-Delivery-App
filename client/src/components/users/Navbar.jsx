@@ -10,7 +10,7 @@ const Navbar = () => {
   const navigate = useNavigate();
 
   return (
-    <div className="flex justify-between items-center">
+    <div className="flex justify-between items-center font-ui">
       <div className="flex gap-4 items-center">
         <button
           className="w-10 h-10 bg-gray-300 rounded-full p-2"

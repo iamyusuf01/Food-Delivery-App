@@ -31,6 +31,7 @@ export const AppContextProvider = (props) => {
   const [OpenRestaurants, setOpenRestaurants] = useState(false);
 
   const [restaurants, setRestaurants] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   const [allRestaurants, setRegisteredRestaurants] = useState(
     [...restaurants].sort((a, b) => b.rating - a.rating),
@@ -80,21 +81,6 @@ export const AppContextProvider = (props) => {
     }
   };
 
-  // const getRestaurantData = async () => {
-  //   try {
-  //     const { data } = await axios.get(
-  //       "http://localhost:4000/api/restaurant/current-restaurant"
-  //     );
-  //     if (data.success) {
-  //       setRestaurantData(data.restaurantData);
-  //       console.log(data);
-  //     } else {
-  //       toast.error(data.message);
-  //     }
-  //   } catch (error) {
-  //     toast.error(error.message);
-  //   }
-  // };
 
   const fetchAllRestaurants = async () => {
     try {
@@ -108,6 +94,8 @@ export const AppContextProvider = (props) => {
       console.log(data);
     } catch (error) {
       toast.error(error.message);
+    } finally {
+      setLoading(false)
     }
   };
 
@@ -146,6 +134,7 @@ export const AppContextProvider = (props) => {
     getAuthState,
     restaurantData,
     OpenRestaurants,
+    loading
     // menu,
     // fetchMenuByRestaurantId
   };

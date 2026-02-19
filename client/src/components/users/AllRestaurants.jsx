@@ -7,10 +7,12 @@ import { TbTruckDelivery } from "react-icons/tb";
 import { MdOutlineAccessTime } from "react-icons/md";
 import { useContext } from "react";
 import { AuthContext } from "../../context/AuthContext";
+import ShimmerCard from "../../components/lib/ShimmerCard";
 
 const AllRestaurants = () => {
   const navigate = useNavigate();
-  const { restaurants } = useContext(AuthContext);
+  const { restaurants, loading } = useContext(AuthContext);
+
   return (
     <div className="p-6 font-ui">
       <div className="flex items-center gap-4 ">
@@ -22,46 +24,52 @@ const AllRestaurants = () => {
         </button>
         <h2 className="font-medium font-ui text-xl">Restaurants</h2>
       </div>
+
       <div className="flex flex-col">
-        {restaurants.map((item, key) => (
-          <Link
-            to={`/all-restaurants/${item._id}`}
-            key={key}
-            className="py-6"
-            id="_id"
-          >
-            <div className="">
-              <img
-                src={item.avatar}
-                // src=""
-                className=" bg-gray-400 h-44 w-full rounded-xl object-cover"
-              />
-              <h2 className="pt-1 font-medium font-ui text-xl">{item.name}</h2>
-              <p className="py-2 text-sm text-gray-600">{item?.description}</p>
-              {/* <div className="py-3">
-                {item?.menu?.map((item) => (
-                  <div key={item.id}>{item.name}</div>
-                ))}
-              </div> */}
-            </div>
-            <div className="flex gap-12 pb-4">
-              <div className="flex items-center gap-2">
-                <FaRegStar size={20} color="orange" />
-                <p className="font-medium">{item.rating}</p>
-              </div>
-              <div className="flex items-center gap-2">
-                <TbTruckDelivery size={22} color="orange" />
-                <p>Free</p>
-              </div>
-              <div className="flex items-center gap-2">
-                <p>
-                  <MdOutlineAccessTime size={22} color="orange" />
-                </p>
-                <p>{item.deliveryTime} Min</p>
-              </div>
-            </div>
-          </Link>
-        ))}
+        {loading
+          ? Array.from({ length: 6 }).map((_, index) => (
+              <ShimmerCard key={index} />
+            ))
+          : restaurants.map((item, key) => (
+              <Link
+                to={`/all-restaurants/${item._id}`}
+                key={key}
+                className="py-4 my-2"
+                id="_id"
+              >
+                <div className="">
+                  <img
+                    src={item.avatar}
+                    // src=""
+                    className=" bg-gray-400 h-44 w-full rounded-xl object-cover"
+                  />
+                  <h2 className="pt-1 font-medium font-ui text-xl">
+                    {item.name}
+                  </h2>
+                  <p className="py-2 text-sm text-gray-600">
+                    {item?.description}
+                  </p>
+                </div>
+                <div className="flex gap-12 pb-4">
+                  <div className="flex items-center gap-2">
+                    <FaRegStar size={20} color="orange" />
+                    <p className="font-medium">{item.rating}</p>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <TbTruckDelivery size={22} color="orange" />
+                    <p>
+                      {item.deliveryFee > 0 ? `₹${item.deliveryFee}` : "Free"}
+                    </p>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <p>
+                      <MdOutlineAccessTime size={22} color="orange" />
+                    </p>
+                    <p>{item.deliveryTime} Min</p>
+                  </div>
+                </div>
+              </Link>
+            ))}
       </div>
     </div>
   );
