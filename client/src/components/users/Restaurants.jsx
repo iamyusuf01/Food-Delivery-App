@@ -63,7 +63,7 @@ const Restaurants = () => {
               </div>
               <div className="flex items-center gap-2">
                 <MdOutlineAccessTime size={22} color="orange" />
-                <p>{item.deliveryTime}</p>
+                <p>{item.deliveryTime} Min</p>
               </div>
             </div>
           </Link>

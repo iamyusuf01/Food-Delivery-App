@@ -6,36 +6,73 @@ const restaurantSchema = new mongoose.Schema(
       type: String,
       required: true,
       trim: true,
+      minlength: 2,
+      maxlength: 100,
     },
+
     description: {
       type: String,
       required: true,
       trim: true,
+      maxlength: 500,
     },
-    type: {
-      type: String,
-    },
+
+    cuisines: [
+      {
+        type: String,
+        required: true,
+      },
+    ],
     rating: {
       type: Number,
-      default: 4.0,
+      default: 0,
       min: 0,
       max: 5,
     },
-    deliveryTime: {
-      type: String,
-      required: true,
+
+    totalReviews: {
+      type: Number,
+      default: 0,
     },
+
+    deliveryTime: {
+      type: Number, // minutes
+      required: true,
+      min: 1,
+    },
+
+    deliveryFee: {
+      type: Number,
+      default: 0,
+      min: 0,
+    },
+
+    minOrderAmount: {
+      type: Number,
+      default: 0,
+      min: 0,
+    },
+
     isVeg: {
       type: Boolean,
       default: false,
     },
-    city: {
-      type: String,
-      // required: true,
-    },
+
     address: {
-      type: String,
-      // required: true,
+      street: {
+        type: String,
+        required: true,
+      },
+      city: {
+        type: String,
+        required: true,
+      },
+      state: {
+        type: String,
+      },
+      pincode: {
+        type: String,
+      },
     },
 
     avatar: {
@@ -48,14 +85,27 @@ const restaurantSchema = new mongoose.Schema(
         ref: "Menu",
       },
     ],
+
     isOpen: {
       type: Boolean,
       default: true,
     },
+
+    isFeatured: {
+      type: Boolean,
+      default: false,
+    },
+
+    isActive: {
+      type: Boolean,
+      default: true,
+    },
+
     owner: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
       required: true,
+      // index: true,
     },
   },
   { timestamps: true },

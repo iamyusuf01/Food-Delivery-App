@@ -57,7 +57,7 @@ const AllRestaurants = () => {
                 <p>
                   <MdOutlineAccessTime size={22} color="orange" />
                 </p>
-                <p>{item.deliveryTime}</p>
+                <p>{item.deliveryTime} Min</p>
               </div>
             </div>
           </Link>

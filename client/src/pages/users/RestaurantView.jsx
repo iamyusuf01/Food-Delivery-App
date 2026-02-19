@@ -110,7 +110,7 @@ const RestaurantView = () => {
             </div>
             <div className="flex items-center gap-2">
               <MdOutlineAccessTime size={22} color="orange" />
-              <p>{restaurant?.deliveryTime}</p>
+              <p>{restaurant?.deliveryTime} Min</p>
             </div>
           </div>
         </div>

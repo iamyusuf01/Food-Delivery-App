@@ -4,25 +4,36 @@ import Restaurant from "../models/restaurantModel.js";
 
 export const addRestaurant = async (req, res) => {
   try {
-    if (!["seller", "admin"].includes(req.user.role)) {
-      return res.json({
+    const {
+      name,
+      description,
+      cuisines,
+      deliveryTime,
+      deliveryFee,
+      minOrderAmount,
+      isVeg,
+      street,
+      city,
+      state,
+      pincode,
+    } = req.body;
+
+     if (
+      !name?.trim() ||
+      !description?.trim() ||
+      !deliveryTime ||
+      !cuisines ||
+      !street?.trim() ||
+      !city?.trim()
+    ) {
+      return res.status(400).json({
         success: false,
-        message: "Only seller or admin can create restaurant",
+        message: "Required fields are missing",
       });
     }
-
-    const { name, description, deliveryTime } = req.body;
-
-    if (!name?.trim() || !description?.trim()|| !deliveryTime?.trim()) {
-      return res.json({
-        success: false,
-        message: "All fields are required",
-      });
-    }
-
-    console.log("Body", req.body)
 
     const avatarLocalPath = req.files?.avatar?.[0]?.path;
+
     if (!avatarLocalPath) {
       return res.json({
         success: false,
@@ -55,6 +66,16 @@ export const addRestaurant = async (req, res) => {
       name,
       description,
       deliveryTime,
+      deliveryFee,
+      cuisines: Array.isArray(cuisines) ? cuisines : [cuisines],
+      minOrderAmount,
+      isVeg,
+      address: {
+        street: street,
+        city: city,
+        state: state || "",
+        pincode: pincode || ""
+      },
       avatar: avatar.url,
       owner: req.user._id,
     });
