@@ -78,8 +78,10 @@ export const AppContextProvider = (props) => {
       }
     } catch (error) {
       toast.error(error.message);
+    } finally {
+      setLoading(false)
     }
-  };
+  }; 
 
 
   const fetchAllRestaurants = async () => {

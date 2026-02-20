@@ -4,10 +4,15 @@ import { FaCaretDown } from "react-icons/fa";
 import { IoBagHandle } from "react-icons/io5";
 import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext";
+import NavbarShimmer from "../../components/lib/NavbarShimmer";
 
 const Navbar = () => {
-  const { isAdmin, isSeller } = useContext(AuthContext);
+  const { isAdmin, isSeller, loading } = useContext(AuthContext);
   const navigate = useNavigate();
+
+  if (loading) {
+    return <NavbarShimmer />;
+  }
 
   return (
     <div className="flex justify-between items-center font-ui">
