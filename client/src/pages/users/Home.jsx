@@ -6,9 +6,10 @@ import Restaurants from "../../components/users/Restaurants";
 import Offers from "../../components/users/Offers";
 import { useMatch } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext";
+import CategoriesShimmer from "../../components/lib/CategoriesShimmer";
 
 const Home = () => {
-  const { userData } = useContext(AuthContext);
+  const { userData, loading } = useContext(AuthContext);
 
   const isAdminRoute = useMatch("/admin/*");
 
@@ -36,7 +37,7 @@ const Home = () => {
             <div className="w-40 h-4 bg-gray-300 rounded animate-pulse"></div>
           )}
         </h2>
-        <Categories />
+        {loading ? <CategoriesShimmer /> : <Categories />}
         <Restaurants />
       </div>
       <div className="absolute top-36 left-16 right-16">{/* <Offers /> */}</div>

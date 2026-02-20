@@ -17,17 +17,18 @@ const Restaurants = () => {
         (restaurants.length === 0 && (
           <p className="text-gray-500 py-6">No open restaurants available.</p>
         ))}
-      <div className="flex justify-between items-center">
-        <h2 className="text-xl">Open Restaurants</h2>
-        <div
-          className="flex items-center gap-2 cursor-pointer"
-          onClick={() => navigate("/all-restaurants")}
-        >
-          <p>See All</p>
-          <FaChevronRight size={16} />
+      {!loading && (
+        <div className="flex justify-between items-center">
+          <h2 className="text-xl">Open Restaurants</h2>
+          <div
+            className="flex items-center gap-2 cursor-pointer"
+            onClick={() => navigate("/all-restaurants")}
+          >
+            <p>See All</p>
+            <FaChevronRight size={16} />
+          </div>
         </div>
-      </div>
-
+      )}
       <div className="my-4 grid gap-6">
         {loading
           ? Array.from({ length: 6 }).map((_, index) => (

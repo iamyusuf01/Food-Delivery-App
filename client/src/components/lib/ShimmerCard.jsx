@@ -6,8 +6,6 @@ const ShimmerCard = () => {
       <div className="relative h-44 rounded-xl mb-4 overflow-hidden">
         <div className="absolute inset-0 shimmer"></div>
       </div>
-
-      {/* Title */}
       <div className="relative h-5 w-1/2 rounded mb-3 overflow-hidden">
         <div className="absolute inset-0 shimmer"></div>
       </div>
