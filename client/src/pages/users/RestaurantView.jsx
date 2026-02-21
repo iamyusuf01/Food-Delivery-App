@@ -66,7 +66,7 @@ const RestaurantView = () => {
           </button>
           <h2 className="text-xl font-medium">Restaurant View</h2>
         </div>
-      
+
         <div
           className="w-10 h-10 cursor-pointer rounded-full p-3 bg-gray-200"
           onClick={() => setOpen(true)}
@@ -134,9 +134,14 @@ const RestaurantView = () => {
                   className="w-full h-28 rounded-2xl bg-gray-200 object-cover"
                 />
 
-                <p className="text-xl font-medium pt-2">{menuItem.name}</p>
+                <div>
+                  <p className="text-xl font-medium pt-2">{menuItem.name}</p>
+                  <p className="text-gray-600">
+                    {menuItem?.restaurant?.name}
+                  </p>
+                </div>
 
-                <div className="flex justify-between items-center pt-1">
+                <div className="flex justify-between items-center">
                   <p className="font-bold">₹{menuItem.price}</p>
 
                   <button

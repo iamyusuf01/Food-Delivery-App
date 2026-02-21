@@ -28,9 +28,9 @@ const AddToCart = ({ restaurants, menu }) => {
   };
 
   return (
-    <div className="rounded-3xl bg-gray-200 p-6 w-full">
+    <div className="rounded-t-3xl bg-gray-200 px-4 py-2 w-full">
       <div className="flex items-center py-4 pt-4 mt-6 justify-between ">
-        <p className="text-xl">${total}</p>
+        <p className="text-xl">₹{total}</p>
         <div className="flex items-center gap-4 border rounded-full w-26 h-12 py-2 px-4 bg-black text-white">
           <p className="" onClick={decreaseCount}>
             <FaMinus />

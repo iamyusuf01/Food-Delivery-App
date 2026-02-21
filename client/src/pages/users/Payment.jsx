@@ -1,15 +1,18 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState, useContext, useMemo } from "react";
 import { FaChevronLeft, FaPaypal, FaPlus } from "react-icons/fa";
 import { PiHandCoins } from "react-icons/pi";
 import { RiVisaLine } from "react-icons/ri";
 import { SiMastercard } from "react-icons/si";
 import Card from "../../assets/Card.png";
 import { useNavigate } from "react-router";
+import { CartContext } from "../../context/CartContext";
 
 const Payment = () => {
   const [method, setMethod] = useState("");
   const [savedCard, setSavedCard] = useState(null);
   const navigate = useNavigate();
+
+  const { cartItems } = useContext(CartContext);
 
   const PaymentMethods = [
     { title: "Cash", icon: PiHandCoins, color: "text-orange-500" },
@@ -23,19 +26,42 @@ const Payment = () => {
     if (card) {
       setSavedCard(JSON.parse(card));
     }
-  }, []);
+
+    // Redirect if cart empty
+    if (cartItems.length === 0) {
+      navigate("/cart");
+    }
+  }, [cartItems, navigate]);
+
+ // ✅ Real total from cart (only items price)
+const total = useMemo(() => {
+  return cartItems.reduce((sum, item) => {
+    return sum + item.price * (item.quantity || 1);
+  }, 0);
+}, [cartItems]);
+
+  const handlePayment = () => {
+    if (!method) return;
+
+    alert(`Payment Successful ₹${total.toFixed(2)}`);
+    navigate("/order-success");
+  };
 
   return (
     <div className="p-6 font-ui">
+      
+      {/* Header (UI unchanged) */}
       <div className="flex gap-4 items-center">
         <div
-          onClick={() => navigate('/profile')}
+          onClick={() => navigate(-1)}
           className="w-10 h-10 rounded-full bg-gray-300 flex items-center justify-center cursor-pointer"
         >
           <FaChevronLeft />
         </div>
         <h2 className="text-xl">Payment</h2>
       </div>
+
+      {/* Payment Methods (UI unchanged) */}
       <div className="flex gap-2">
         {PaymentMethods.map(({ title, icon: Icon, color }) => (
           <button
@@ -56,6 +82,8 @@ const Payment = () => {
           </button>
         ))}
       </div>
+
+      {/* Card Section (UI unchanged) */}
       {method && method !== "Cash" && (
         <>
           {savedCard && savedCard.type === method ? (
@@ -75,7 +103,11 @@ const Payment = () => {
             </div>
           ) : (
             <div className="flex flex-col items-center my-8 bg-gray-200 rounded-xl text-center">
-              <img className="rounded-xl w-52 mt-8" src={Card} />
+              <img
+                className="rounded-xl w-52 mt-8"
+                src={Card}
+                alt="Card Placeholder"
+              />
               <div className="py-4">
                 <h2 className="font-medium">No card added</h2>
                 <p className="text-gray-500 text-sm">
@@ -84,6 +116,7 @@ const Payment = () => {
               </div>
             </div>
           )}
+
           <div
             onClick={() =>
               navigate("/payment/add-card", {
@@ -94,17 +127,21 @@ const Payment = () => {
           >
             <FaPlus className="text-orange-500" />
             <p className="uppercase text-orange-400 text-sm">
-              {savedCard?.type === method && "Add New"}
+              {savedCard?.type === method ? "Add New" : "Add Card"}
             </p>
           </div>
         </>
       )}
+
+      {/* Total Section (UI kept same, details added below) */}
       <div className="pt-8">
-        <div className="flex gap-4">
+        <div className="flex gap-4 font-semibold text-lg mt-2">
           <p>Total:</p>
-          <p>$40</p>
+          <p>₹{total}</p>
         </div>
+
         <button
+          onClick={handlePayment}
           disabled={!method}
           className={`uppercase w-full mt-4 h-12 rounded font-medium
             ${

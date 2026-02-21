@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import { useContext, useState, useMemo } from "react";
 import { FaChevronLeft, FaMinus, FaPlus } from "react-icons/fa";
 import { FaChevronRight } from "react-icons/fa6";
 import { CartContext } from "../../context/CartContext";
@@ -8,11 +8,9 @@ const MyCart = () => {
   const [edit, setEdit] = useState(false);
   const [change, setChange] = useState(false);
   const [address, setAddress] = useState("2118 Thornridge Cir. Syracuse");
-
-  // local quantity per item
   const [quantity, setQuantity] = useState({});
-  const naviagte = useNavigate()
 
+  const navigate = useNavigate();
   const { cartItems, removeCartItem } = useContext(CartContext);
 
   const increase = (id) => {
@@ -29,10 +27,12 @@ const MyCart = () => {
     }));
   };
 
-  const total = cartItems.reduce((sum, item) => {
-    const qty = quantity[item.itemId] || 1;
-    return sum + item.price * qty;
-  }, 0);
+  const total = useMemo(() => {
+    return cartItems.reduce((sum, item) => {
+      const qty = quantity[item.itemId] || 1;
+      return sum + item.price * qty;
+    }, 0);
+  }, [cartItems, quantity]);
 
   return (
     <div className="min-h-screen bg-black text-white font-ui relative">
@@ -45,7 +45,7 @@ const MyCart = () => {
             >
               <FaChevronLeft />
             </NavLink>
-            <h2 className="text-xl">Cart</h2>
+            <h2 className="text-lg">Cart</h2>
           </div>
 
           <button
@@ -58,9 +58,7 @@ const MyCart = () => {
           </button>
         </div>
         {cartItems.length === 0 ? (
-          <p className="text-center text-gray-400 mt-10">
-            Your cart is empty
-          </p>
+          <p className="text-center text-gray-400 mt-10">Your cart is empty</p>
         ) : (
           cartItems.map((product) => {
             const count = quantity[product.itemId] || 1;
@@ -70,8 +68,11 @@ const MyCart = () => {
                 key={product.itemId}
                 className="flex gap-4 py-4 border-b border-gray-700"
               >
-                <div className="w-32 h-32 bg-gray-700 rounded-xl" />
-
+                <img
+                  src={product.image}
+                  alt={product.name}
+                  className="w-32 h-32 object-cover rounded-xl"
+                />{" "}
                 <div className="flex-1">
                   <div className="flex justify-between">
                     <div>
@@ -79,7 +80,7 @@ const MyCart = () => {
                       <p className="text-sm text-gray-400">
                         {product.restaurantName}
                       </p>
-                      <p className="mt-1">₹{product.price}</p>
+                      <p className="mt-1">₹{product.price * count}</p>
                     </div>
 
                     {edit && (
@@ -91,6 +92,7 @@ const MyCart = () => {
                       </button>
                     )}
                   </div>
+
                   <div className="flex items-center gap-4 mt-3">
                     <button
                       onClick={() => decrease(product.itemId)}
@@ -114,6 +116,7 @@ const MyCart = () => {
           })
         )}
       </div>
+
       <div className="bg-white rounded-t-2xl py-4 px-6 text-gray-600">
         <div className="flex justify-between items-center">
           <h2 className="uppercase text-lg">Delivery Address</h2>
@@ -138,16 +141,26 @@ const MyCart = () => {
             {address}
           </p>
         )}
+
         <div className="flex justify-between py-4">
           <p>
             Total: <span className="text-black font-semibold">₹{total}</span>
           </p>
+
           <div className="flex items-center gap-1 text-orange-500 text-sm">
             Breakdown <FaChevronRight size={12} />
           </div>
         </div>
-        <button 
-          onClick={() => naviagte('/payment')}
+
+        <button
+          onClick={() =>
+            navigate("/payment", {
+              state: {
+                total,
+                cartItems,
+              },
+            })
+          }
           disabled={cartItems.length === 0}
           className="uppercase bg-orange-500 disabled:bg-gray-300 disabled:text-gray-500 text-white w-full h-12 rounded active:scale-95 transition"
         >
