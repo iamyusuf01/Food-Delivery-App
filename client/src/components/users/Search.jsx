@@ -17,7 +17,7 @@ const Search = () => {
       const searchItems = allDishes.filter((item) =>
         item.name.toLowerCase().includes(input.toLowerCase())
       );
-      console.log(searchedRestaurants);
+      // console.log(searchedRestaurants);
       setRegisteredRestaurants(searchedRestaurants);
       setAllDish(searchItems);
     } else {

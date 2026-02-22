@@ -69,7 +69,7 @@ const Navbar = () => {
         {!isAdmin && !isSeller && (
           <>
             <Link to="/search" className="bg-gray-500/30 rounded-full p-1">
-              <CgSearch size={32} className="text-black" />
+              <CgSearch size={30} className="text-black m-auto px-0.5" />
             </Link>
 
             <button

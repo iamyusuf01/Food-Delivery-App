@@ -17,34 +17,15 @@ const tabs = ["All", "Burger", "Pizza", "Sandwich"];
 
 const RestaurantView = () => {
   const navigate = useNavigate();
-  const { restaurants, backendUrl, loading } = useContext(AuthContext);
+  const { restaurants, loading, menu, menuLoading } = useContext(AuthContext);
 
   const { id } = useParams();
 
   const [open, setOpen] = useState(false);
-  const [menu, setMenu] = useState([]);
   const [active, setActive] = useState("All");
-  const [menuLoading, setMenuLoading] = useState(true);
-
+  
   const restaurant = restaurants.find((r) => r._id?.toString() === id);
-
-  const fetchAllMenu = async () => {
-    try {
-      setMenuLoading(true);
-      const { data } = await axios.get(backendUrl + `/api/menu/all-menu`);
-      if (data.success) {
-        setMenu(data.menu);
-      }
-    } catch (error) {
-      toast.error(error.message);
-    } finally {
-      setMenuLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    fetchAllMenu();
-  }, []);
+  
 
   if (loading || !restaurant) {
     return (

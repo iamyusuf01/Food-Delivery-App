@@ -126,19 +126,19 @@ const SpecificItem = () => {
           {filteredItems.map((item) => (
             <div
               onClick={() =>
-                navigate(`/food-details/${item.restaurantId}/${item.itemId}`)
+                navigate(`/food-details/${item.restaurant.id}/${item.id}`)
               }
-              key={item.itemId}
+              key={item.id}
               className="bg-white shadow-xl p-3 w-full rounded-2xl"
             >
               <div className="bg-gray-500 h-30 w-full rounded-2xl"></div>
               <p className="text-xl font-semibold mt-3">{item.name}</p>
               <p className="text-gray-500 font-semibold mt-1">
-                {findRestaurantName(item.restaurantId)}
+                {findRestaurantName(item.restaurant.id)}
               </p>
               <div className="flex justify-between items-center">
                 <span className="text-black font-semibold text-xl">
-                  ${item.price}
+                  ₹{item.price}
                 </span>
                 <p className="w-8 h-8 mt-2 rounded-full bg-amber-500 py-2 px-2">
                   <FaPlus color="white" />

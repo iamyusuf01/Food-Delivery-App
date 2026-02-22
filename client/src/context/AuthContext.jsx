@@ -17,7 +17,7 @@ const menuOptions = [
 
 export const AppContextProvider = (props) => {
   const backendUrl = import.meta.env.VITE_API_URL;
-  console.log('backend',backendUrl);
+  console.log("backend", backendUrl);
 
   axios.defaults.withCredentials = true;
   const navigate = useNavigate();
@@ -32,6 +32,8 @@ export const AppContextProvider = (props) => {
 
   const [restaurants, setRestaurants] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [menu, setMenu] = useState([]);
+  const [menuLoading, setMenuLoading] = useState(true);
 
   const [allRestaurants, setRegisteredRestaurants] = useState(
     [...restaurants].sort((a, b) => b.rating - a.rating),
@@ -45,7 +47,7 @@ export const AppContextProvider = (props) => {
   const getAuthState = async () => {
     try {
       const { data } = await axios.post(
-         backendUrl + '/api/auth/is-auth',
+        backendUrl + "/api/auth/is-auth",
         null,
         { withCredentials: true, validateStatus: () => true },
       );
@@ -79,27 +81,44 @@ export const AppContextProvider = (props) => {
     } catch (error) {
       toast.error(error.message);
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }; 
-
+  };
 
   const fetchAllRestaurants = async () => {
     try {
-      const { data } = await axios.get(
-        backendUrl + "/api/restaurant/all",
-      );
+      const { data } = await axios.get(backendUrl + "/api/restaurant/all");
       if (data.success) {
         setRestaurants(data.restaurants);
+        setRegisteredRestaurants(data.restaurants)
         setOpenRestaurants(data.restaurants.some((r) => r.isOpen) || false);
       }
       console.log(data);
     } catch (error) {
       toast.error(error.message);
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
   };
+
+  const fetchAllMenu = async () => {
+    try {
+      setMenuLoading(true);
+      const { data } = await axios.get(backendUrl + `/api/menu/all-menu`);
+      if (data.success) {
+        setMenu(data.menu);
+        setAllDish(data.menu)
+      }
+    } catch (error) {
+      toast.error(error.message);
+    } finally {
+      setMenuLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchAllMenu();
+  }, []);
 
   useEffect(() => {
     fetchAllRestaurants();
@@ -111,9 +130,9 @@ export const AppContextProvider = (props) => {
   }, []);
 
   useEffect(() => {
-    if (token){
+    if (token) {
       getUserData();
-    };
+    }
   }, [token]);
 
   const value = {
@@ -136,7 +155,9 @@ export const AppContextProvider = (props) => {
     getAuthState,
     restaurantData,
     OpenRestaurants,
-    loading
+    loading,
+    menuLoading,
+    menu
     // menu,
     // fetchMenuByRestaurantId
   };
