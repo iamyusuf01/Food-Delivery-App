@@ -33,7 +33,6 @@ const Payment = () => {
     }
   }, [cartItems, navigate]);
 
- // ✅ Real total from cart (only items price)
 const total = useMemo(() => {
   return cartItems.reduce((sum, item) => {
     return sum + item.price * (item.quantity || 1);
@@ -44,14 +43,12 @@ const total = useMemo(() => {
     if (!method) return;
 
     alert(`Payment Successful ₹${total.toFixed(2)}`);
-    navigate("/order-success");
+    navigate("/payment/order-success");
   };
 
   return (
     <div className="p-6 font-ui">
-      
-      {/* Header (UI unchanged) */}
-      <div className="flex gap-4 items-center">
+            <div className="flex gap-4 items-center">
         <div
           onClick={() => navigate(-1)}
           className="w-10 h-10 rounded-full bg-gray-300 flex items-center justify-center cursor-pointer"
@@ -60,8 +57,6 @@ const total = useMemo(() => {
         </div>
         <h2 className="text-xl">Payment</h2>
       </div>
-
-      {/* Payment Methods (UI unchanged) */}
       <div className="flex gap-2">
         {PaymentMethods.map(({ title, icon: Icon, color }) => (
           <button
@@ -82,8 +77,6 @@ const total = useMemo(() => {
           </button>
         ))}
       </div>
-
-      {/* Card Section (UI unchanged) */}
       {method && method !== "Cash" && (
         <>
           {savedCard && savedCard.type === method ? (
@@ -132,8 +125,6 @@ const total = useMemo(() => {
           </div>
         </>
       )}
-
-      {/* Total Section (UI kept same, details added below) */}
       <div className="pt-8">
         <div className="flex gap-4 font-semibold text-lg mt-2">
           <p>Total:</p>

@@ -90,7 +90,7 @@ function App() {
         {/* Payment Routes */}
         <Route path="/payment" element={<Payment />} />
         <Route path="/payment/add-card" element={<AddCard />} />
-        <Route path="/payment/verify-payment" element={<CheckPayment />} />
+        <Route path="/payment/order-success" element={<CheckPayment />} />
 
         {/* Tracking Orders */}
         <Route path="/track-order" element={<Order />} />
