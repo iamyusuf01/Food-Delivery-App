@@ -70,7 +70,7 @@ const RestaurantView = () => {
         <div className="flex gap-12 items-center py-2">
           <div className="flex items-center gap-2">
             <FaRegStar className="text-orange-500" />
-            <p className="font-medium text-lg">{restaurant.rating || 0}</p>
+            <p className="font-medium text-lg">{restaurant.rating > 0 ? `${restaurant.rating}`: 4.5}</p>
           </div>
 
           <div className="flex items-center gap-2">

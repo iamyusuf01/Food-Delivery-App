@@ -1,9 +1,9 @@
 import React from "react";
-import Navbar from "../../components/seller/admin/Navbar";
+import Navbar from "../../components/admin/admin/Navbar";
 import { useContext } from "react";
 import { AuthContext } from "../../context/AuthContext";
 import { Outlet, useLocation, useParams } from "react-router";
-import Footer from "../../components/seller/admin/Footer";
+import Footer from "../../components/admin/admin/Footer";
 
 const SellerLayout = () => {
   const { isSeller } = useContext(AuthContext);

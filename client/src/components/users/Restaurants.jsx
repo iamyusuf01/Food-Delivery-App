@@ -56,7 +56,7 @@ const Restaurants = () => {
                 <div className="flex gap-12 pb-4">
                   <div className="flex items-center gap-2">
                     <FaRegStar size={20} color="orange" />
-                    <p className="font-medium">{item?.rating || 0}</p>
+                    <p className="font-medium">{item.rating > 0 ? `${item.rating}` : 4.5}</p>
                   </div>
 
                   <div className="flex items-center gap-2">

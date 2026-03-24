@@ -14,7 +14,6 @@ const Navbar = () => {
         <div className="flex gap-4">
           <button
             className=" w-10 h-10 bg-gray-100 rounded-full p-2"
-            onClick={() => navigate("/admin/my-profile")}
           >
             <CgMenuLeft size={26} />
           </button>
