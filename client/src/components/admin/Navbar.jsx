@@ -20,7 +20,7 @@ const Navbar = () => {
             <CgMenuLeft size={26} />
           </button>
 
-          <div>
+          {/* <div>
             <h2 className="uppercase font-semibold text-xs text-amber-600">
               Location
             </h2>
@@ -28,7 +28,7 @@ const Navbar = () => {
               <p className="text-xs">Halal Lab Office</p>
               <FaCaretDown />
             </div>
-          </div>
+          </div> */}
         </div>
 
         {/* Profile */}
