@@ -35,18 +35,6 @@ const restaurantSchema = new mongoose.Schema(
       default: 0,
     },
 
-    deliveryTime: {
-      type: Number, // minutes
-      required: true,
-      min: 1,
-    },
-
-    deliveryFee: {
-      type: Number,
-      default: 0,
-      min: 0,
-    },
-
     minOrderAmount: {
       type: Number,
       default: 0,

@@ -61,33 +61,6 @@ const MyProfile = () => {
   /* ---------- LOGGED IN ---------- */
   return (
     <div className="bg-white font-ui min-h-screen">
-
-      {/* ADMIN HEADER */}
-      {isAdmin && (
-        <div className="p-6">
-          <div className="flex items-center gap-4 pb-6">
-            <Link
-              to="/admin"
-              className="w-10 h-10 rounded-full p-3 bg-gray-200"
-            >
-              <FaChevronLeft />
-            </Link>
-            <h2 className="text-lg">Admin Profile</h2>
-          </div>
-
-          <ul className="bg-gray-100 rounded-xl p-6">
-            <NavLink to={'/admin/all-users'} className="flex justify-between items-center">
-              <div className="flex items-center gap-4">
-                <IoPersonOutline size={24} className="text-orange-500" />
-                <span>All Users</span>
-              </div>
-              <FaChevronRight />
-            </NavLink>
-          </ul>
-        </div>
-      )}
-
-      {/* SELLER HEADER */}
       {isSeller && !isAdmin && (
         <div className="bg-orange-500 p-6 text-white rounded-b-2xl">
           <div className="flex items-center gap-4">

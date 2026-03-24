@@ -11,8 +11,6 @@ const AddRestaurant = () => {
 
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
-  const [deliveryTime, setDeliveryTime] = useState("");
-  const [deliveryFee, setDeliveryFee] = useState("");
   const [cuisines, setCuisines] = useState("");
   const [street, setStreet] = useState("");
   const [city, setCity] = useState("");
@@ -46,8 +44,6 @@ const AddRestaurant = () => {
       const formData = new FormData();
       formData.append("name", name);
       formData.append("description", description);
-      formData.append("deliveryTime", deliveryTime);
-      formData.append("deliveryFee", deliveryFee);
       formData.append("street", street);
       formData.append("city", city);
 
@@ -65,8 +61,6 @@ const AddRestaurant = () => {
         toast.success(data.message);
         setName("");
         setDescription("");
-        setDeliveryTime("");
-        setDeliveryFee("");
         setCuisines("");
         setStreet("");
         setCity("");
@@ -165,29 +159,7 @@ const AddRestaurant = () => {
             className="border border-gray-400 rounded px-2 py-1 w-full mt-2"
           />
         </div>
-        <div className="py-3">
-          <p className="uppercase">Delivery Time (minutes)</p>
-          <input
-            value={deliveryTime}
-            onChange={(e) => setDeliveryTime(e.target.value)}
-            type="number"
-            placeholder="eg - 30"
-            required
-            className="border border-gray-400 rounded px-2 py-1 w-full mt-2"
-          />
-        </div>
 
-        {/* Delivery Fee */}
-        <div className="py-3">
-          <p className="uppercase">Delivery Fee</p>
-          <input
-            value={deliveryFee}
-            onChange={(e) => setDeliveryFee(e.target.value)}
-            type="number"
-            placeholder="eg- 49"
-            className="border border-gray-400 rounded px-2 py-1 w-full mt-2"
-          />
-        </div>
         <div className="py-3">
           <p className="uppercase">Street</p>
           <input
