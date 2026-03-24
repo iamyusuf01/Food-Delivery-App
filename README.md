@@ -77,7 +77,7 @@ cd zestly
 ```bash
 cd server
 npm install
-npm run dev
+npm run start
 ```
 
 ### 3️⃣ Setup Frontend
@@ -115,6 +115,7 @@ JWT_SECRET=your_secret_key
 * Notifications system
 * Performance optimization
 
+
 ---
 
 ## 🤝 Contributing
@@ -123,11 +124,6 @@ Contributions are welcome! Feel free to fork and submit PRs.
 
 ---
 
-## 📄 License
-
-This project is licensed under the MIT License.
-
----
 
 ## 👨‍💻 Author
 
