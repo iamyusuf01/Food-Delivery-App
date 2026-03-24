@@ -1,9 +1,37 @@
-import React from 'react'
+import { FaChevronRight } from "react-icons/fa";
+import { FaArrowRightArrowLeft, FaRightLong } from "react-icons/fa6";
+import { Link } from "react-router-dom";
 
-const Menu = () => {
+const Menu = ({ closeSidebar }) => {
   return (
-    <div>Menu</div>
-  )
-}
+    <ul className="flex flex-col gap-4 font-ui">
+      <li
+        onClick={closeSidebar}
+        className=" cursor-pointer  px-2 bg-gray-200 py-2 rounded"
+      >
+        <Link
+          to="/admin/all-users"
+          className="flex justify-between items-center"
+        >
+          <p>Users</p>
+          <FaChevronRight size={12} />
+        </Link>
+      </li>
 
-export default Menu
+      <li
+        onClick={closeSidebar}
+        className="cursor-pointer  px-2 bg-gray-200 py-2 rounded"
+      >
+        <Link
+          to="/admin/all-restaurants"
+          className="flex justify-between items-center "
+        >
+          <p>Restaurants</p>
+          <FaChevronRight size={12} />
+        </Link>
+      </li>
+    </ul>
+  );
+};
+
+export default Menu;
