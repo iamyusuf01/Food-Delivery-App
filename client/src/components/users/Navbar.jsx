@@ -42,12 +42,6 @@ const Navbar = () => {
             >
               Admin
             </button>
-            <button
-              onClick={() => navigate("/admin/add-restaurant")}
-              className="bg-gray-500/30 h-8 rounded-xl px-3"
-            >
-              Add Restaurant
-            </button>
           </>
         )}
         {!isAdmin && isSeller && (
@@ -57,12 +51,6 @@ const Navbar = () => {
               className="bg-gray-500/30 h-8 rounded-xl px-3"
             >
               Seller
-            </button>
-            <button
-              onClick={() => navigate("/seller/add-restaurant")}
-              className="bg-gray-500/30 h-8 rounded-xl px-3"
-            >
-              Add Restaurant
             </button>
           </>
         )}

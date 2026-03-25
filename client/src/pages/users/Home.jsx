@@ -34,10 +34,10 @@ const Home = () => {
               <span className="font-medium">{getGretting()}</span>
             </>
           ) : (
-            <div className="w-40 h-4 bg-gray-300 rounded animate-pulse"></div>
+            <div className="w-40 h-4 bg-gray-300 rounded animate-pulse">{getGretting()}</div>
           )}
         </h2>
-        {loading ? <CategoriesShimmer /> : <Categories />}
+        {/* {loading ? <CategoriesShimmer /> : <Categories />} */}
         <Restaurants />
       </div>
       <div className="absolute top-36 left-16 right-16">{/* <Offers /> */}</div>
