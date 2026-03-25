@@ -2,7 +2,7 @@ import { RechartsDevtools } from "@recharts/devtools";
 import React, { useEffect, useRef, useState } from "react";
 import { FaStar } from "react-icons/fa6";
 import { Line, LineChart } from "recharts";
-import OrderCards from "../../components/admin/admin/OrderCards";
+import OrderCards from "../../components/seller/OrderCards";
 
 const SellerDashboard = () => {
   const data = [

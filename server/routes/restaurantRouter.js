@@ -14,6 +14,6 @@ router.get('/all', getAllRestaurants)
 // Fetch all current restaurant
 router.get('/current-restaurant/:id', getCurrentRestaurant)
 // delete restaurants
-router.delete('/delete/:id', auth, authorizeRoles('admin'), deleteRestaurant)
+router.delete('/:id', auth, authorizeRoles('admin'), deleteRestaurant)
 
 export default router
