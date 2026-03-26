@@ -18,10 +18,9 @@ export const addRestaurant = async (req, res) => {
       pincode,
     } = req.body;
 
-     if (
+    if (
       !name?.trim() ||
       !description?.trim() ||
-      !deliveryTime ||
       !cuisines ||
       !street?.trim() ||
       !city?.trim()
@@ -74,7 +73,7 @@ export const addRestaurant = async (req, res) => {
         street: street,
         city: city,
         state: state || "",
-        pincode: pincode || ""
+        pincode: pincode || "",
       },
       avatar: avatar.url,
       owner: req.user._id,
@@ -120,6 +119,7 @@ export const getCurrentRestaurant = async (req, res) => {
     });
   }
 };
+
 export const getAllRestaurants = async (req, res) => {
   try {
     const restaurants = await Restaurant.find();
@@ -224,6 +224,29 @@ export const updateRestaurantAvatar = async (req, res) => {
     });
   } catch (error) {
     console.log(error);
+    return res.json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+export const checkRestaurant = async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const restaurant = await Restaurant.findOne({ owner: userId });
+    if (restaurant) {
+      return res.json({
+        success: true,
+        restaurant
+      });
+    }
+
+    return res.json({
+      success: true,
+      restaurant: restaurant || null
+    });
+  } catch (error) {
     return res.json({
       success: false,
       message: error.message,

@@ -81,24 +81,36 @@ const AddItem = () => {
     }
   };
 
+  const handleReset = () => {
+    setName('')
+    setPrice('')
+    setDescription('')
+    setImage(null)
+    setPreview(null)
+
+    if(fileInputRef.current){
+      fileInputRef.current.value = ''
+    }
+  }
+
   useEffect(() => {
     return () => {
       if (preview) URL.revokeObjectURL(preview);
     };
   }, [preview]);
   return (
-    <div className="p-6 bg-white overflow-hidden">
+    <div className="p-6 bg-white overflow-hidden font-ui">
       <div className=" flex justify-between items-center  max-h-screen rounded-2xl">
         <div className="flex items-center gap-4 ">
           <Link
             className="w-10 h-10 rounded-full p-3 bg-gray-300 text-black"
-            to={"/admin"}
+            to={"/seller"}
           >
             <FaChevronLeft />
           </Link>
-          <h2 className="text-xl">My Food List</h2>
+          <h2 className="text-xl">Add Item</h2>
         </div>
-        <button className="uppercase text-orange-500 font-medium">Reset</button>
+        <button onClick={handleReset} className="uppercase cursor-pointer text-orange-500 font-medium">Reset</button>
       </div>
       <div>
         <form onSubmit={ClickAddItem}>

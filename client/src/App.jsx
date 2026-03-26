@@ -32,7 +32,7 @@ import CheckPayment from "./payment/CheckPayment";
 import Admin from "./pages/admin/Admin";
 import SellerDashboard from "./pages/seller/SellerDashboard";
 import PublicRoute from "./routes/PublicRoute";
-import MyProfile from "./pages/seller/MyProfile";
+import MyProfile from "./pages/seller/SellerProfile";
 import AddItem from "./pages/seller/AddItem";
 import ChefFoodDetails from "./pages/seller/ChefFoodDetails";
 import MyFood from "./pages/seller/MyFood";
@@ -46,6 +46,7 @@ import Users from "./pages/admin/Users";
 import SellerLayout from "./pages/seller/SellerLayout";
 import Restaurants from "./pages/admin/Restaurants";
 import AdminDashboard from "./pages/admin/AdminDashboard";
+import SellerProfile from "./pages/seller/SellerProfile";
 
 function App() {
   return (
@@ -117,9 +118,14 @@ function App() {
             <Route path="add-restaurant" element={<AddRestaurant />} />
             <Route path="add-item" element={<AddItem />} />
             <Route path="my-food-list" element={<MyFood />} />
+            <Route path="my-profile" element={<SellerProfile />} />
             <Route
               path="chef-food-details/:itemId"
               element={<ChefFoodDetails />}
+            />
+            <Route
+              path="chat"
+              element={<ViewNotification />}
             />
           </Route>
         </Route>

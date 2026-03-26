@@ -69,7 +69,7 @@ const MyFood = () => {
       <div className="flex items-center gap-4">
         <Link
           className="w-10 h-10 rounded-full p-3 bg-gray-300 text-black"
-          to="/admin"
+          to="/seller"
         >
           <FaChevronLeft />
         </Link>

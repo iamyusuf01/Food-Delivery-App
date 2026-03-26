@@ -39,7 +39,7 @@ const ChefFoodDetails = () => {
       <div className=" flex justify-between items-center">
         <div className="flex items-center gap-4 ">
           <Link
-            to={"/admin"}
+            to={"/seller"}
             className="w-10 h-10 rounded-full p-3 bg-gray-200"
           >
             <FaChevronLeft />

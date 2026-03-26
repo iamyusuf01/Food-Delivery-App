@@ -14,7 +14,7 @@ const Footer = () => {
       <ul className="flex justify-around items-center h-16">
         {/* Dashboard */}
         <NavLink
-          to="/admin"
+          to="/seller"
           end
           className={({ isActive }) => (isActive ? active : inactive)}
         >
@@ -23,20 +23,20 @@ const Footer = () => {
 
         {/* My Food */}
         <NavLink
-          to="/admin/my-food-list"
+          to="/seller/my-food-list"
           className={({ isActive }) => (isActive ? active : inactive)}
         >
           <IoIosMenu size={32} />
         </NavLink>
 
         {/* Add Item (always orange) */}
-        <NavLink to="/admin/add-item">
+        <NavLink to="/seller/add-item">
           <IoAddCircleOutline size={42} className="text-orange-500" />
         </NavLink>
 
         {/* Notifications */}
         <NavLink
-          to="/admin/chat"
+          to="/seller/chat"
           className={({ isActive }) => (isActive ? active : inactive)}
         >
           <IoIosNotificationsOutline size={28} />
@@ -44,7 +44,7 @@ const Footer = () => {
 
         {/* Profile */}
         <NavLink
-          to=""
+          to="/seller/my-profile"
           className={({ isActive }) => (isActive ? active : inactive)}
         >
           <BsPerson size={28} />

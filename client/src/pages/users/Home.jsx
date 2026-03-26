@@ -34,7 +34,9 @@ const Home = () => {
               <span className="font-medium">{getGretting()}</span>
             </>
           ) : (
-            <div className="w-40 h-4 bg-gray-300 rounded animate-pulse">{getGretting()}</div>
+            <div className="w-40 h-4 bg-gray-300 rounded animate-pulse">
+              {/* {getGretting()} */}
+            </div>
           )}
         </h2>
         {/* {loading ? <CategoriesShimmer /> : <Categories />} */}

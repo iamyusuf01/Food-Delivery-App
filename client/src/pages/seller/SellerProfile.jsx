@@ -9,7 +9,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { AuthContext } from "../../context/AuthContext";
 
-const MyProfile = () => {
+const SellerProfile = () => {
   const { isLoggedIn, isAdmin, isSeller, setIsLoggedIn, backendUrl } =
     useContext(AuthContext);
 
@@ -152,4 +152,4 @@ const MyProfile = () => {
   );
 };
 
-export default MyProfile;
+export default SellerProfile;

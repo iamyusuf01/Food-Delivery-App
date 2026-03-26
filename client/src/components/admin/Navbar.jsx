@@ -9,7 +9,6 @@ const Navbar = () => {
 
   return (
     <div>
-      {/* Top Bar */}
       <div className="flex justify-between items-center p-6">
         <div className="flex gap-4">
           <button
@@ -31,7 +30,6 @@ const Navbar = () => {
           </div> */}
         </div>
 
-        {/* Profile */}
         <img
           src="https://i.pravatar.cc/40"
           alt="user"
@@ -39,10 +37,8 @@ const Navbar = () => {
         />
       </div>
 
-      {/* Sidebar + Overlay */}
       {isOpen && (
         <>
-          {/* Overlay */}
           <div
             className="fixed inset-0 bg-black/40 z-40"
             onClick={() => setIsOpen(false)}
