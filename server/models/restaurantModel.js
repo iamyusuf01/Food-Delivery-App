@@ -23,6 +23,7 @@ const restaurantSchema = new mongoose.Schema(
         required: true,
       },
     ],
+
     rating: {
       type: Number,
       default: 0,
@@ -47,32 +48,16 @@ const restaurantSchema = new mongoose.Schema(
     },
 
     address: {
-      street: {
-        type: String,
-        required: true,
-      },
-      city: {
-        type: String,
-        required: true,
-      },
-      state: {
-        type: String,
-      },
-      pincode: {
-        type: String,
-      },
+      street: { type: String, required: true },
+      city: { type: String, required: true },
+      state: String,
+      pincode: String,
     },
 
     avatar: {
       type: String,
       required: true,
     },
-    menu: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Menu",
-      },
-    ],
 
     isOpen: {
       type: Boolean,
@@ -89,17 +74,27 @@ const restaurantSchema = new mongoose.Schema(
       default: true,
     },
 
+    isDeleted: {
+      type: Boolean,
+      default: false,
+    },
+
     owner: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
       required: true,
-      // index: true,
+      index: true,
     },
   },
-  { timestamps: true },
+  { timestamps: true }
 );
 
+// 🔥 Indexes
+restaurantSchema.index({ isActive: 1, isOpen: 1 });
+restaurantSchema.index({ name: "text", cuisines: "text" });
+
 const Restaurant =
-  mongoose.models.Restaurant || mongoose.model("Restaurant", restaurantSchema);
+  mongoose.models.Restaurant ||
+  mongoose.model("Restaurant", restaurantSchema);
 
 export default Restaurant;

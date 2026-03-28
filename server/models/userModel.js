@@ -3,75 +3,51 @@ import jwt from "jsonwebtoken";
 
 const userSchema = new mongoose.Schema(
   {
-    name: {
-      type: String,
-      required: true,
-    },
-    avatar: {
-      type: String,
-      default: "",
-    },
+    name: { type: String, required: true },
+
+    avatar: { type: String, default: "" },
+
     email: {
       type: String,
       required: true,
       unique: true,
+      index: true,
     },
-    password: {
-      type: String,
-      required: true,
-    },
-    refreshToken: {
-      type: String,
-    },
+
+    password: { type: String, required: true },
+
+    refreshToken: String,
+
     phone: {
-      type: Number,
+      type: String,
       unique: true,
     },
-    bio: {
-      type: String,
-      default: "",
-    },
+
+    bio: { type: String, default: "" },
+
     role: {
       type: String,
       enum: ["user", "admin", "seller"],
       default: "user",
     },
+
+    isVerified: {
+      type: Boolean,
+      default: false,
+    },
+
     location: {
-      address: {
-        type: String,
-        default: "",
-      },
-      street: {
-        type: String,
-        default: "",
-      },
-      postCode: {
-        type: Number,
-        default: 0,
-        required: true,
-      },
-      appartment: {
-        type: Number,
-        default: 0,
-        required: true,
-      },
+      address: { type: String, default: "" },
+      street: { type: String, default: "" },
+      pincode: { type: String, default: "" },
+      apartment: { type: String, default: "" },
     },
-    verifyOtp: {
-      type: Number,
-      default: 0,
-    },
-    verifyOtpExpireAt: {
-      type: Number,
-      default: 0,
-    },
-    resetOtp: {
-      type: Number,
-      default: 0,
-    },
-    resetOtpExpireAt: {
-      type: Number,
-      default: 0,
-    },
+
+    verifyOtp: Number,
+    verifyOtpExpireAt: Date,
+
+    resetOtp: Number,
+    resetOtpExpireAt: Date,
   },
   { timestamps: true }
 );
@@ -84,11 +60,10 @@ userSchema.methods.generateAccessToken = function () {
       name: this.name,
     },
     process.env.ACCESS_TOKEN_SECRET,
-    {
-      expiresIn: process.env.ACCESS_TOKEN_EXPIRY,
-    }
+    { expiresIn: process.env.ACCESS_TOKEN_EXPIRY }
   );
 };
+
 userSchema.methods.generateRefreshToken = function () {
   return jwt.sign(
     {
@@ -96,9 +71,7 @@ userSchema.methods.generateRefreshToken = function () {
       role: this.role,
     },
     process.env.REFRESH_TOKEN_SECRET,
-    {
-      expiresIn: process.env.REFRESH_TOKEN_EXPIRY,
-    }
+    { expiresIn: process.env.REFRESH_TOKEN_EXPIRY }
   );
 };
 

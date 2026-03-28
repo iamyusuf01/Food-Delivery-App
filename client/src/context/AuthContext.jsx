@@ -125,12 +125,12 @@ export const AppContextProvider = (props) => {
   }, []);
 
   useEffect(() => {
-    getAuthState();
+    if (!token) return getAuthState();
     // getUserData()
   }, []);
 
   useEffect(() => {
-    if (token) {
+    if (!token) {
       getUserData();
     }
   }, [token]);
