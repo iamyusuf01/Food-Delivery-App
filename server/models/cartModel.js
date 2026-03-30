@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 
 const cartItemSchema = new mongoose.Schema(
   {
-    menuItem: {
+    productId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Menu",
       required: true,
@@ -21,7 +21,7 @@ const cartItemSchema = new mongoose.Schema(
     },
     totalItemPrice: {
       type: Number,
-      required: true,
+      default: 0,
     },
   },
   { _id: false },
@@ -29,7 +29,7 @@ const cartItemSchema = new mongoose.Schema(
 
 const cartSchema = new mongoose.Schema(
   {
-    user: {
+    userId: { 
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
       required: true,
@@ -37,7 +37,7 @@ const cartSchema = new mongoose.Schema(
       index: true,
     },
 
-    restaurant: {
+    restaurantId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Restaurant",
       required: true,

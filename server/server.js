@@ -7,6 +7,7 @@ import authRouter from "./routes/authRouter.js";
 import userRouter from "./routes/userRouter.js";
 import restaurantRouter from "./routes/restaurantRouter.js";
 import menuRouter from "./routes/menuRouter.js";
+import cartRouter from "./routes/cartRouter.js";
 
 // dotenv.config();
 // dotenv.config({
@@ -40,6 +41,7 @@ app.use("/api/auth", authRouter);
 app.use("/api/user", userRouter);
 app.use("/api/restaurant", restaurantRouter);
 app.use("/api/menu", menuRouter);
+app.use("/api/cart", cartRouter);
 
 app.get("/", (req, res) => {
   res.send("Hello World");
