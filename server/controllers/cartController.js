@@ -7,14 +7,14 @@ export const addProduct = async (req, res) => {
 
     // Validation
     if (!restaurantId || !productId || quantity == null || price == null) {
-      return res.status(400).json({
+      return res.json({
         success: false,
         message: "All fields are required",
       });
     }
 
     const qty = Number(quantity);
-    
+
     if (qty < 1) {
       return res.json({
         success: false,
@@ -24,7 +24,7 @@ export const addProduct = async (req, res) => {
     // Find cart
     let cart = await Cart.findOne({ userId });
 
-    if (cart && cart.restaurantId.toString() !== restaurantId) {
+    if (cart && cart.restaurantId?.toString() !== restaurantId) {
       return res.json({
         success: false,
         message: "You can only add products from one restaurant to the cart",
@@ -41,7 +41,7 @@ export const addProduct = async (req, res) => {
             productId,
             quantity: qty,
             price,
-            totalItemPrice: itemTotal,
+            // totalItemPrice: itemTotal,
           },
         ],
       });
@@ -71,7 +71,7 @@ export const addProduct = async (req, res) => {
 
     await cart.save();
 
-    return res.status(200).json({
+    return res.json({
       success: true,
       message: "Product added to cart successfully",
       cart,
@@ -93,57 +93,37 @@ export const getCart = async (req, res) => {
     const cart = await Cart.findOne({ userId })
       .populate("items.productId", "name price image")
       .lean();
-    return res.status(200).json({
+    return res.json({
       success: true,
       cart,
     });
   } catch (error) {
     console.error(error);
-    return res.status(500).json({
+    return res.json({
       success: false,
       message: "Error fetching cart",
     });
   }
 };
 
-// export const clearCart = async (req, res) => {
-//   try {
-//     const userId = req.user._id;
-//     //find cart
-//     const cart = await Cart.findOne({ userId });
-//     //check if cart exists
-//     if (!cart) {
-//       return res.json({
-//         success: true,
-//         message: "Cart is already empty",
-//         cart: {
-//           items: [],
-//           subtotal: 0,
-//           totalAmount: 0,
-//         },
-//       });
-//     }
-//     //clear cart items
-//     cart.items = [];
-//     cart.subtotal = 0;
-//     cart.totalAmount = 0;
-//     cart.restaurantId = null;
+export const clearCart = async (req, res) => {
+  try {
+    const userId = req.user._id;
+    //find cart
+    const cart = await Cart.findOneAndDelete({ userId });
 
-//     await cart.save();
-
-//     return res.status(200).json({
-//       success: true,
-//       message: "Cart cleared successfully",
-//       cart,
-//     });
-//   } catch (error) {
-//     console.error(error);
-//     return res.status(500).json({
-//       success: false,
-//       message: "Error clearing cart" || error.message,
-//     });
-//   }
-// };
+    return res.json({
+      success: true,
+      message: "Cart cleared successfully",
+    });
+  } catch (error) {
+    console.error(error);
+    return res.json({
+      success: false,
+      message: "Error clearing cart" || error.message,
+    });
+  }
+};
 
 export const removeProduct = async (req, res) => {
   try {
@@ -152,9 +132,8 @@ export const removeProduct = async (req, res) => {
 
     let cart = await Cart.findOne({ userId });
 
-    // ✅ If no cart → return empty
     if (!cart) {
-      return res.status(200).json({
+      return res.json({
         success: true,
         message: "Cart is already empty",
         cart: {
@@ -167,38 +146,34 @@ export const removeProduct = async (req, res) => {
 
     const pid = String(productId).trim();
 
-    // ✅ Find item index safely
     const itemIndex = cart.items.findIndex(
-      (item) => item.productId?.toString() === pid
+      (item) => item.productId?.toString() === pid,
     );
 
     if (itemIndex === -1) {
-      return res.status(404).json({
+      return res.json({
         success: false,
         message: "Product not found in cart",
       });
     }
 
-    // ✅ Remove item
     cart.items.splice(itemIndex, 1);
 
-    // ✅ Reset restaurant if empty
     if (cart.items.length === 0) {
       cart.restaurantId = null;
     }
 
     await cart.save();
 
-    return res.status(200).json({
+    return res.json({
       success: true,
       message: "Product removed successfully",
       cart,
     });
-
   } catch (error) {
     console.error("REMOVE ERROR:", error);
 
-    return res.status(500).json({
+    return res.json({
       success: false,
       message: error.message,
     });
@@ -207,13 +182,12 @@ export const removeProduct = async (req, res) => {
 
 export const updateQuantity = async (req, res) => {
   try {
-    const { productId } = req.params;
-    const { userId } = req.user;
-    const { quantity } = req.body;
+    const userId = req.user._id;
+    const { quantity, productId } = req.body;
 
     const qty = Number(quantity);
 
-    // Validation
+    //  Validation
     if (!qty || qty < 1) {
       return res.status(400).json({
         success: false,
@@ -221,7 +195,7 @@ export const updateQuantity = async (req, res) => {
       });
     }
 
-    let cart = await Cart.findOne({ userId });
+    const cart = await Cart.findOne({ userId });
 
     if (!cart) {
       return res.json({
@@ -230,31 +204,42 @@ export const updateQuantity = async (req, res) => {
       });
     }
 
-    const itemIndex = cart.items.findIndex(
-      (item) => item.productId.toString() === productId,
+    //  Find item
+    const item = cart.items.find(
+      (item) => item.productId.toString() === productId
     );
 
-    if (itemIndex === -1) {
+    if (!item) {
       return res.json({
         success: false,
         message: "Product not found in cart",
       });
     }
-    // Update quantity
-    cart.items[itemIndex].quantity = qty;
+
+    //  Update quantity
+    item.quantity = qty;
+
+  
+    item.totalItemPrice = item.price * item.quantity;
+
+    cart.subtotal = cart.items.reduce((acc, item) => {
+      return acc + item.price * item.quantity;
+    }, 0);
+
+    cart.totalAmount = cart.subtotal + (cart.deliveryFee || 0);
 
     await cart.save();
 
     return res.json({
       success: true,
-      message: "Product quantity updated successfully",
-      cart,
+      cart
     });
+
   } catch (error) {
     console.error(error);
-    return res.status(500).json({
+    return res.json({
       success: false,
-      message: "Error updating product quantity",
+      message: error.message || "Error updating cart",
     });
   }
 };
