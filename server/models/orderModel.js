@@ -1,5 +1,14 @@
 import mongoose from "mongoose";
 
+const ORDER_STATUS = [
+  "PLACED",
+  "CONFIRMED",
+  "PREPARING",
+  "OUT_FOR_DELIVERY",
+  "DELIVERED",
+  "CANCELLED",
+];
+
 const orderItemSchema = new mongoose.Schema(
   {
     menuItem: {
@@ -23,22 +32,26 @@ const orderItemSchema = new mongoose.Schema(
     },
     totalItemPrice: {
       type: Number,
-      required: true,
     },
   },
-  { _id: false },
+  { _id: false }
 );
+
+orderItemSchema.pre("validate", function (next) {
+  this.totalItemPrice = this.price * this.quantity;
+  next();
+});
 
 const orderSchema = new mongoose.Schema(
   {
-    user: {
+    userId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
       required: true,
       index: true,
     },
 
-    restaurant: {
+    restaurantId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Restaurant",
       required: true,
@@ -47,41 +60,29 @@ const orderSchema = new mongoose.Schema(
 
     items: {
       type: [orderItemSchema],
-      default: [],
+      required: true,
+      validate: [(val) => val.length > 0, "Order must have at least one item"],
     },
 
     deliveryAddress: {
-      street: String,
-      city: String,
-      state: String,
-      pincode: String,
+      street: { type: String, required: true },
+      city: { type: String, required: true },
+      state: { type: String, required: true },
+      pincode: { type: String, required: true },
     },
 
-    subtotal: {
-      type: Number,
-      required: true,
-    },
+    subtotal: Number,
 
     deliveryFee: {
       type: Number,
       default: 0,
     },
 
-    totalAmount: {
-      type: Number,
-      required: true,
-    },
+    totalAmount: Number,
 
     status: {
       type: String,
-      enum: [
-        "PLACED",
-        "CONFIRMED",
-        "PREPARING",
-        "OUT_FOR_DELIVERY",
-        "DELIVERED",
-        "CANCELLED",
-      ],
+      enum: ORDER_STATUS,
       default: "PLACED",
       index: true,
     },
@@ -106,8 +107,14 @@ const orderSchema = new mongoose.Schema(
     statusTimeline: {
       type: [
         {
-          status: String,
-          time: Date,
+          status: {
+            type: String,
+            enum: ORDER_STATUS,
+          },
+          time: {
+            type: Date,
+            default: Date.now,
+          },
         },
       ],
       default: [],
@@ -118,14 +125,34 @@ const orderSchema = new mongoose.Schema(
       default: false,
     },
   },
-  { timestamps: true },
+  { timestamps: true }
 );
 
-// 🔥 Indexes
+orderSchema.pre("validate", function (next) {
+  this.subtotal = this.items.reduce(
+    (sum, item) => sum + item.totalItemPrice,
+    0
+  );
+
+  this.totalAmount = this.subtotal + this.deliveryFee;
+  next();
+});
+
+orderSchema.pre("save", function (next) {
+  if (this.isModified("status")) {
+    this.statusTimeline.push({
+      status: this.status,
+      time: new Date(),
+    });
+  }
+  next();
+});
+
 orderSchema.index({ user: 1, createdAt: -1 });
 orderSchema.index({ restaurant: 1, status: 1 });
 orderSchema.index({ createdAt: -1 });
 
-const Order = mongoose.models.Order || mongoose.model("Order", orderSchema);
+const Order =
+  mongoose.models.Order || mongoose.model("Order", orderSchema);
 
 export default Order;

@@ -1,70 +1,37 @@
 import mongoose from "mongoose";
 
-const cartItemSchema = new mongoose.Schema(
-  {
-    productId: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Menu",
-      required: true,
-    },
-    name: String,
-    image: String,
-
-    quantity: {
-      type: Number,
-      default: 1,
-      min: 1,
-    },
-    price: {
-      type: Number,
-      required: true,
-    },
-    totalItemPrice: {
-      type: Number,
-      default: 0,
-    },
+const cartItemSchema = new mongoose.Schema({
+  productId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Menu",
+    required: true,
   },
-  { _id: false },
-);
+  name: String,
+  price: Number,
+  quantity: Number,
+  totalItemPrice: Number,
+});
 
 const cartSchema = new mongoose.Schema(
   {
-    userId: { 
+    userId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
       required: true,
-      unique: true,
-      index: true,
     },
-
     restaurantId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Restaurant",
-      default: null,
-      index: true,
     },
-
-    items: {
-      type: [cartItemSchema],
-      default: [],
-    },
-
-    subtotal: {
-      type: Number,
-      default: 0,
-    },
-
+    items: [cartItemSchema],
+    subtotal: Number,
+    totalAmount: Number,
     deliveryFee: {
       type: Number,
-      default: 0,
-    },
-
-    totalAmount: {
-      type: Number,
-      default: 0,
+      default: 30,
     },
   },
-  { timestamps: true },
+  { timestamps: true }
 );
 
 const Cart = mongoose.models.Cart || mongoose.model("Cart", cartSchema);
