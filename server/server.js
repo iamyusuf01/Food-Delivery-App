@@ -8,6 +8,8 @@ import userRouter from "./routes/userRouter.js";
 import restaurantRouter from "./routes/restaurantRouter.js";
 import menuRouter from "./routes/menuRouter.js";
 import cartRouter from "./routes/cartRouter.js";
+import orderRouter from './routes/orderRouter.js'
+import paymentRouter from './routes/paymentRouter.js'
 
 // dotenv.config();
 // dotenv.config({
@@ -42,6 +44,8 @@ app.use("/api/user", userRouter);
 app.use("/api/restaurant", restaurantRouter);
 app.use("/api/menu", menuRouter);
 app.use("/api/cart", cartRouter);
+app.use("/api/order", orderRouter);
+app.use("/api/payment", paymentRouter);
 
 app.get("/", (req, res) => {
   res.send("Hello World");

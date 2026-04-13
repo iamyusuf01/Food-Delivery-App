@@ -1,4 +1,4 @@
-import Cart from "../models/cartModel";
+import Cart from "../models/cartModel.js";
 import Menu from "../models/menuModel.js";
 import Order from "../models/orderModel.js";
 
@@ -6,7 +6,14 @@ export const placeOrderFromCart = async (req, res) => {
   try {
     const userId = req.user._id;
     const { deliveryAddress, paymentMethod = "COD" } = req.body;
+    const { street, state, city, pincode } = deliveryAddress;
 
+    if (!street || !state || !city || !pincode) {
+      return res.json({
+        success: false,
+        message: "Add delivery address",
+      });
+    }
     //Get Cart
     const cart = await Cart.findOne({ userId });
     if (!cart || cart.items.length === 0) {
@@ -35,24 +42,24 @@ export const placeOrderFromCart = async (req, res) => {
     // Create Orders
     const order = await Order.create({
       userId,
-      restaurant: cart.restaurantId,
+      restaurantId: cart.restaurantId,
       items: orderItems,
-      deliveryAddress,
+      deliveryAddress: {
+        street,
+        state,
+        city,
+        pincode,
+      },
       deliveryFee: cart.deliveryFee || 49,
       paymentMethod,
     });
-
-    //Clear Cart after order created
-    cart.items = [];
-    cart.restaurantId = null;
-    cart.subtotal = 0;
-    cart.totalAmount = 0;
 
     await cart.save();
 
     return res.json({
       success: true,
       message: "Order placed successfully",
+      order,
     });
   } catch (error) {
     console.error("ORDER ERROR:", error);
@@ -66,73 +73,72 @@ export const placeOrderFromCart = async (req, res) => {
 
 export const updateOrderStatus = async (req, res) => {
   try {
-    const {orderId} = req.params;
-    const {status} = req.body;
+    const { orderId } = req.params;
+    const { status } = req.body;
 
     const order = await Order.findById(orderId);
 
-    if(!order){
+    if (!order) {
       return res.json({
         success: false,
-        message: 'Order not found'
-      })
+        message: "Order not found",
+      });
     }
 
     order.status = status;
-    await order.save()
+    await order.save();
 
     return res.jons({
       success: true,
-      message: 'Order status updated',
+      message: "Order status updated",
       order,
-    })
+    });
   } catch (error) {
     return res.json({
       success: false,
-      message: error.message
-    })
+      message: error.message,
+    });
   }
-}
+};
 
 export const getUserOrder = async (req, res) => {
   try {
-    const userId = req.user._id
-    const orders = await Order.find({userId}).sort({createdAt: -1})
+    const userId = req.user._id;
+    const orders = await Order.find({ userId }).sort({ createdAt: -1 });
 
     return res.json({
       success: true,
-      orders
-    })
-
+      orders,
+    });
   } catch (error) {
     return res.json({
       success: false,
-      message: error.message
-    })
+      message: error.message,
+    });
   }
-}
+};
 
-export const getOrderById = async (req, res) => { 
+export const getOrderById = async (req, res) => {
   try {
-    const {id} = req.params;
+    const { id } = req.params;
 
     const order = await Order.findById(id);
 
-    if(!order){
+    if (!order) {
       return res.json({
         success: false,
-        message: 'Order not found'
-      })
+        message: "Order not found",
+      });
     }
 
     return res.json({
       success: true,
       order,
-    })
+    });
   } catch (error) {
     return res.json({
       success: false,
-      message: error.message
-    })
+      message: error.message,
+    });
   }
-}
+};

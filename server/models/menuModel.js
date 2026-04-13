@@ -57,7 +57,6 @@ const menuSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-// 🔥 Search optimization
 menuSchema.index({ name: "text", description: "text" });
 
 const Menu = mongoose.models.Menu || mongoose.model("Menu", menuSchema);

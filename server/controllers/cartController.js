@@ -49,10 +49,10 @@ export const addProduct = async (req, res) => {
         items: [
           {
             productId,
-            name: manu.name,
-            price: menu.price,
+            name: menu?.name,
+            price: menu?.price,
             quantity: qty,
-            totalItemPrice: qty * menu.price,
+            totalItemPrice: qty * menu?.price,
           },
         ],
       });
@@ -73,10 +73,10 @@ export const addProduct = async (req, res) => {
         // Add new item
         cart.items.push({
           productId,
-          name: menu.name,
-          price: menu.price,
+          name: menu?.name,
+          price: menu?.price,
           quantity: qty,
-          totalItemPrice: qty * menu.price,
+          totalItemPrice: qty * menu?.price,
         });
       }
     }

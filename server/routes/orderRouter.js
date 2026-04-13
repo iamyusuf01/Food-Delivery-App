@@ -5,8 +5,8 @@ import auth from "../middlewares/authMiddleware.js";
 const router = express.Router();
 
 router.post("/place", auth, placeOrderFromCart);
-router.post("/update", auth, updateOrderStatus );
-router.post("/get-order", auth, getUserOrder );
-router.post("/:id", auth, getOrderById );
+router.put("/update", auth, updateOrderStatus );
+router.get("/get-order", auth, getUserOrder );
+router.get("/:id", auth, getOrderById );
 
 export default router;
