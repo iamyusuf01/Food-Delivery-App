@@ -21,27 +21,26 @@ const paymentSchema = new mongoose.Schema(
       type: String,
       default: "INR",
     },
-    razorpay_order_id: {
-      type: String,
-    },
-    razorpay_payment_id: {
-      type: String,
-    },
-    razorpay_signature: {
-      type: String,
-    },
+
+    razorpayOrderId: { type: String },
+    razorpayPaymentId: { type: String },
+    razorpaySignature: { type: String },
+
     status: {
       type: String,
       enum: ["PENDING", "SUCCESS", "FAILED"],
       default: "PENDING",
       index: true,
     },
+
     method: {
       type: String,
       enum: ["CARD", "UPI", "NETBANKING", "WALLET", "COD"],
     },
-    reciept: String,
+
+    receipt: String,
     notes: { type: Object },
+
     failureReason: String,
 
     refundId: String,
