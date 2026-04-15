@@ -23,6 +23,7 @@
     "mongodb": "^7.0.0",
     "mongoose": "^9.0.0",
     "multer": "^2.0.2",
+    "node-cron": "^4.2.1",
     "nodemailer": "^8.0.5",
     "nodemon": "^3.1.11",
     "razorpay": "^2.9.6",
