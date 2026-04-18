@@ -3,15 +3,17 @@ import "./index.css";
 import App from "./App.jsx";
 import { BrowserRouter } from "react-router-dom";
 import { AppContextProvider } from "./context/AuthContext.jsx";
-import { CardContextProvider } from "./context/CartContext.jsx";
-
+import { CartContextProvider } from "./context/CartContext.jsx";
+import { PaymentContextProvider } from "./context/PaymentContext.jsx";
 
 createRoot(document.getElementById("root")).render(
   <BrowserRouter>
     <AppContextProvider>
-      <CardContextProvider>
-        <App />
-      </CardContextProvider>
+      <CartContextProvider>
+        <PaymentContextProvider>
+          <App />
+        </PaymentContextProvider>
+      </CartContextProvider>
     </AppContextProvider>
-  </BrowserRouter>
+  </BrowserRouter>,
 );

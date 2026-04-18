@@ -1,94 +1,74 @@
-import { createContext, useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router";
-import { restaurants } from "../assets/assets";
+import { createContext, useContext, useEffect, useState } from "react";
+import axios from "axios";
+import { AuthContext } from "./AuthContext.jsx";
+import { toast } from "react-toastify";
 
 export const CartContext = createContext();
 
-export const CardContextProvider = (props) => {
-  const { id, itemId } = useParams();
-  const [name, setName] = useState("");
-  const [count, setCount] = useState(0);
-  const [unitPrice, setUnitPrice] = useState(0);
-  const [total, setTotal] = useState("0");
-  const [cartItems, setCartItems] = useState(() => {
-    const savedCart = localStorage.getItem("cartItems");
-    return savedCart ? JSON.parse(savedCart) : [];
-  });
-  const navigate = useNavigate();
-  console.log(cartItems)
+export const CartContextProvider = ({ children }) => {
+  const { backendUrl, token } = useContext(AuthContext);
 
-  const restaurant = restaurants?.find((res) => res?.id === id);
-  const menuItem = restaurant?.menu?.find((menu) => menu?.itemId === itemId);
+  const [count, setCount] = useState(1);
+  const [cartItems, setCartItems] = useState([]);
 
-  useEffect(() => {
-    if (menuItem && typeof menuItem.price === "number") {
-      setUnitPrice(menuItem.price);
-    } else {
-      setUnitPrice(0);
+
+  const removeCartItem = async (productId) => {
+    try {
+      const { data } = await axios.delete(
+        backendUrl + `/api/cart/${productId}`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+          withCredentials: true,
+        },
+      );
+      if (data.success) {
+        setCartItems(data.cart?.items || []) ;
+        getCartItems()
+        toast.success(data.message);
+      } else {
+        toast.error(data.message);
+      }
+    } catch (error) {
+      toast.error(error.message);
     }
-    setCount(1);
-  }, [menuItem]);
-
-  useEffect(() => {
-    localStorage.setItem("cartItems", JSON.stringify(cartItems));
-  }, [cartItems]);
-
-  useEffect(() => {
-    setTotal(count * unitPrice);
-  }, [count, unitPrice]);
-
-  const increaseCount = () => {
-    setCount((prev) => prev + 1);
   };
 
-  const decreaseCount = () => {
-    setCount((prev) => (prev > 1 ? prev - 1 : prev)); // prevent going below 1
-  };
+  const getCartItems = async () => {
+    try {
+      const { data } = await axios.get(`${backendUrl}/api/cart/get-cart`, {
+        headers: { Authorization: `Bearer ${token}` },
+        withCredentials: true,
+      });
 
-  const setCountDirect = (newCount) => {
-    const n = Number(newCount);
-    if (!Number.isNaN(n) && n > 0) setCount(n);
-  };
-
-  const addToCartItems = (menuItem, restaurant) => {
-    // setResItems((prev) => [...prev, restaurant]);
-    setCartItems((prev) => [...prev, menuItem]);
-    navigate("/my-cart");
-    console.log(menuItem, restaurant,'this is from cart context');
-  };
-
-  const removeCartItem = (itemId) => {
-    const remainingItem = cartItems.filter((prev) => prev.itemId !== itemId)
-      setCartItems(remainingItem);
-
-  };
-
-  useEffect(() => {
-    if (restaurants?.menu) {
-      setCartItems(restaurants.menu);
-      // setResItems([restaurants]); // wrap object in array
+      if (data.success) {
+        setCartItems(data.cart?.items || [])
+        console.log(data.cart)
+      } else {
+        toast.error(data.message);
+      }
+    } catch (error) {
+      toast.error(error.response?.data?.message || "Error fetching cart");
     }
-  }, [restaurants]);
+  };
+
+  useEffect(() => {
+    if (token) {
+      getCartItems();
+    }
+  }, [token]);
+
+  const increaseCount = () => setCount((prev) => prev + 1);
+  const decreaseCount = () => setCount((prev) => (prev > 1 ? prev - 1 : prev));
 
   const value = {
-    name,
-    setName,
     count,
     increaseCount,
     decreaseCount,
-    setCount: setCountDirect,
-    unitPrice,
-    total,
-    menuItem,
-    restaurant,
-    addToCartItems,
-    setCartItems,
+    setCount,
     cartItems,
+    setCartItems,
     removeCartItem,
-    navigate
   };
 
-  return (
-    <CartContext.Provider value={value}>{props.children}</CartContext.Provider>
-  );
+  return <CartContext.Provider value={value}>{children}</CartContext.Provider>;
 };
