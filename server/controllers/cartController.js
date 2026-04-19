@@ -261,7 +261,6 @@ export const updateCartItem = async (req, res) => {
       });
     }
 
-    // ❗ If quantity = 0 → remove item
     if (quantity <= 0) {
       cart.items = cart.items.filter(
         (i) => i.productId.toString() !== productId
@@ -271,7 +270,6 @@ export const updateCartItem = async (req, res) => {
       item.totalItemPrice = quantity * item.price;
     }
 
-    // ✅ Recalculate totals
     cart.subtotal = cart.items.reduce(
       (sum, i) => sum + i.totalItemPrice,
       0
