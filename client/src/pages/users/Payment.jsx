@@ -29,7 +29,7 @@ const Payment = () => {
 
     // Redirect if cart empty
     if (cartItems.length === 0) {
-      navigate("/cart");
+      navigate("/my-cart");
     }
   }, [cartItems, navigate]);
 

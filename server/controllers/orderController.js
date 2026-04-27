@@ -5,8 +5,22 @@ import Order from "../models/orderModel.js";
 export const placeOrderFromCart = async (req, res) => {
   try {
     const userId = req.user._id;
-    const { deliveryAddress, paymentMethod = "COD" } = req.body;
-    const { street, state, city, pincode } = deliveryAddress;
+    const { address, paymentMethod } = req.body;
+
+    if (!userId) {
+      return res.json({
+        success: false,
+        message: "User not found",
+      });
+    }
+
+    if (!address) {
+      return res.json({
+        success: false,
+        message: "address is required",
+      });
+    }
+    const { street, state, city, pincode } = address;
 
     if (!street || !state || !city || !pincode) {
       return res.json({
@@ -16,6 +30,7 @@ export const placeOrderFromCart = async (req, res) => {
     }
     //Get Cart
     const cart = await Cart.findOne({ userId });
+
     if (!cart || cart.items.length === 0) {
       return res.json({
         success: false,
@@ -24,27 +39,27 @@ export const placeOrderFromCart = async (req, res) => {
     }
 
     //Build order
-    const orderItems = [];
+    const orderItems = await Promise.all(
+      cart.items.map(async (item) => {
+        const menu = await Menu.findById(item.productId);
+        if (!menu) throw new Error("Item not found");
 
-    for (const item of cart.items) {
-      const menu = await Menu.findById(item.productId);
-      if (!menu) throw new Error("Item not found");
-
-      orderItems.push({
-        menuItem: menu._id,
-        name: menu.name,
-        image: menu.image,
-        price: menu.price,
-        quantity: item.quantity,
-      });
-    }
+        return {
+          menuItem: menu._id,
+          name: menu.name,
+          image: menu.image,
+          price: menu.price,
+          quantity: item.quantity,
+        };
+      }),
+    );
 
     // Create Orders
     const order = await Order.create({
       userId,
       restaurantId: cart.restaurantId,
       items: orderItems,
-      deliveryAddress: {
+      address: {
         street,
         state,
         city,
@@ -53,7 +68,7 @@ export const placeOrderFromCart = async (req, res) => {
       deliveryFee: cart.deliveryFee || 49,
       paymentMethod,
     });
-
+    // cart.items = [];
     await cart.save();
 
     return res.json({

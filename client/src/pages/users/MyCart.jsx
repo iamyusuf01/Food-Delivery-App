@@ -1,17 +1,53 @@
-import { useContext, useState, useMemo, useEffect } from "react";
+import { useContext, useState, useMemo} from "react";
 import { FaChevronLeft, FaMinus, FaPlus } from "react-icons/fa";
 import { FaChevronRight } from "react-icons/fa6";
 import { CartContext } from "../../context/CartContext";
 import { NavLink, useNavigate } from "react-router-dom";
+import { AuthContext } from "../../context/AuthContext";
+import axios from "axios";
+import { toast } from "react-toastify";
 
 const MyCart = () => {
   const [edit, setEdit] = useState(false);
   const [change, setChange] = useState(false);
-  const [address, setAddress] = useState("2118 Thornridge Cir. Syracuse");
-
+  const [address, setAddress] = useState({
+    street: "",
+    city: "",
+    state: "",
+    pincode: "",
+  });
+  const [order, setOrder] = useState([]);
+  console.log(order)
   const navigate = useNavigate();
   const { cartItems, removeCartItem, updateItemQuantity } =
     useContext(CartContext);
+
+  const { token, backendUrl } = useContext(AuthContext);
+
+  const placeOrderFromCart = async () => {
+    try {
+      const { data } = await axios.post(
+        backendUrl + "/api/order/place",
+        {
+          address,
+          paymentMethod: "COD",
+        },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        },
+      );
+
+      if (data.success) {
+        setOrder(data.order);
+        
+        navigate("/payment");
+      } else {
+        toast.error(data.message);
+      }
+    } catch (error) {
+      toast.error(error.message);
+    }
+  };
 
   const total = useMemo(() => {
     return cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
@@ -123,14 +159,46 @@ const MyCart = () => {
         </div>
 
         {change ? (
-          <input
-            value={address}
-            onChange={(e) => setAddress(e.target.value)}
-            className="mt-3 w-full border border-gray-300 rounded-md px-3 py-2 text-sm"
-          />
+          <div className="flex flex-col gap-2 mt-3">
+            <input
+              placeholder="Street"
+              value={address.street}
+              onChange={(e) =>
+                setAddress({ ...address, street: e.target.value })
+              }
+              className="bg-gray-200 py-3 rounded-md my-2 px-2 text-sm"
+            />
+
+            <input
+              placeholder="City"
+              value={address.city}
+              onChange={(e) => setAddress({ ...address, city: e.target.value })}
+              className="bg-gray-200 py-3 rounded-md my-2 px-2 text-sm"
+            />
+
+            <input
+              placeholder="State"
+              value={address.state}
+              onChange={(e) =>
+                setAddress({ ...address, state: e.target.value })
+              }
+              className="bg-gray-200 py-3 rounded-md my-2 px-2 text-sm"
+            />
+
+            <input
+              placeholder="Pincode"
+              value={address.pincode}
+              onChange={(e) =>
+                setAddress({ ...address, pincode: e.target.value })
+              }
+              className="bg-gray-200 py-3 rounded-md my-2 px-2 text-sm"
+            />
+          </div>
         ) : (
           <p className="bg-gray-200 py-3 rounded-md my-2 px-2 text-sm">
-            {address}
+            {address.street
+              ? `${address.street}, ${address.city}, ${address.state} - ${address.pincode}`
+              : "No address added"}
           </p>
         )}
 
@@ -147,11 +215,7 @@ const MyCart = () => {
 
         {/* Checkout */}
         <button
-          onClick={() =>
-            navigate("/payment", {
-              state: { total, cartItems },
-            })
-          }
+          onClick={placeOrderFromCart}
           disabled={cartItems.length === 0}
           className="uppercase bg-orange-500 disabled:bg-gray-300 disabled:text-gray-500 text-white w-full h-12 rounded"
         >

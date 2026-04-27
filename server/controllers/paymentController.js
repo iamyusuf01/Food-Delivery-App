@@ -2,7 +2,7 @@ import { razorpayInstance } from "../config/razorpay.js";
 import Order from "../models/orderModel.js";
 import crypto from "crypto";
 import Payment from "../models/paymentModel.js";
-import cron from 'node-cron'
+import cron from "node-cron";
 
 export const createPaymentOrder = async (req, res) => {
   try {
@@ -16,7 +16,6 @@ export const createPaymentOrder = async (req, res) => {
     }
 
     const order = await Order.findById(orderId);
-
     if (!order) {
       return res.status(404).json({
         success: false,
@@ -24,6 +23,7 @@ export const createPaymentOrder = async (req, res) => {
       });
     }
 
+    // prevent duplicate pending payment
     const existingPayment = await Payment.findOne({
       orderId: order._id,
       status: "PENDING",
@@ -46,7 +46,7 @@ export const createPaymentOrder = async (req, res) => {
     }
 
     const options = {
-      amount: Math.round(order.totalAmount * 100), // paise
+      amount: Math.round(order.totalAmount * 100),
       currency: "INR",
       receipt: order._id.toString(),
       notes: {
@@ -65,9 +65,6 @@ export const createPaymentOrder = async (req, res) => {
       status: "PENDING",
       razorpayOrderId: razorpayOrder.id,
       receipt: order._id.toString(),
-      notes: {
-        orderId: order._id.toString(),
-      },
     });
 
     return res.status(200).json({
@@ -77,7 +74,6 @@ export const createPaymentOrder = async (req, res) => {
     });
   } catch (error) {
     console.error("Payment Order Error:", error);
-
     return res.status(500).json({
       success: false,
       message: "Internal server error",
@@ -108,11 +104,11 @@ export const verifyPayment = async (req, res) => {
       });
     }
 
+    // already verified
     if (payment.status === "SUCCESS") {
-      return res.status(200).json({
+      return res.json({
         success: true,
-        message: "Payment already verified",
-        payment,
+        message: "Already verified",
       });
     }
 
@@ -124,10 +120,9 @@ export const verifyPayment = async (req, res) => {
       .digest("hex");
 
     if (expectedSignature !== razorpay_signature) {
-      await Payment.findByIdAndUpdate(payment._id, {
-        status: "FAILED",
-        failureReason: "Invalid signature",
-      });
+      payment.status = "FAILED";
+      payment.failureReason = "Invalid signature";
+      await payment.save();
 
       return res.status(400).json({
         success: false,
@@ -135,9 +130,10 @@ export const verifyPayment = async (req, res) => {
       });
     }
 
+    // success
+    payment.status = "SUCCESS";
     payment.razorpayPaymentId = razorpay_payment_id;
     payment.razorpaySignature = razorpay_signature;
-    payment.status = "SUCCESS";
     await payment.save();
 
     await Order.findByIdAndUpdate(payment.orderId, {
@@ -145,14 +141,12 @@ export const verifyPayment = async (req, res) => {
       status: "CONFIRMED",
     });
 
-    return res.status(200).json({
+    return res.json({
       success: true,
-      message: "Payment verified successfully",
-      payment,
+      message: "Payment verified",
     });
   } catch (error) {
     console.error("Verify Payment Error:", error);
-
     return res.status(500).json({
       success: false,
       message: "Internal server error",
@@ -197,7 +191,7 @@ export const initiateRefund = async (req, res) => {
     const refund = await razorpayInstance.payments.refund(
       payment.razorpayPaymentId,
       {
-        amount: Math.round(payment.amount * 100), // paise
+        amount: Math.round(payment.amount * 100),
       }
     );
 
@@ -205,15 +199,12 @@ export const initiateRefund = async (req, res) => {
     payment.refundStatus = "PROCESSED";
     await payment.save();
 
-    return res.status(200).json({
+    return res.json({
       success: true,
       message: "Refund successful",
-      refund,
     });
-
   } catch (error) {
     console.error("Refund Error:", error);
-
     return res.status(500).json({
       success: false,
       message: "Internal server error",
@@ -221,20 +212,25 @@ export const initiateRefund = async (req, res) => {
   }
 };
 
-cron.schedule("*/10 * * * * ", async () => {
-  const expiredPayment = await Payment.find({
-    status: 'PENDING',
-    createdAt: {
-      $lt: new Date(Date.now() - 15 * 60 * 1000),
+cron.schedule("*/10 * * * *", async () => {
+  try {
+    const result = await Payment.updateMany(
+      {
+        status: "PENDING",
+        createdAt: {
+          $lt: new Date(Date.now() - 15 * 60 * 1000),
+        },
+      },
+      {
+        $set: {
+          status: "FAILED",
+          failureReason: "Timeout",
+        },
+      }
+    );
 
-    }
-  })
-
-  for(const payment of expiredPayments){
-    payment.status = "FAILED",
-    payment.failureReason = 'Timeout';
-    await payment.save();
+    console.log(`Expired payments cleared: ${result.modifiedCount}`);
+  } catch (error) {
+    console.error("CRON ERROR:", error.message);
   }
-
-  console.log('Expired payments cleared')
-})
+});

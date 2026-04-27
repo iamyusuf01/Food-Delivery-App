@@ -41,7 +41,9 @@ export const AppContextProvider = (props) => {
   const [allDish, setAllDish] = useState(
     restaurants.map((res) => res.menu).flat(),
   );
-  const token = localStorage.getItem("accessToken");
+  const [token, setToken] = useState(
+    localStorage.getItem("accessToken") || null,
+  );
   // const { id } = useParams();
 
   const getAuthState = async () => {
@@ -90,7 +92,7 @@ export const AppContextProvider = (props) => {
       const { data } = await axios.get(backendUrl + "/api/restaurant/all");
       if (data.success) {
         setRestaurants(data.restaurants);
-        setRegisteredRestaurants(data.restaurants)
+        setRegisteredRestaurants(data.restaurants);
         setOpenRestaurants(data.restaurants.some((r) => r.isOpen) || false);
       }
       console.log(data);
@@ -107,7 +109,7 @@ export const AppContextProvider = (props) => {
       const { data } = await axios.get(backendUrl + `/api/menu/all-menu`);
       if (data.success) {
         setMenu(data.menu);
-        setAllDish(data.menu)
+        setAllDish(data.menu);
       }
     } catch (error) {
       toast.error(error.message);
@@ -117,23 +119,19 @@ export const AppContextProvider = (props) => {
   };
 
   useEffect(() => {
+    fetchAllRestaurants();
     fetchAllMenu();
   }, []);
 
-  useEffect(() => {
-    fetchAllRestaurants();
-  }, []);
 
   useEffect(() => {
-    if (!token) return getAuthState();
-    // getUserData()
-  }, []);
-
-  useEffect(() => {
-    if (!token) {
+    if (token) {
       getUserData();
+    } else {
+      getAuthState();
     }
   }, [token]);
+
 
   const value = {
     token,
@@ -157,7 +155,7 @@ export const AppContextProvider = (props) => {
     OpenRestaurants,
     loading,
     menuLoading,
-    menu
+    menu,
     // menu,
     // fetchMenuByRestaurantId
   };

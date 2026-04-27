@@ -37,7 +37,6 @@ const orderItemSchema = new mongoose.Schema(
   { _id: false },
 );
 
-
 const orderSchema = new mongoose.Schema(
   {
     userId: {
@@ -60,7 +59,7 @@ const orderSchema = new mongoose.Schema(
       validate: [(val) => val.length > 0, "Order must have at least one item"],
     },
 
-    deliveryAddress: {
+    address: {
       street: { type: String, required: true, trim: true },
       city: { type: String, required: true, trim: true },
       state: { type: String, required: true, trim: true },

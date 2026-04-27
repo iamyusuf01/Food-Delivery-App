@@ -1,24 +1,48 @@
 import axios from "axios";
-import { createContext, useState } from "react";
-import { useParams } from "react-router";
+import { createContext, useContext, useState } from "react";
+import { AuthContext } from "./AuthContext";
+import { useNavigate } from "react-router";
+import { toast } from "react-toastify";
 
 export const PaymentContext = createContext();
 
 export const PaymentContextProvider = (props) => {
-  const backendUrl = import.meta.env.VITE_API_URL;
+  const { backendUrl, cartItems, token } = useContext(AuthContext);
 
-//   const [placedOrder, setPlaceOrder] = useState([]);
-//   const { id } = useParams();
+  const [placedOrder, setPlaceOrder] = useState([]);
+  const navigate = useNavigate();
 
-//   const placeOrderFromCart = async () => {
-//     try {
-//         const {data} = await axios.post(backendUrl + '/api/order/place', )
-//     } catch (error) {
-        
-//     }
-//   }
+  const Order = async () => {
+    try {
+      const { data } = axios.post(
+        backendUrl + "/api/payment//initiate",
+        {
+          orderId: cartItems.id,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          withCredentials: true,
+        },
+      );
+      if (data.success) {
+        setPlaceOrder(data.payment);
+        navigate("/payment");
+        console.log(data.payment)
+      } else {
+        toast.error(data.message);
+      }
+    } catch (error) {
+      toast.error(error.message);
+    }
+  };
 
-  const value = {};
+  const value = {
+    placedOrder,
+    setPlaceOrder,
+    Order,
+  };
 
   return (
     <PaymentContext.Provider value={value}>

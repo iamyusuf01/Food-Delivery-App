@@ -4,7 +4,7 @@ import auth from '../middlewares/authMiddleware.js'
 
 const router = express.Router();
 
-router.post('/create',auth, createPaymentOrder)
+router.post('/initiate',auth, createPaymentOrder)
 router.post('/verify',auth, verifyPayment)
 router.post('/refund',auth, initiateRefund)
 
