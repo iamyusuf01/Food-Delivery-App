@@ -1,4 +1,4 @@
-import { useContext, useState, useMemo} from "react";
+import { useContext, useState, useMemo } from "react";
 import { FaChevronLeft, FaMinus, FaPlus } from "react-icons/fa";
 import { FaChevronRight } from "react-icons/fa6";
 import { CartContext } from "../../context/CartContext";
@@ -17,7 +17,7 @@ const MyCart = () => {
     pincode: "",
   });
   const [order, setOrder] = useState([]);
-  console.log(order)
+  console.log(order);
   const navigate = useNavigate();
   const { cartItems, removeCartItem, updateItemQuantity } =
     useContext(CartContext);
@@ -39,8 +39,7 @@ const MyCart = () => {
 
       if (data.success) {
         setOrder(data.order);
-        
-        navigate("/payment");
+        navigate("/payment", { state: { order: data.order } });
       } else {
         toast.error(data.message);
       }

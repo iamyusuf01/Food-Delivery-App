@@ -23,7 +23,6 @@ export const createPaymentOrder = async (req, res) => {
       });
     }
 
-    // prevent duplicate pending payment
     const existingPayment = await Payment.findOne({
       orderId: order._id,
       status: "PENDING",
@@ -33,7 +32,12 @@ export const createPaymentOrder = async (req, res) => {
       return res.status(200).json({
         success: true,
         message: "Payment already initiated",
-        razorpayOrderId: existingPayment.razorpayOrderId,
+        order: {
+          id: existingPayment.razorpayOrderId,
+          amount: existingPayment.amount * 100,
+          currency: "INR",
+        },
+        key: process.env.RAZORPAY_KEY_ID, 
         paymentId: existingPayment._id,
       });
     }
@@ -69,7 +73,8 @@ export const createPaymentOrder = async (req, res) => {
 
     return res.status(200).json({
       success: true,
-      razorpayOrder,
+      order: razorpayOrder, 
+      key: process.env.RAZORPAY_KEY_ID, 
       paymentId: payment._id,
     });
   } catch (error) {
@@ -83,10 +88,19 @@ export const createPaymentOrder = async (req, res) => {
 
 export const verifyPayment = async (req, res) => {
   try {
-    const { razorpay_order_id, razorpay_payment_id, razorpay_signature } =
-      req.body;
+    const {
+      razorpay_order_id,
+      razorpay_payment_id,
+      razorpay_signature,
+      orderId,
+    } = req.body;
 
-    if (!razorpay_order_id || !razorpay_payment_id || !razorpay_signature) {
+    if (
+      !razorpay_order_id ||
+      !razorpay_payment_id ||
+      !razorpay_signature ||
+      !orderId
+    ) {
       return res.status(400).json({
         success: false,
         message: "Invalid payment data",
@@ -104,11 +118,24 @@ export const verifyPayment = async (req, res) => {
       });
     }
 
-    // already verified
+    if (payment.orderId.toString() !== orderId) {
+      return res.status(400).json({
+        success: false,
+        message: "Order mismatch",
+      });
+    }
+
     if (payment.status === "SUCCESS") {
       return res.json({
         success: true,
         message: "Already verified",
+      });
+    }
+
+    if (payment.status === "FAILED") {
+      return res.json({
+        success: false,
+        message: "Payment already failed",
       });
     }
 
@@ -130,10 +157,11 @@ export const verifyPayment = async (req, res) => {
       });
     }
 
-    // success
     payment.status = "SUCCESS";
     payment.razorpayPaymentId = razorpay_payment_id;
     payment.razorpaySignature = razorpay_signature;
+    payment.method = "ONLINE";
+
     await payment.save();
 
     await Order.findByIdAndUpdate(payment.orderId, {
@@ -192,7 +220,7 @@ export const initiateRefund = async (req, res) => {
       payment.razorpayPaymentId,
       {
         amount: Math.round(payment.amount * 100),
-      }
+      },
     );
 
     payment.refundId = refund.id;
@@ -226,7 +254,7 @@ cron.schedule("*/10 * * * *", async () => {
           status: "FAILED",
           failureReason: "Timeout",
         },
-      }
+      },
     );
 
     console.log(`Expired payments cleared: ${result.modifiedCount}`);

@@ -157,3 +157,47 @@ export const getOrderById = async (req, res) => {
     });
   }
 };
+
+export const changePaymentMethod = async (req, res) => {
+  try {
+    const { orderId, paymentMethod } = req.body;
+
+    if (!orderId) {
+      return res.json({
+        success: false,
+        message: "Order id is missing",
+      });
+    }
+
+    if (!paymentMethod || !["COD", "ONLINE"].includes(paymentMethod)) {
+      return res.json({
+        success: false,
+        message: "Select valid payment method",
+      });
+    }
+
+    const updateOrder = await Order.findByIdAndUpdate(
+      orderId,
+      { paymentMethod },
+      { new: true }
+    );
+
+    if (!updateOrder) {
+      return res.json({
+        success: false,
+        message: "Order not found",
+      });
+    }
+
+    return res.json({
+      success: true,
+      order: updateOrder,
+    });
+
+  } catch (error) {
+    return res.json({
+      success: false,
+      message: error.message,
+    });
+  }
+};

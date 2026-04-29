@@ -1,54 +1,157 @@
-import { useEffect, useState, useContext, useMemo } from "react";
-import { FaChevronLeft, FaPaypal, FaPlus } from "react-icons/fa";
+import { useState, useContext, useEffect } from "react";
+import { FaChevronLeft } from "react-icons/fa";
 import { PiHandCoins } from "react-icons/pi";
 import { RiVisaLine } from "react-icons/ri";
 import { SiMastercard } from "react-icons/si";
-import Card from "../../assets/Card.png";
-import { useNavigate } from "react-router";
-import { CartContext } from "../../context/CartContext";
+import { useLocation, useNavigate } from "react-router-dom"; 
+import { toast } from "react-toastify";
+import axios from "axios";
+import { AuthContext } from "../../context/AuthContext";
 
 const Payment = () => {
   const [method, setMethod] = useState("");
-  const [savedCard, setSavedCard] = useState(null);
+  const [loading, setLoading] = useState(false);
+
   const navigate = useNavigate();
+  const { backendUrl, token } = useContext(AuthContext);
 
-  const { cartItems } = useContext(CartContext);
-
-  const PaymentMethods = [
-    { title: "Cash", icon: PiHandCoins, color: "text-orange-500" },
-    { title: "Visa", icon: RiVisaLine, color: "text-blue-500" },
-    { title: "Mastercard", icon: SiMastercard, color: "text-orange-500" },
-    { title: "PayPal", icon: FaPaypal, color: "text-blue-500" },
-  ];
-
+  const location = useLocation();
+  const order = location.state?.order;
+  const orderId = order?._id;
+  
   useEffect(() => {
-    const card = localStorage.getItem("savedCard");
-    if (card) {
-      setSavedCard(JSON.parse(card));
-    }
-
-    // Redirect if cart empty
-    if (cartItems.length === 0) {
+    if (!orderId) {
+      toast.error("Session expired. Please try again.");
       navigate("/my-cart");
     }
-  }, [cartItems, navigate]);
+  }, [orderId]);
 
-const total = useMemo(() => {
-  return cartItems.reduce((sum, item) => {
-    return sum + item.price * (item.quantity || 1);
-  }, 0);
-}, [cartItems]);
+  const loadRazorPay = () => {
+    return new Promise((resolve) => {
+      const script = document.createElement("script");
+      script.src = "https://checkout.razorpay.com/v1/checkout.js";
+      script.onload = () => resolve(true);
+      script.onerror = () => resolve(false);
+      document.body.appendChild(script);
+    });
+  };
 
-  const handlePayment = () => {
-    if (!method) return;
+  const handleCOD = async () => {
+    if (!orderId) return;
 
-    alert(`Payment Successful ₹${total.toFixed(2)}`);
-    navigate("/payment/order-success");
+    try {
+      setLoading(true);
+
+      const { data } = await axios.post(
+        backendUrl + "/api/order/change-method",
+        {
+          orderId,
+          paymentMethod: "COD",
+        },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+
+      if (data.success) {
+        toast.success("Order placed successfully");
+        navigate("/order/success"); 
+      } else {
+        toast.error(data.message);
+      }
+    } catch (error) {
+      toast.error(error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleRazorpay = async () => {
+    if (!orderId) return;
+
+    try {
+      setLoading(true);
+
+      const res = await loadRazorPay();
+      if (!res) {
+        toast.error("Razorpay failed to load");
+        return;
+      }
+
+      const { data } = await axios.post(
+        backendUrl + "/api/payment/initiate",
+        { orderId },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+
+      console.log("INITIATE RESPONSE:", data);
+
+      if (!data.success || !data.key) {
+        toast.error("Payment initialization failed");
+        return;
+      }
+
+      const options = {
+        key: data.key,
+        amount: data.order.amount,
+        currency: data.order.currency,
+        order_id: data.order.id,
+
+        handler: async function (response) {
+          console.log("RAZORPAY SUCCESS:", response);
+
+          try {
+            const { data: verifyData } = await axios.post(
+              backendUrl + "/api/payment/verify",
+              {
+                ...response,
+                orderId,
+              },
+              {
+                headers: { Authorization: `Bearer ${token}` }, 
+              }
+            );
+
+            console.log("VERIFY RESPONSE:", verifyData);
+
+            if (verifyData.success) {
+              toast.success("Payment Successful ");
+
+              setTimeout(() => {
+                navigate("/payment/success"); 
+              }, 500);
+            } else {
+              toast.error(verifyData.message);
+            }
+          } catch (error) {
+            console.error("VERIFY ERROR:", error);
+            toast.error("Verification failed");
+          }
+        },
+
+        modal: {
+          ondismiss: function () {
+            console.log("Payment popup closed");
+          },
+        },
+      };
+
+      const payment = new window.Razorpay(options);
+      payment.open();
+    } catch (error) {
+      console.error(error);
+      toast.error(error.message);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
     <div className="p-6 font-ui">
-            <div className="flex gap-4 items-center">
+      {/* Header */}
+      <div className="flex gap-4 items-center">
         <div
           onClick={() => navigate(-1)}
           className="w-10 h-10 rounded-full bg-gray-300 flex items-center justify-center cursor-pointer"
@@ -57,91 +160,47 @@ const total = useMemo(() => {
         </div>
         <h2 className="text-xl">Payment</h2>
       </div>
-      <div className="flex gap-2">
-        {PaymentMethods.map(({ title, icon: Icon, color }) => (
-          <button
-            key={title}
-            onClick={() => setMethod(title)}
-            className="w-full grid justify-between pt-6"
-          >
-            <div
-              className={`rounded py-4 px-8 ${
-                method === title
-                  ? "border-2 border-orange-400 rounded-md"
-                  : "bg-gray-200"
-              }`}
-            >
-              <Icon size={20} className={color} />
-            </div>
-            <p className="text-center">{title}</p>
-          </button>
-        ))}
-      </div>
-      {method && method !== "Cash" && (
-        <>
-          {savedCard && savedCard.type === method ? (
-            <div className="my-8 bg-gray-200 rounded-xl p-4">
-              <p className="text-sm text-gray-500 mb-2">
-                {savedCard.type} Card
-              </p>
 
-              <p className="text-lg font-medium tracking-widest">
-                **** **** **** {savedCard.number.slice(-4)}
-              </p>
-
-              <div className="flex justify-between mt-4 text-sm">
-                <span>{savedCard.name}</span>
-                <span>{savedCard.expire}</span>
-              </div>
-            </div>
-          ) : (
-            <div className="flex flex-col items-center my-8 bg-gray-200 rounded-xl text-center">
-              <img
-                className="rounded-xl w-52 mt-8"
-                src={Card}
-                alt="Card Placeholder"
-              />
-              <div className="py-4">
-                <h2 className="font-medium">No card added</h2>
-                <p className="text-gray-500 text-sm">
-                  You can add a card and save it for later
-                </p>
-              </div>
-            </div>
-          )}
-
-          <div
-            onClick={() =>
-              navigate("/payment/add-card", {
-                state: { method },
-              })
-            }
-            className="flex justify-center items-center border rounded border-gray-300 h-12 gap-2 cursor-pointer"
-          >
-            <FaPlus className="text-orange-500" />
-            <p className="uppercase text-orange-400 text-sm">
-              {savedCard?.type === method ? "Add New" : "Add Card"}
-            </p>
-          </div>
-        </>
-      )}
-      <div className="pt-8">
-        <div className="flex gap-4 font-semibold text-lg mt-2">
-          <p>Total:</p>
-          <p>₹{total}</p>
+      {/* Payment Options */}
+      <div className="mt-8 space-y-4">
+        <div
+          onClick={() => setMethod("cash")}
+          className={`p-4 border rounded cursor-pointer flex items-center gap-3 ${
+            method === "cash" ? "border-orange-500 bg-orange-50" : ""
+          }`}
+        >
+          <PiHandCoins size={22} />
+          <span>Cash on Delivery</span>
         </div>
 
-        <button
-          onClick={handlePayment}
-          disabled={!method}
-          className={`uppercase w-full mt-4 h-12 rounded font-medium
-            ${
-              method ? "bg-orange-500 text-white" : "bg-gray-300 text-gray-500"
-            }`}
+        <div
+          onClick={() => setMethod("online")}
+          className={`p-4 border rounded cursor-pointer flex items-center gap-3 ${
+            method === "online" ? "border-orange-500 bg-orange-50" : ""
+          }`}
         >
-          Pay & Confirm
-        </button>
+          <RiVisaLine size={22} />
+          <SiMastercard size={22} />
+          <span>Pay Online</span>
+        </div>
       </div>
+
+      {/* Button */}
+      <button
+        onClick={method === "cash" ? handleCOD : handleRazorpay}
+        disabled={!method || loading}
+        className={`uppercase w-full mt-6 h-12 rounded font-medium ${
+          method && !loading
+            ? "bg-orange-500 text-white"
+            : "bg-gray-300 text-gray-500"
+        }`}
+      >
+        {loading
+          ? "Processing..."
+          : method === "online"
+          ? "Pay Online"
+          : "Place Order"}
+      </button>
     </div>
   );
 };
