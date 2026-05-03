@@ -70,6 +70,10 @@ export const CartContextProvider = ({ children }) => {
     }
   };
 
+  const clearCart = () => {
+  setCartItems([]);
+};
+
   useEffect(() => {
     if (token) {
       getCartItems();
@@ -84,6 +88,7 @@ export const CartContextProvider = ({ children }) => {
     getCartItems, 
     removeCartItem,
     updateItemQuantity,
+    clearCart,
   };
 
   return (

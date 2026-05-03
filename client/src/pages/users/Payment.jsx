@@ -7,6 +7,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import axios from "axios";
 import { AuthContext } from "../../context/AuthContext";
+import { CartContext } from "../../context/CartContext";
 
 const Payment = () => {
   const [method, setMethod] = useState("");
@@ -14,6 +15,7 @@ const Payment = () => {
 
   const navigate = useNavigate();
   const { backendUrl, token } = useContext(AuthContext);
+  const { clearCart } = useContext(CartContext);
 
   const location = useLocation();
   const order = location.state?.order;
@@ -21,7 +23,7 @@ const Payment = () => {
   
   useEffect(() => {
     if (!orderId) {
-      toast.error("Session expired. Please try again.");
+      // toast.error("Session expired. Please try again.");
       navigate("/my-cart");
     }
   }, [orderId]);
@@ -55,6 +57,7 @@ const Payment = () => {
 
       if (data.success) {
         toast.success("Order placed successfully");
+        clearCart()
         navigate("/order/success"); 
       } else {
         toast.error(data.message);
@@ -67,86 +70,97 @@ const Payment = () => {
   };
 
   const handleRazorpay = async () => {
-    if (!orderId) return;
+  if (!orderId) return;
 
-    try {
-      setLoading(true);
+  try {
+    setLoading(true);
 
-      const res = await loadRazorPay();
-      if (!res) {
-        toast.error("Razorpay failed to load");
-        return;
-      }
-
-      const { data } = await axios.post(
-        backendUrl + "/api/payment/initiate",
-        { orderId },
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      );
-
-      console.log("INITIATE RESPONSE:", data);
-
-      if (!data.success || !data.key) {
-        toast.error("Payment initialization failed");
-        return;
-      }
-
-      const options = {
-        key: data.key,
-        amount: data.order.amount,
-        currency: data.order.currency,
-        order_id: data.order.id,
-
-        handler: async function (response) {
-          console.log("RAZORPAY SUCCESS:", response);
-
-          try {
-            const { data: verifyData } = await axios.post(
-              backendUrl + "/api/payment/verify",
-              {
-                ...response,
-                orderId,
-              },
-              {
-                headers: { Authorization: `Bearer ${token}` }, 
-              }
-            );
-
-            console.log("VERIFY RESPONSE:", verifyData);
-
-            if (verifyData.success) {
-              toast.success("Payment Successful ");
-
-              setTimeout(() => {
-                navigate("/payment/success"); 
-              }, 500);
-            } else {
-              toast.error(verifyData.message);
-            }
-          } catch (error) {
-            console.error("VERIFY ERROR:", error);
-            toast.error("Verification failed");
-          }
-        },
-
-        modal: {
-          ondismiss: function () {
-            console.log("Payment popup closed");
-          },
-        },
-      };
-
-      const payment = new window.Razorpay(options);
-      payment.open();
-    } catch (error) {
-      console.error(error);
-      toast.error(error.message);
-    } finally {
-      setLoading(false);
+    const loaded = await loadRazorPay();
+    if (!loaded) {
+      toast.error("Razorpay failed to load");
+      return;
     }
-  };
+
+    const { data } = await axios.post(
+      backendUrl + "/api/payment/initiate",
+      { orderId },
+      { headers: { Authorization: `Bearer ${token}` } }
+    );
+
+    console.log("INITIATE RESPONSE:", data);
+
+    if (!data.success || !data.key || !data.order?.id) {
+      toast.error("Payment initialization failed");
+      return;
+    }
+
+    const options = {
+      key: data.key,
+      amount: data.order.amount,
+      currency: data.order.currency,
+      order_id: data.order.id,
+
+      name: "Zestly Delivery App",
+      description: "Order Payment",
+
+      handler: async function (response) {
+        console.log("RAZORPAY RESPONSE:", response);
+
+        const payload = {
+          razorpay_order_id: response.razorpay_order_id,
+          razorpay_payment_id: response.razorpay_payment_id,
+          razorpay_signature: response.razorpay_signature,
+          orderId: orderId,
+        };
+
+        console.log("VERIFY PAYLOAD:", payload);
+
+        try {
+          const { data: verifyData } = await axios.post(
+            backendUrl + "/api/payment/verify",
+            payload,
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+                "Content-Type": "application/json",
+              },
+            }
+          );
+
+          console.log("VERIFY RESPONSE:", verifyData);
+
+          if (verifyData.success) {
+            toast.success("Payment Successful");
+
+            setTimeout(() => {
+              navigate("/payment/success");
+            }, 500);
+            clearCart()
+          } else {
+            toast.error(verifyData.message || "Verification failed");
+          }
+        } catch (err) {
+          console.error("VERIFY ERROR:", err.response?.data || err.message);
+          toast.error("Verification failed");
+        }
+      },
+
+      modal: {
+        ondismiss: function () {
+          console.log("Payment popup closed");
+        },
+      },
+    };
+
+    const payment = new window.Razorpay(options);
+    payment.open();
+  } catch (error) {
+    console.error("INITIATE ERROR:", error.response?.data || error.message);
+    toast.error("Something went wrong");
+  } finally {
+    setLoading(false);
+  }
+};
 
   return (
     <div className="p-6 font-ui">

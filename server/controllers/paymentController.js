@@ -37,7 +37,7 @@ export const createPaymentOrder = async (req, res) => {
           amount: existingPayment.amount * 100,
           currency: "INR",
         },
-        key: process.env.RAZORPAY_KEY_ID, 
+        key: process.env.RAZORPAY_KEY_ID,
         paymentId: existingPayment._id,
       });
     }
@@ -73,8 +73,8 @@ export const createPaymentOrder = async (req, res) => {
 
     return res.status(200).json({
       success: true,
-      order: razorpayOrder, 
-      key: process.env.RAZORPAY_KEY_ID, 
+      order: razorpayOrder,
+      key: process.env.RAZORPAY_KEY_ID,
       paymentId: payment._id,
     });
   } catch (error) {
@@ -88,24 +88,8 @@ export const createPaymentOrder = async (req, res) => {
 
 export const verifyPayment = async (req, res) => {
   try {
-    const {
-      razorpay_order_id,
-      razorpay_payment_id,
-      razorpay_signature,
-      orderId,
-    } = req.body;
-
-    if (
-      !razorpay_order_id ||
-      !razorpay_payment_id ||
-      !razorpay_signature ||
-      !orderId
-    ) {
-      return res.status(400).json({
-        success: false,
-        message: "Invalid payment data",
-      });
-    }
+    const { razorpay_order_id, razorpay_payment_id, razorpay_signature } =
+      req.body;
 
     const payment = await Payment.findOne({
       razorpayOrderId: razorpay_order_id,
@@ -118,13 +102,6 @@ export const verifyPayment = async (req, res) => {
       });
     }
 
-    if (payment.orderId.toString() !== orderId) {
-      return res.status(400).json({
-        success: false,
-        message: "Order mismatch",
-      });
-    }
-
     if (payment.status === "SUCCESS") {
       return res.json({
         success: true,
@@ -132,14 +109,7 @@ export const verifyPayment = async (req, res) => {
       });
     }
 
-    if (payment.status === "FAILED") {
-      return res.json({
-        success: false,
-        message: "Payment already failed",
-      });
-    }
-
-    const body = razorpay_order_id + "|" + razorpay_payment_id;
+    const body = `${razorpay_order_id}|${razorpay_payment_id}`;
 
     const expectedSignature = crypto
       .createHmac("sha256", process.env.RAZORPAY_KEY_SECRET)
@@ -148,36 +118,40 @@ export const verifyPayment = async (req, res) => {
 
     if (expectedSignature !== razorpay_signature) {
       payment.status = "FAILED";
-      payment.failureReason = "Invalid signature";
       await payment.save();
 
       return res.status(400).json({
         success: false,
-        message: "Payment verification failed",
+        message: "Invalid signature",
       });
     }
 
     payment.status = "SUCCESS";
     payment.razorpayPaymentId = razorpay_payment_id;
     payment.razorpaySignature = razorpay_signature;
-    payment.method = "ONLINE";
-
     await payment.save();
 
     await Order.findByIdAndUpdate(payment.orderId, {
       paymentStatus: "PAID",
+      paymentMethod: "ONLINE", // 🔥 IMPORTANT FIX
       status: "CONFIRMED",
     });
+
+    await Cart.findOneAndUpdate(
+      { userId: payment.userId },
+      { $set: { items: [] } },
+    );
 
     return res.json({
       success: true,
       message: "Payment verified",
     });
   } catch (error) {
-    console.error("Verify Payment Error:", error);
+    console.error("VERIFY ERROR:", error);
+
     return res.status(500).json({
       success: false,
-      message: "Internal server error",
+      message: error.message,
     });
   }
 };
@@ -216,48 +190,84 @@ export const initiateRefund = async (req, res) => {
       });
     }
 
+    if (!payment.razorpayPaymentId) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid payment reference",
+      });
+    }
+
+    payment.refundStatus = "PENDING";
+    await payment.save();
+
     const refund = await razorpayInstance.payments.refund(
       payment.razorpayPaymentId,
       {
         amount: Math.round(payment.amount * 100),
-      },
+      }
     );
 
     payment.refundId = refund.id;
     payment.refundStatus = "PROCESSED";
     await payment.save();
 
+    await Order.findByIdAndUpdate(payment.orderId, {
+      paymentStatus: "REFUNDED",
+      status: "CANCELLED",
+    });
+
     return res.json({
       success: true,
       message: "Refund successful",
+      refundId: refund.id,
     });
+
   } catch (error) {
     console.error("Refund Error:", error);
+
+    await Payment.findByIdAndUpdate(req.body.paymentId, {
+      refundStatus: "FAILED",
+    });
+
     return res.status(500).json({
       success: false,
-      message: "Internal server error",
+      message: error.message,
     });
   }
 };
 
 cron.schedule("*/10 * * * *", async () => {
   try {
-    const result = await Payment.updateMany(
-      {
-        status: "PENDING",
-        createdAt: {
-          $lt: new Date(Date.now() - 15 * 60 * 1000),
-        },
+    const expiredPayments = await Payment.find({
+      status: "PENDING",
+      createdAt: {
+        $lt: new Date(Date.now() - 15 * 60 * 1000),
       },
+    });
+
+    const ids = expiredPayments.map(p => p._id);
+
+    await Payment.updateMany(
+      { _id: { $in: ids } },
       {
         $set: {
           status: "FAILED",
           failureReason: "Timeout",
         },
-      },
+      }
     );
 
-    console.log(`Expired payments cleared: ${result.modifiedCount}`);
+    await Order.updateMany(
+      { _id: { $in: expiredPayments.map(p => p.orderId) } },
+      {
+        $set: {
+          paymentStatus: "FAILED",
+          status: "CANCELLED",
+        },
+      }
+    );
+
+    console.log(`Expired payments handled: ${ids.length}`);
   } catch (error) {
     console.error("CRON ERROR:", error.message);
   }
